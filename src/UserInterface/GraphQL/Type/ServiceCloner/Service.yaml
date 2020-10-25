@@ -1,0 +1,17 @@
+Service:
+  type: object
+  config:
+    resolveField: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver", [info, value, args])'
+    fields:
+      name:
+        type: String!
+      image:
+        type: String!
+      command:
+        type: String
+      labels:
+        type: '[Label]'
+      environments:
+        type: '[Environment]'
+      ports:
+        type: '[Port]'
