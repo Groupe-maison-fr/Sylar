@@ -1,0 +1,14 @@
+QueryUserInterface:
+  type: object
+  decorator: true
+  config:
+    fields:
+      services:
+        type: "[Service]"
+        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver::resolve")'
+      containers:
+        type: "[Container]"
+        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\ContainerResolver::resolve")'
+      filesystems:
+        type: "[Filesystem]"
+        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver::resolve")'

@@ -1,0 +1,27 @@
+Filesystem:
+  type: object
+  config:
+    resolveField: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver", [info, value, args])'
+    fields:
+      name:
+        type: String!
+      type:
+        type: String!
+      origin:
+        type: String!
+      mountPoint:
+        type: String!
+      available:
+        type: String!
+      refer:
+        type: String!
+      used:
+        type: String!
+      usedByChild:
+        type: String!
+      usedByDataset:
+        type: String!
+      usedByRefreservation:
+        type: String!
+      usedBySnapshot:
+        type: String!

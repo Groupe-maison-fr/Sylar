@@ -1,0 +1,17 @@
+Container:
+  type: object
+  config:
+    resolveField: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\ContainerResolver", [info, value, args])'
+    fields:
+      containerName:
+        type: String!
+      masterName:
+        type: String!
+      instanceName:
+        type: String!
+      instanceIndex:
+        type: String!
+      zfsFilesystemName:
+        type: String!
+      time:
+        type: String!

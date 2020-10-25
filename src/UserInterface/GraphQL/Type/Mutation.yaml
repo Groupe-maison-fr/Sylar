@@ -1,0 +1,11 @@
+MutationFacilities:
+  type: object
+  decorator: true
+  config:
+    fields:
+      loginUser:
+        type: LoginUserOutput!
+        resolve: '@=mutation("App\\Core\\Facilities\\Infrastructure\\Graphql\\Mutation\\LoginUserMutation", [args["input"]["username"], args["input"]["password"]])'
+        args:
+          input:
+            type: LoginUserInput!

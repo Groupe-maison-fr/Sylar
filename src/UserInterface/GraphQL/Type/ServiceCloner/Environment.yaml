@@ -1,0 +1,8 @@
+Environment:
+  type: object
+  config:
+    fields:
+      name:
+        type: String!
+      value:
+        type: String!
