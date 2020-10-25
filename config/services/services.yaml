@@ -20,3 +20,6 @@ services:
     App\Infrastructure\Zfs\ZfsService:
         arguments:
             $process : '@App\Infrastructure\Process\SudoProcess'
+
+    Docker\Docker:
+        factory: ['@App\Infrastructure\Docker\DockerFactory', 'create']
