@@ -1,0 +1,32 @@
+stateRoot: '/app/data'
+zpoolName: 'testpool'
+zpoolRoot: '/testpool'
+services:
+  - name: go-static-webserver
+    image: 'pierrezemb/gostatic:latest'
+    labels:
+      - name: environment
+        value: unit-test
+    environments:
+    - name: CLONE_NAME
+      value: '=containerParameter.getName()'
+    - name: CLONE_INDEX
+      value: '=containerParameter.getIndex()'
+    - name: CLONE_REPLICATED_FILESYSTEM
+      value: '=containerParameter.getReplicatedFilesystem()'
+    lifeCycleHooks:
+      preStartCommands:
+        - executionEnvironment: host
+          command: ['docker','ps']
+        - executionEnvironment: masterContainer
+          command: ['docker','ps']
+      postStartWaiters:
+        - type: logMatch
+          expression: '!Listening at 0\.0\.0\.0!'
+          timeout: 30
+      postStartCommands:
+        - executionEnvironment: host
+          command: ['ls','/']
+      postDestroyCommands:
+        - executionEnvironment: host
+          command: ['ls','/']
