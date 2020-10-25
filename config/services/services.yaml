@@ -11,7 +11,12 @@ services:
         resource: '../../src/*'
         exclude:
          - '../../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+         - '../../src/**/*DTO.php'
 
     App\UserInterface\Cli\:
         resource: '../../src/UserInterface/Cli/**'
         tags: ['console.command']
+
+    App\Infrastructure\Filesystem\ZfsFilesystemService:
+        arguments:
+            $process : '@App\Infrastructure\Process\SudoProcess'
