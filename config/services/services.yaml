@@ -18,7 +18,7 @@ services:
         exclude:
          - '../../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
          - '../../src/**/*DTO.php'
-         - '../../src/Core/ServiceCloner/Exception/*'
+         - '../../src/**/*Exception.php'
          - '../../src/Infrastructure/Docker/Endpoint/ContainerLogsUntil.php'
          - '../../src/Infrastructure/Docker/Stream/DockerRawStreamUntil.php'
 
