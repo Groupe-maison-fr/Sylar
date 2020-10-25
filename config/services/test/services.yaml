@@ -1,0 +1,9 @@
+parameters:
+    service_are_public: true
+
+services:
+    App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface:
+        class: App\Core\ServiceCloner\Configuration\ConfigurationService
+        public: true
+        arguments:
+            $configurationFilename: '%sylar_config_filename%'

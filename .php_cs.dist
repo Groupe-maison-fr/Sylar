@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules([
+        '@Symfony' => true,
+        '@PHP71Migration:risky' => true,
+        'declare_strict_types' => true,
+        'phpdoc_align' => false,
+        'phpdoc_summary' => false,
+        'concat_space' => ['spacing' => 'one'],
+        'no_multiline_whitespace_before_semicolons' => true,
+        'no_useless_else' => true,
+        'no_useless_return' => true,
+        'ordered_imports' => [
+            'sort_algorithm' => 'alpha',
+            'imports_order' => ['class', 'function', 'const'],
+        ],
+        'phpdoc_order' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'no_short_echo_tag' => true,
+        'php_unit_test_annotation' => [
+            'style' => 'annotation',
+        ],
+        'php_unit_method_casing' => ['case' => 'snake_case'],
+        'php_unit_set_up_tear_down_visibility' => true,
+        'php_unit_internal_class' => true,
+        'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
+        'final_internal_class' => true,
+        'pre_increment' => false,
+        'return_type_declaration' => ['space_before' => 'none'],
+        'void_return' => true,
+        'yoda_style' => [
+            'equal' => false,
+            'identical' => false,
+        ],
+        'class_definition' => [
+            'multiLineExtendsEachSingleLine' => true,
+        ],
+        'single_line_throw' => false,
+    ])
+    ->setCacheFile('/tmp/backend.php_cs.cache')
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->in([__DIR__ . '/src', __DIR__ . '/tests', __DIR__ . '/config', __DIR__ . '/tests'])
+            ->exclude([])
+            ->name('*.php')
+    );
