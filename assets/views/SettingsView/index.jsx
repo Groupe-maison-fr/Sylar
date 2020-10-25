@@ -6,7 +6,6 @@ import {
 } from '@material-ui/core';
 import Page from '../../components/Page';
 import Notifications from './Notifications';
-import Password from './Password';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,9 +26,6 @@ const SettingsView = () => {
     >
       <Container maxWidth="lg">
         <Notifications />
-        <Box mt={3}>
-          <Password />
-        </Box>
       </Container>
     </Page>
   );

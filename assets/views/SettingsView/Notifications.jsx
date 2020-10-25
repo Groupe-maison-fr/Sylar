@@ -132,7 +132,7 @@ const Notifications = ({ className, ...rest }) => {
 };
 
 Notifications.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string.isRequired
 };
 
 export default Notifications;

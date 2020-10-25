@@ -90,7 +90,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           gutterBottom
           variant="h4"
         >
-          aaaa
+          &nbsp;
         </Typography>
       </Box>
     </Box>
