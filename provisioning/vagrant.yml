@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+
+- name: Vagrant system
+  import_playbook: system.yml
+
+- name: Vagrant dev tools
+  import_playbook: dev.yml
+
+- name: Vagrant nginx
+  import_playbook: nginx.yml
+
+- name: Vagrant supervisor
+  import_playbook: supervisor.yml
