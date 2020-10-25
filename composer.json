@@ -1,0 +1,77 @@
+{
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^7.4",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "ext-json": "*",
+        "ext-pcntl": "*",
+        "doctrine/collections": "^1.6",
+        "morgonus/docker-api-php-client": "^1.3",
+        "nyholm/dsn": "^1.0",
+        "overblog/graphql-bundle": "^0.13.4",
+        "php-http/logger-plugin": "^1.2",
+        "phpunit/phpunit": "^9.4",
+        "ramsey/uuid": "^4.1",
+        "symfony/console": "5.0.*",
+        "symfony/dotenv": "5.0.*",
+        "symfony/expression-language": "5.0.*",
+        "symfony/flex": "^1.3.1",
+        "symfony/framework-bundle": "5.0.*",
+        "symfony/monolog-bundle": "^3.6",
+        "symfony/property-access": "5.0.*",
+        "symfony/property-info": "5.0.*",
+        "symfony/twig-bundle": "5.0.*",
+        "symfony/webpack-encore-bundle": "^1.7",
+        "symfony/yaml": "5.0.*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpstan/phpstan-symfony": "^0.12.19-dev"
+    },
+    "minimum-stability": "alpha",
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "App\\Common\\": "lib/Common/src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\": "src/",
+            "App\\Common\\": "lib/Common/src",
+            "Tests\\": "tests/",
+            "Tests\\Common\\": "lib/Common/tests/"
+        }
+    },
+
+    "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php56": "*"
+    },
+    "scripts": {
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "5.0.*"
+        }
+    }
+}
