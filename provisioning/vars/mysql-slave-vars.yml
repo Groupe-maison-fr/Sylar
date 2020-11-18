@@ -1,0 +1,31 @@
+---
+ansible_python_interpreter: python3
+
+mysql_port: "3306"
+mysql_bind_address: '0.0.0.0'
+mysql_datadir: /var/lib/mysql
+
+mysql_databases:
+  - name: example_database
+    encoding: latin1
+    collation: latin1_general_ci
+
+mysql_root_password: "mysql_root_password_slave"
+
+mysql_server_id: "2"
+mysql_max_binlog_size: "100M"
+mysql_expire_logs_days: "10"
+
+mysql_users:
+  - name: replication_user
+    host: "%"
+    password: replication_password
+    priv: "*.*:SUPER"
+
+mysql_replication_master: '192.168.99.20'
+
+mysql_replication_user:
+  name: replication_user
+  password: replication_password
+
+

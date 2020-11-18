@@ -9,10 +9,10 @@
         - 'supervisor'
 
     - name: Create supervisord main config
-      action: copy src=templates/etc/supervisor/supervisord.conf dest=/etc/supervisor/supervisord.conf
+      action: copy src=../templates/etc/supervisor/supervisord.conf dest=/etc/supervisor/supervisord.conf
 
     - name: Create supervisord apps config
-      action: copy src=templates/etc/supervisor/conf.d/apps.conf dest=/etc/supervisor/conf.d/apps.conf
+      action: copy src=../templates/etc/supervisor/conf.d/apps.conf dest=/etc/supervisor/conf.d/apps.conf
 
     - name: start supervisord service and have it run during system startup
       action: service name=supervisor state=started enabled=yes

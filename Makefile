@@ -55,6 +55,7 @@ test:
 	vendor/bin/phpstan analyse src --level 5
 	vendor/bin/php-cs-fixer fix --verbose --dry-run
 	/usr/bin/php /app/vendor/phpunit/phpunit/phpunit --configuration /app/phpunit.xml.dist tests --testdox
+
 docker-stats:
 	@docker stats --format "{{.ID}} {{.CPUPerc}} {{.MemUsage}} {{.Name}}"
 

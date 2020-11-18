@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: true
+  vars:
+    - role: ansible-zfs
+
+  tasks:
+    - name: Install required zfs packages
+      apt:
+        name: zfsutils-linux
+        state: latest
+        update_cache: yes
