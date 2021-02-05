@@ -1,0 +1,30 @@
+---
+- hosts: all
+  become: true
+  vars:
+    - NODEJS_VERSION: "11"
+    - ansible_distribution_release: "bionic"
+
+  tasks:
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: yes
+
+    - name: adding existing user 'vagrant' to group docker
+      user:
+        name: 'vagrant'
+        groups:
+          - docker
+        append: yes

@@ -1,0 +1,34 @@
+parameters:
+    service_are_public: false
+    sylar_data_path_default: /app/data
+    sylar_data_path: '%env(default:sylar_data_path_default:SYLAR_DATA_PATH)%'
+    sylar_config_filename_default: /app/data/sylar.yaml
+    sylar_config_filename: '%env(default:sylar_config_filename_default:SYLAR_CONFIG_FILENAME)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: '%service_are_public%'
+        bind:
+            $configurationFilename: '%sylar_config_filename%'
+
+    App\:
+        resource: '../../src/*'
+        exclude:
+         - '../../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+         - '../../src/**/*DTO.php'
+         - '../../src/**/*Exception.php'
+         - '../../src/Infrastructure/Docker/Endpoint/ContainerLogsUntil.php'
+         - '../../src/Infrastructure/Docker/Stream/DockerRawStreamUntil.php'
+
+    App\UserInterface\Cli\:
+        resource: '../../src/UserInterface/Cli/**'
+        tags: ['console.command']
+
+    App\Infrastructure\Filesystem\ZfsFilesystemService:
+        arguments:
+            $process : '@App\Infrastructure\Process\SudoProcess'
+
+    Docker\Docker:
+        factory: ['@App\Infrastructure\Docker\DockerFactory', 'create']

@@ -1,0 +1,8 @@
+home:
+  path: /
+  controller: App\UserInterface\Web\UseCase\IndexController::index
+
+react_app:
+  path: /app/{parameters}
+  controller: App\UserInterface\Web\UseCase\IndexController::index
+

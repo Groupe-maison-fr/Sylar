@@ -1,0 +1,40 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Install required system packages
+      apt: name={{ item }} state=latest update_cache=yes
+      loop:
+        - 'nginx'
+
+    - name: Remove default nginx site
+      action: file path=/etc/nginx/sites-enabled/default state=absent
+
+    - name: Write nginx.conf
+      action: template src=../templates/etc/nginx/nginx.conf dest=/etc/nginx/nginx.conf
+
+    - name: Write phpfpm
+      action: copy src=../templates/etc/php/7.4/fpm/pool.d/www.conf dest=/etc/php/7.4/fpm/pool.d/www.conf
+      notify:
+        - restart phpfpm
+
+    - name: Create nginx site config
+      action: copy src=../templates/etc/nginx/conf.d/site.conf dest=/etc/nginx/sites-available/site.conf
+      notify:
+        - restart nginx
+
+    - name: Link nginx config
+      action: file src=/etc/nginx/sites-available/site.conf dest=/etc/nginx/sites-enabled/site.conf state=link
+      notify:
+        - restart nginx
+
+##  - name: start app
+##    action: supervisorctl name=${app_name} state=started
+
+  handlers:
+    - name: restart nginx
+      action: service name=nginx state=restarted
+
+    - name: restart phpfpm
+      action: service name=php7.4-fpm state=restarted
