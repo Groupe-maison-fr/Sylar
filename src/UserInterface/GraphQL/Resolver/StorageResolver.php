@@ -35,27 +35,27 @@ final class StorageResolver implements ResolverInterface
     public function __invoke(ResolveInfo $info, FilesystemDTO $zfsFilesystem, Argument $args)
     {
         switch ($info->fieldName) {
-            case'name':
+            case 'name':
                 return $zfsFilesystem->getName();
-            case'type':
+            case 'type':
                 return $zfsFilesystem->getType();
-            case'origin':
+            case 'origin':
                 return $zfsFilesystem->getOrigin();
-            case'mountPoint':
+            case 'mountPoint':
                 return $zfsFilesystem->getMountPoint();
-            case'available':
+            case 'available':
                 return $zfsFilesystem->getAvailable();
-            case'refer':
+            case 'refer':
                 return $zfsFilesystem->getRefer();
-            case'used':
+            case 'used':
                 return $zfsFilesystem->getUsed();
-            case'usedByChild':
+            case 'usedByChild':
                 return $zfsFilesystem->getUsedByChild();
-            case'usedByDataset':
+            case 'usedByDataset':
                 return $zfsFilesystem->getUsedByDataset();
-            case'usedByRefreservation':
+            case 'usedByRefreservation':
                 return $zfsFilesystem->getUsedByRefreservation();
-            case'usedBySnapshot':
+            case 'usedBySnapshot':
                 return $zfsFilesystem->getUsedBySnapshot();
         }
     }

@@ -109,7 +109,6 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
             $this->docker->containerStart($containerCreate->getId());
         } catch (Exception $exception) {
             $this->logger->error(sprintf('createDocker: %s', $exception->getMessage()));
-            dd($exception);
             throw $exception;
         }
     }

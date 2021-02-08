@@ -66,6 +66,7 @@ final class StartServiceCommand extends Command
         $serviceConfiguration = $this->dockerConfiguration->getConfiguration()->getServiceByName($serviceName);
         if ($serviceConfiguration === null) {
             $output->writeln(sprintf('<error>Service name %s does not exists</error>', $serviceName));
+
             return 1;
         }
 
