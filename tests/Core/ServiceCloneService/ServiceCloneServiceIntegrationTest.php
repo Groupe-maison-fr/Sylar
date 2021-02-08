@@ -11,6 +11,7 @@ use App\Core\ServiceCloner\ServiceClonerServiceInterface;
 use App\Infrastructure\Docker\ContainerCreationServiceInterface;
 use App\Infrastructure\Docker\ContainerExecServiceInterface;
 use App\Infrastructure\Docker\ContainerFinderServiceInterface;
+use App\Infrastructure\Docker\ContainerStopServiceInterface;
 use App\Infrastructure\Process\SudoProcess;
 use Docker\API\Model\ContainerSummaryItem;
 use Tests\AbstractIntegrationTest;
@@ -51,10 +52,9 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
      */
     private $process;
 
-    /**
-     * @var ContainerFinderServiceInterface
-     */
-    private $containerFinderService;
+    private ContainerFinderServiceInterface $containerFinderService;
+
+    private ContainerStopServiceInterface $containerStopService;
 
     protected function setUp(): void
     {
@@ -214,8 +214,9 @@ EOS);
     public function it_should_create_a_container_and_run_lifecycles_hooks(): void
     {
         $this->setDependentServices('lifecycle_hooks');
+        $this->resetBufferedLoggerHandler();
 
-        $dockerName = 'go-static-webserver';
+        $dockerName = $this->configurationService->getConfiguration()->getServices()[0]->getName();
         $this->serviceCloneService->start($dockerName, 'master', 0);
 
         /** @var ContainerSummaryItem $containerSummaryItem */
@@ -224,5 +225,9 @@ EOS);
         self::assertSame('running', $containerSummaryItem->getState());
         $this->serviceCloneService->stop($dockerName, 'master');
         $this->assertContainsLogThatMatchRegularExpression('!Listening at 0\.0\.0\.0!');
+        $this->assertContainsLogWithSameMessage('Process launched "sudo docker ps --no-trunc"');
+        $this->assertContainsLogThatMatchRegularExpression('!Listening at 0\.0\.0\.0!');
+        $this->assertContainsLogWithSameMessage('Process launched "sudo ls -lah /"');
+        $this->assertContainsLogWithSameMessage('Process launched "sudo ls -ahl /"');
     }
 }

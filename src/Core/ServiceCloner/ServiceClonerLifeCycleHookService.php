@@ -93,7 +93,11 @@ final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleH
     {
         $dockerConfiguration->getLifeCycleHooks()->getPostDestroyCommands()->map(function (PostDestroyCommand $command) use ($containerParameter): void {
             $arguments = $this->processArray($containerParameter, $command->getCommand());
-            dump(sprintf('POST_DESTROY %s %s', $containerParameter->getName(), json_encode($arguments)));
+            if ($command->getExecutionEnvironment() === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_HOST) {
+                $this->process->run(...$arguments);
+
+                return;
+            }
         });
     }
 }
