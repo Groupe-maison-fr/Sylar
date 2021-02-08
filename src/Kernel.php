@@ -36,7 +36,7 @@ class Kernel extends BaseKernel
         }
     }
 
-    public function getProjectDir(): string
+    public function getProjectDir()
     {
         return __DIR__ . '/../';
     }

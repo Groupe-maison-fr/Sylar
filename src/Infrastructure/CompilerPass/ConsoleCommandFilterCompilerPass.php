@@ -13,7 +13,7 @@ final class ConsoleCommandFilterCompilerPass implements CompilerPassInterface
 
     public function __construct()
     {
-        $this->filteredNamespaces = ['Doctrine', 'Symfony'];
+        $this->filteredNamespaces = ['Doctrine', 'Symfony', 'Overblog'];
     }
 
     public function process(ContainerBuilder $container): void

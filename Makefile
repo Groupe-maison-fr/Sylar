@@ -39,8 +39,7 @@ install-composer:
 .PHONY: dev-up
 dev-up:
 	vagrant up --provision
-	vagrant ssh slave -c 'cd /app;make install-composer';
-	vagrant ssh slave -c 'cd /app;make vendor'
+	vagrant ssh slave -c 'cd /app;make install-composer;make vendor-dev;make node_modules'
 
 .PHONY: dev-down
 dev-down:
@@ -50,15 +49,8 @@ dev-down:
 dev-destroy:
 	vagrant destroy -f
 
-.PHONY: vendor
-vendor:
-	composer install
-	yarn install
-
-.PHONY: build
-build: bin/box
-	composer install
-	yarn install
+.PHONY: build-dev
+build-dev: bin/box vendor-dev node_modules
 	yarn run build
 
 .PHONY: cs-fixer-fix
@@ -75,6 +67,19 @@ test:
 .PHONY: docker-stats
 docker-stats:
 	@docker stats --format "{{.ID}} {{.CPUPerc}} {{.MemUsage}} {{.Name}}"
+
+.PHONY: node_modules
+node_modules:
+	yarn install
+
+.PHONY: vendor-prod
+vendor-prod:
+	rm -rf vendor
+	APP_ENV=prod composer install --prefer-dist --no-scripts --no-dev
+
+.PHONY: vendor-dev
+vendor-dev:
+	APP_ENV=dev composer install --prefer-dist
 
 .PHONY: watch-assets
 watch-assets:
@@ -103,3 +108,12 @@ shell:
 .PHONY: tests
 tests:
 	vagrant ssh slave -c 'cd /app;make test'
+
+.PHONY: build
+build: node_modules vendor-prod
+	rm -rf var/cache
+	APP_ENV=prod bin/console
+	yarn build
+	box compile -vvv
+	mv build/sylar.phar build/sylar
+	ls -lah build
