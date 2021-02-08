@@ -2,7 +2,7 @@ stateRoot: '/app/data'
 zpoolName: 'testpool'
 zpoolRoot: '/testpool'
 services:
-  - name: mysql
+  - name: mysql_specific_configuration
     image: 'library/mariadb:10.5.3'
     labels:
       - name: environment
@@ -26,3 +26,6 @@ services:
       value: '=containerParameter.getIndex()'
     - name: CLONE_REPLICATED_FILESYSTEM
       value: '=containerParameter.getReplicatedFilesystem()'
+    ports:
+      - hostPort: '=(3406+containerParameter.getIndex())~"/tcp"'
+        containerPort: '3306/tcp'
