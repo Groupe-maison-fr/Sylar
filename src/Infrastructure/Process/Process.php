@@ -32,8 +32,12 @@ final class Process implements ProcessInterface
             $process->run();
         }
         $output = $process->getOutput();
+        $errorOutput = $process->getErrorOutput();
 
         $this->logger->debug(sprintf('Process result "%s"', $output));
+        if ($errorOutput) {
+            $this->logger->debug(sprintf('Process error output "%s"', $errorOutput));
+        }
 
         return $output;
     }
