@@ -60,11 +60,6 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
      */
     private $dockerPullService;
 
-    /**
-     * @var ContainerFinderService
-     */
-    private $dockerFinderService;
-
     public function __construct(
         Docker $docker,
         LoggerInterface $logger,
@@ -72,8 +67,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         MountFactoryInterface $mountSpecificationFactory,
         EnvironmentFactoryInterface $environmentSpecificationFactory,
         LabelFactoryInterface $labelSpecificationFactory,
-        ContainerImageServiceInterface $dockerPullService,
-        ContainerFinderService $dockerFinderService
+        ContainerImageServiceInterface $dockerPullService
     ) {
         $this->docker = $docker;
         $this->logger = $logger;
@@ -82,7 +76,6 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         $this->environmentSpecificationFactory = $environmentSpecificationFactory;
         $this->labelSpecificationFactory = $labelSpecificationFactory;
         $this->dockerPullService = $dockerPullService;
-        $this->dockerFinderService = $dockerFinderService;
     }
 
     public function createDocker(

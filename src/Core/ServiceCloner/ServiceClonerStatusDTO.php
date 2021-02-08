@@ -17,6 +17,11 @@ final class ServiceClonerStatusDTO
     private $instanceName;
 
     /**
+     * @var string
+     */
+    private $containerName;
+
+    /**
      * @var string|null
      */
     private $stateFilename;
@@ -32,6 +37,11 @@ final class ServiceClonerStatusDTO
     private $isMaster;
 
     /**
+     * @var int|null
+     */
+    private $index;
+
+    /**
      * @var string|null
      */
     private $dockerState;
@@ -42,10 +52,12 @@ final class ServiceClonerStatusDTO
     ) {
         $this->masterName = $masterName;
         $this->instanceName = $instanceName;
+        $this->containerName = null;
         $this->stateFilename = null;
         $this->dockerState = null;
         $this->zfsPath = null;
         $this->isMaster = null;
+        $this->index = $instanceName == 'master' ? 0 : null;
     }
 
     public function getStateFilename(): ?string
@@ -86,5 +98,25 @@ final class ServiceClonerStatusDTO
     public function setDockerState(?string $dockerState): void
     {
         $this->dockerState = $dockerState;
+    }
+
+    public function getIndex(): ?int
+    {
+        return $this->index;
+    }
+
+    public function setIndex(?int $index): void
+    {
+        $this->index = $index;
+    }
+
+    public function getContainerName(): string
+    {
+        return $this->containerName;
+    }
+
+    public function setContainerName(string $containerName): void
+    {
+        $this->containerName = $containerName;
     }
 }

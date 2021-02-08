@@ -16,6 +16,8 @@ interface FilesystemServiceInterface
 
     public function createSnapshot(string $name, string $snap): void;
 
+    public function destroySnapshot(string $name, string $snap): void;
+
     public function isSnapshoted($name): bool;
 
     public function getSnapshots(string $name): FilesystemCollection;
@@ -28,7 +30,7 @@ interface FilesystemServiceInterface
 
     public function getClones(string $name, string $snap): FilesystemCollection;
 
-    public function hasFilesystem(string $name): bool;
+    public function hasFilesystem(string $mountPoint): bool;
 
     public function getFilesystems(): FilesystemCollection;
 }

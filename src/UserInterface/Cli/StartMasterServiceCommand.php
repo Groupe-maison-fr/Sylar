@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class StartServiceCommand extends Command
+final class StartMasterServiceCommand extends Command
 {
     private const ARGUMENT_SERVICE_NAME = 'serviceName';
     private const ARGUMENT_INSTANCE_NAME = 'instanceName';
@@ -38,42 +38,18 @@ final class StartServiceCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('service:start')
+        $this->setName('service:start-master')
             ->setDescription('generate a dataset based on parameters')
             ->addArgument(
                 self::ARGUMENT_SERVICE_NAME,
                 InputArgument::REQUIRED,
                 'Service name'
-            )
-            ->addArgument(
-                self::ARGUMENT_INSTANCE_NAME,
-                InputArgument::REQUIRED,
-                'Instance name'
-            )
-            ->addArgument(
-                self::ARGUMENT_INSTANCE_INDEX,
-                InputArgument::OPTIONAL,
-                'Instance index'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $serviceName = $input->getArgument(self::ARGUMENT_SERVICE_NAME);
-        $instanceName = $input->getArgument(self::ARGUMENT_INSTANCE_NAME);
-        $instanceIndex = $input->getArgument(self::ARGUMENT_INSTANCE_INDEX);
-
-        if ($instanceName === 'master') {
-            $output->writeln(sprintf('<error>Service name %s can not be master</error>', $serviceName));
-
-            return 1;
-        }
-
-        if ($instanceIndex !== null && (int) $instanceIndex === 0) {
-            $output->writeln(sprintf('<error>Service index %s can not be 0</error>', $serviceName));
-
-            return 1;
-        }
 
         $serviceConfiguration = $this->dockerConfiguration->getConfiguration()->getServiceByName($serviceName);
         if ($serviceConfiguration === null) {
@@ -82,7 +58,7 @@ final class StartServiceCommand extends Command
             return 1;
         }
 
-        $this->serviceClonerService->start($serviceName, $instanceName, $instanceIndex === null ? null : (int) $instanceIndex);
+        $this->serviceClonerService->start($serviceName, 'master', 0);
 
         return 0;
     }

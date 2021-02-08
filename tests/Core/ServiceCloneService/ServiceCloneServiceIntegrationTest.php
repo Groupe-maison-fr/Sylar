@@ -221,7 +221,7 @@ EOS);
         $containerSummaryItem = $this->containerFinderService->getDockerByName($dockerName);
 
         self::assertSame('running', $containerSummaryItem->getState());
-        $this->assertContainsLogWithSameMessage('Process launched "sudo bash -c docker rm --force $(docker ps --filter "label=environment=unit-test" -a --format "{{.ID}}")"');
-        $this->assertContainsLogThatMatchRegularExpression('!^Process!');
+        $this->serviceCloneService->stop($dockerName, 'master');
+        $this->assertContainsLogThatMatchRegularExpression('!Listening at 0\.0\.0\.0!');
     }
 }

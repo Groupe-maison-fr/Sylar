@@ -65,7 +65,7 @@ final class ZfsFilesystemServiceIntegrationTest extends AbstractIntegrationTest
     public function it_should_create_a_filesystem(): void
     {
         $this->zfsFilesystemService->createFilesystem('testpool/test');
-        self::assertTrue($this->zfsFilesystemService->hasFilesystem('testpool/test'));
+        self::assertTrue($this->zfsFilesystemService->hasFilesystem('/testpool/test'));
     }
 
     /**
