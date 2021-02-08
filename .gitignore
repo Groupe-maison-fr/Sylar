@@ -11,6 +11,7 @@
 .vagrant
 .vboxhdd/
 /node_modules
+provisioning/roles/geerlingguy.mysql/
 ###< symfony/framework-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###

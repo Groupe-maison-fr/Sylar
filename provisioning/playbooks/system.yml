@@ -2,12 +2,11 @@
 - hosts: all
   become: true
   vars:
-    - NODEJS_VERSION: "11"
     - ansible_distribution_release: "bionic"
 
   tasks:
     - name: Install required system packages
-      apt: name={{ item }} state=latest update_cache=yes
+      apt: name={{ item }} state=latest
       loop:
         - 'apt-transport-https'
         - 'ca-certificates'
