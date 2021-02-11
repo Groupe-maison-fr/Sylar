@@ -1,0 +1,3 @@
+[mysqld]
+binlog_do_db = example_database
+log-slave-updates=1

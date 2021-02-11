@@ -22,7 +22,7 @@
         state: latest
         update_cache: yes
 
-    - name: adding existing user 'vagrant' to group docker
+    - name: Adding existing user 'vagrant' to group docker
       user:
         name: 'vagrant'
         groups:

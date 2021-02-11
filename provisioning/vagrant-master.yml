@@ -11,3 +11,7 @@
 
 - name: Vagrant system
   import_playbook: playbooks/system.yml
+
+- name: Vagrant mysql master
+  import_playbook: playbooks/mysql-master.yml
+

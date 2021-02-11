@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+      - ../vars/mysql-master-vars.yml
+
+  tasks:
+    - name: set replication user
+      ansible.builtin.shell:
+        cmd: mysql -u root -p{{ mysql_root_password }} -h 127.0.0.1 -e "GRANT REPLICATION SLAVE ON *.* TO '{{ mysql_replication_user.name }}'@'%' IDENTIFIED BY '{{ mysql_replication_user.password }}';" || true
+
