@@ -16,6 +16,7 @@ use App\Infrastructure\Docker\ContainerParameter\LabelFactoryInterface;
 use App\Infrastructure\Docker\ContainerParameter\MountFactoryInterface;
 use App\Infrastructure\Docker\ContainerParameter\PortBindingFactoryInterface;
 use ArrayObject;
+use Docker\API\Exception\ContainerCreateBadRequestException;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\API\Model\ContainersCreatePostResponse201;
 use Docker\API\Model\HostConfig;
@@ -100,6 +101,8 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
             /** @var ContainersCreatePostResponse201 $containerCreate */
             $containerCreate = $this->docker->containerCreate($container, ['name' => $containerParameter->getName()]);
             $this->docker->containerStart($containerCreate->getId());
+        } catch (ContainerCreateBadRequestException $exception) {
+            $this->logger->error(sprintf('createDocker: %s %s', $exception->getMessage(), $exception->getErrorResponse()->getMessage()));
         } catch (Exception $exception) {
             $this->logger->error(sprintf('createDocker: %s', $exception->getMessage()));
             throw $exception;
