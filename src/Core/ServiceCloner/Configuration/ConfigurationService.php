@@ -22,22 +22,31 @@ final class ConfigurationService implements ConfigurationServiceInterface
 {
     private string $configurationFilename;
 
+    private string $configurationRoot;
+
     public function __construct(
         string $configurationFilename
     ) {
         $this->configurationFilename = $configurationFilename;
+        $this->configurationRoot = dirname($configurationFilename);
     }
 
     public function getConfiguration(): ServiceCloner
     {
+        chdir($this->configurationRoot);
+
         $processor = new Processor();
 
         return $this->createServiceClonerFromArray(
-            $processor->processConfiguration(
-                new TreeBuilderConfiguration(),
-                [Yaml::parse(
-                    file_get_contents($this->configurationFilename)
-                )]
+            array_merge(
+                $processor->processConfiguration(
+                    new TreeBuilderConfiguration(),
+                    [Yaml::parse(
+                        file_get_contents($this->configurationFilename)
+                    )]
+                ), [
+                'configurationRoot' => realpath($this->configurationRoot),
+            ],
             )
         );
     }

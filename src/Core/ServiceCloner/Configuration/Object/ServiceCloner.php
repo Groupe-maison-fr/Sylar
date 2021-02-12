@@ -24,6 +24,11 @@ final class ServiceCloner
     private $zpoolRoot;
 
     /**
+     * @var string
+     */
+    private $configurationRoot;
+
+    /**
      * @var Service[]|ArrayCollection
      */
     private $services;
@@ -92,5 +97,15 @@ final class ServiceCloner
     public function removeService(Service $service): void
     {
         $this->services->removeElement($service);
+    }
+
+    public function setConfigurationRoot(string $configurationRoot): void
+    {
+        $this->configurationRoot = $configurationRoot;
+    }
+
+    public function getConfigurationRoot(): string
+    {
+        return $this->configurationRoot;
     }
 }

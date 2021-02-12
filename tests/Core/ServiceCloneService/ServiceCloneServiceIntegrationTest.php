@@ -144,7 +144,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
 
         self::assertSame('TABLE_NAME', current($tableNames));
         self::assertContains('SESSION_VARIABLES', $tableNames);
-        self::assertContains("slow_query_log_file\t/var/log/mysql/slow.log", $slowQueryVariables);
+        self::assertContains("slow_query_log_file\t/var/log/mysql/slowslow.log", $slowQueryVariables);
     }
 
     /**
