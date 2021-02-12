@@ -6,6 +6,7 @@ namespace App\UserInterface\GraphQL\Resolver;
 
 use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\ServiceClonerStateService;
+use App\Core\ServiceCloner\ServiceClonerStatusDTO;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
@@ -30,23 +31,27 @@ final class ContainerResolver implements ResolverInterface
         $this->serviceClonerStateService = $serviceClonerStateService;
     }
 
-    public function __invoke(ResolveInfo $info, $state, Argument $args)
+    public function __invoke(ResolveInfo $info, ServiceClonerStatusDTO $state, Argument $args)
     {
         switch ($info->fieldName) {
             case 'containerName':
-                return $state['containerName'];
+                return $state->getContainerName();
             case 'masterName':
-                return $state['masterName'];
+                return $state->getMasterName();
             case 'instanceName':
-                return $state['instanceName'];
+                return $state->getInstanceName();
             case 'instanceIndex':
-                return $state['instanceIndex'];
+                return $state->getIndex();
+            case 'isMaster':
+                return $state->isMaster();
+            case 'dockerState':
+                return $state->getDockerState();
             case 'zfsFilesystemName':
-                return $state['zfsFilesystemName'];
+                return $state->getZfsFilesystemName();
             case 'zfsFilesystem':
-                return $state['zfsFilesystem'];
+                return $state->getZfsFilesystem();
             case 'time':
-                return $state['time'];
+                return $state->getCreatedAt();
         }
     }
 

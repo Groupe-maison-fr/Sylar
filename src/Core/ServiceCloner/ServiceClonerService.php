@@ -14,6 +14,7 @@ use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
 use App\Infrastructure\Docker\ContainerStateServiceInterface;
 use App\Infrastructure\Docker\ContainerStopServiceInterface;
 use App\Infrastructure\Filesystem\FilesystemServiceInterface;
+use DomainException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -89,19 +90,22 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         $this->logger->debug(sprintf('-------------%s----------', $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '@')));
         $this->startFilesystem($masterName, $instanceName);
         $this->startDocker($masterName, $instanceName, $index);
-        $this->serviceClonerStateService->saveState($masterName, $instanceName, $index);
+        $this->serviceClonerStateService->createState($masterName, $instanceName, $index);
     }
 
     public function stop(string $masterName, string $instanceName): void
     {
-        $serviceState = $this->serviceClonerStateService->getState($masterName, $instanceName);
+        $serviceState = $this->serviceClonerStateService->loadState($masterName, $instanceName);
         if ($serviceState === null) {
             throw new NonExistingServiceInstanceException($masterName, $instanceName);
         }
-        $containerName = $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '_');
+
+        if ($this->serviceClonerNamingService->isMasterName($instanceName) && $this->serviceClonerStateService->hasMasterDependantService($masterName)) {
+            throw new DomainException(sprintf('Can not delete "%s", some dependant services are still there', $masterName));
+        }
 
         $containerParameter = new ContainerParameterDTO(
-            $containerName,
+            $serviceState->getContainerName(),
             $serviceState->getIndex(),
             $this->serviceClonerNamingService->getZfsFilesystemPath($masterName, $instanceName)
         );
@@ -110,8 +114,8 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         if ($service === null) {
             throw new NonExistingServiceException($masterName);
         }
-        $this->containerStopService->stop($containerName);
-        $this->containerDestroyService->delete($containerName);
+        $this->containerStopService->stop($serviceState->getContainerName());
+        $this->containerDestroyService->delete($serviceState->getContainerName());
 
         $this->serviceClonerLifeCycleHookService->postDestroy($service, $containerParameter);
         $this->stopFilesystem($masterName, $instanceName);
@@ -121,7 +125,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
 
     private function startDocker(string $masterName, string $instanceName, int $index): void
     {
-        $containerName = $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '_');
+        $containerName = $this->serviceClonerNamingService->getDockerName($masterName, $instanceName);
 
         $containerParameter = new ContainerParameterDTO(
             $containerName,

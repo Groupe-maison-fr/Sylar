@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core\ServiceCloner;
 
+use App\Infrastructure\Filesystem\FilesystemDTO;
+
 final class ServiceClonerStatusDTO
 {
     /**
@@ -29,7 +31,14 @@ final class ServiceClonerStatusDTO
     /**
      * @var string|null
      */
-    private $zfsPath;
+    private $zfsFilesystemName;
+
+    private string $zfsFilesystemPath;
+
+    /**
+     * @var FilesystemDTO|null
+     */
+    private $zfsFilesystem;
 
     /**
      * @var bool|null
@@ -46,38 +55,54 @@ final class ServiceClonerStatusDTO
      */
     private $dockerState;
 
+    private ?int $createdAt;
+
     public function __construct(
         string $masterName,
-        string $instanceName
+        string $instanceName,
+        int $index,
+        string $containerName,
+        string $zfsFilesystemName,
+        string $zfsFilesystemPath,
+        int $createdAt
     ) {
         $this->masterName = $masterName;
         $this->instanceName = $instanceName;
-        $this->containerName = null;
-        $this->stateFilename = null;
+        $this->index = $index;
+        $this->containerName = $containerName;
+        $this->isMaster = $instanceName == 'master';
+        $this->zfsFilesystemName = $zfsFilesystemName;
+        $this->zfsFilesystemPath = $zfsFilesystemPath;
+        $this->createdAt = $createdAt;
+        $this->zfsFilesystem = null;
         $this->dockerState = null;
-        $this->zfsPath = null;
-        $this->isMaster = null;
-        $this->index = $instanceName == 'master' ? 0 : null;
     }
 
-    public function getStateFilename(): ?string
+    public function toArray(): array
     {
-        return $this->stateFilename;
+        return [
+            'masterName' => $this->masterName,
+            'instanceName' => $this->instanceName,
+            'index' => $this->index,
+            'containerName' => $this->containerName,
+            'zfsFilesystemName' => $this->zfsFilesystemName,
+            'zfsFilesystemPath' => $this->zfsFilesystemPath,
+            'createdAt' => $this->createdAt,
+            'isMaster' => $this->isMaster,
+        ];
     }
 
-    public function setStateFilename(?string $stateFilename): void
+    public static function createFromArray(array $data): self
     {
-        $this->stateFilename = $stateFilename;
-    }
-
-    public function getZfsPath(): ?string
-    {
-        return $this->zfsPath;
-    }
-
-    public function setZfsPath(?string $zfsPath): void
-    {
-        $this->zfsPath = $zfsPath;
+        return new self(
+            $data['masterName'],
+            $data['instanceName'],
+            (int) $data['index'],
+            $data['containerName'],
+            $data['zfsFilesystemName'],
+            $data['zfsFilesystemPath'],
+            (int) $data['createdAt']
+        );
     }
 
     public function isMaster(): ?bool
@@ -85,9 +110,39 @@ final class ServiceClonerStatusDTO
         return $this->isMaster;
     }
 
-    public function setIsMaster(?bool $isMaster): void
+    public function getIndex(): ?int
     {
-        $this->isMaster = $isMaster;
+        return $this->index;
+    }
+
+    public function getContainerName(): string
+    {
+        return $this->containerName;
+    }
+
+    public function setContainerName(string $containerName): void
+    {
+        $this->containerName = $containerName;
+    }
+
+    public function getMasterName(): string
+    {
+        return $this->masterName;
+    }
+
+    public function getInstanceName(): string
+    {
+        return $this->instanceName;
+    }
+
+    public function getZfsFilesystemName(): ?string
+    {
+        return $this->zfsFilesystemName;
+    }
+
+    public function getCreatedAt(): ?int
+    {
+        return $this->createdAt;
     }
 
     public function getDockerState(): ?string
@@ -100,23 +155,13 @@ final class ServiceClonerStatusDTO
         $this->dockerState = $dockerState;
     }
 
-    public function getIndex(): ?int
+    public function setZfsFilesystem(?FilesystemDTO $zfsFilesystem): void
     {
-        return $this->index;
+        $this->zfsFilesystem = $zfsFilesystem;
     }
 
-    public function setIndex(?int $index): void
+    public function getZfsFilesystem(): ?FilesystemDTO
     {
-        $this->index = $index;
-    }
-
-    public function getContainerName(): string
-    {
-        return $this->containerName;
-    }
-
-    public function setContainerName(string $containerName): void
-    {
-        $this->containerName = $containerName;
+        return $this->zfsFilesystem;
     }
 }

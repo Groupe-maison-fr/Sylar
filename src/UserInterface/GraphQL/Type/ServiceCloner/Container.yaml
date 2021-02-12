@@ -9,9 +9,15 @@ Container:
         type: String!
       instanceName:
         type: String!
+      isMaster:
+        type: Boolean!
       instanceIndex:
-        type: String!
+        type: Int!
+      dockerState:
+        type: String
       zfsFilesystemName:
         type: String!
       time:
-        type: String!
+        type: Int!
+      zfsFilesystem:
+        type: Filesystem

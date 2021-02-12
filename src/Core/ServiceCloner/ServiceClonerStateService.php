@@ -7,6 +7,7 @@ namespace App\Core\ServiceCloner;
 use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Infrastructure\Docker\ContainerStateServiceInterface;
 use App\Infrastructure\Filesystem\FilesystemServiceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Psr\Log\LoggerInterface;
 use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
@@ -42,91 +43,102 @@ final class ServiceClonerStateService implements ServiceClonerStateServiceInterf
         $this->dockerStateService = $dockerStateService;
     }
 
-    public function saveState(string $masterName, string $instanceName, int $index): void
+    public function createState(string $masterName, string $instanceName, int $index): void
     {
-        $this->filesystem->dumpFile(sprintf(
-            '%s/%s.json',
-            $this->configurationService->getConfiguration()->getstateRoot(),
-            $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '@')
-        ), json_encode([
-            'containerName' => $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '_'),
-            'masterName' => $masterName,
-            'instanceName' => $instanceName,
-            'instanceIndex' => $index,
-            'zfsFilesystemName' => $this->serviceClonerNamingService->getZfsFilesystemName($masterName, $instanceName),
-            'zfsFilesystem' => $this->zfsService->getFilesystem($this->serviceClonerNamingService->getZfsFilesystemName($masterName, $instanceName)),
-            'time' => time(),
-        ]));
+        $serviceClonerStatusDTO = new ServiceClonerStatusDTO(
+            $masterName,
+            $instanceName,
+            $index,
+            $this->serviceClonerNamingService->getDockerName($masterName, $instanceName),
+            $this->serviceClonerNamingService->getZfsFilesystemName($masterName, $instanceName),
+            $this->serviceClonerNamingService->getZfsFilesystemPath($masterName, $instanceName),
+            time()
+        );
+        $this->filesystem->dumpFile(
+            $this->getStateFileName($masterName, $instanceName),
+            json_encode($serviceClonerStatusDTO->toArray(), JSON_PRETTY_PRINT)
+        );
+    }
+
+    public function loadState(string $masterName, string $instanceName): ?ServiceClonerStatusDTO
+    {
+        return $this->refreshState(ServiceClonerStatusDTO::createFromArray(
+            json_decode(file_get_contents($this->getStateFileName($masterName, $instanceName)), true)
+        ));
+    }
+
+    public function hasMasterDependantService(string $masterName): bool
+    {
+        return !(new ArrayCollection($this->getStates()))
+            ->filter(fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getMasterName() === $masterName)
+            ->filter(fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => !$serviceClonerStatusDTO->isMaster())
+            ->isEmpty();
     }
 
     public function deleteState(string $masterName, string $instanceName): void
     {
-        $fullName = $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '@');
-        $stateFilename = sprintf('%s/%s.json', $this->configurationService->getConfiguration()->getstateRoot(), $fullName);
-        unlink($stateFilename);
+        unlink($this->getStateFileName($masterName, $instanceName));
     }
 
-    public function getState(string $masterName, string $instanceName): ?ServiceClonerStatusDTO
+    public function refreshState(ServiceClonerStatusDTO $serviceClonerStatusDTO): ServiceClonerStatusDTO
     {
-        $fullName = $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '@');
-        $stateFilename = sprintf('%s/%s.json', $this->configurationService->getConfiguration()->getstateRoot(), $fullName);
-
-        $serviceClonerStatusDTO = new ServiceClonerStatusDTO($masterName, $instanceName);
-
-        if (!$this->filesystem->exists($stateFilename)) {
-            $this->logger->info(sprintf('State file "%s" does not exists', $stateFilename));
-
-            return null;
-        }
-        $rawState = json_decode(file_get_contents($stateFilename), true);
-        $serviceClonerStatusDTO->setStateFilename($stateFilename);
-        $serviceClonerStatusDTO->setContainerName($rawState['containerName']);
-
         $zfsFilesystemPath = sprintf(
             '/%s/%s',
             $this->configurationService->getConfiguration()->getZpoolName(),
-            $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '-')
+            $this->serviceClonerNamingService->getFullName(
+                $serviceClonerStatusDTO->getMasterName(),
+                $serviceClonerStatusDTO->getInstanceName(),
+                '-'
+            )
         );
-        if (!$this->zfsService->hasFilesystem($zfsFilesystemPath)) {
-            $this->logger->info(sprintf('ZFS "%s" does not exists', $zfsFilesystemPath));
 
-            return null;
-        }
-        $serviceClonerStatusDTO->setZfsPath($zfsFilesystemPath);
-
-        if ($this->dockerStateService->dockerState($fullName) !== 'running') {
-            $this->logger->info(sprintf('Docker "%s" does not exists', $fullName));
-
-            return null;
+        if ($this->zfsService->hasFilesystem($zfsFilesystemPath)) {
+            $serviceClonerStatusDTO->setZfsFilesystem(
+                $this->zfsService->getFilesystem($zfsFilesystemPath)
+            );
         }
 
-        if ($this->serviceClonerNamingService->isMasterName($instanceName)) {
-            $serviceClonerStatusDTO->setIsMaster(false);
-
-            return $serviceClonerStatusDTO;
-        }
-        $serviceClonerStatusDTO->setIsMaster(true);
-
-        $serviceClonerStatusDTO->setIndex($rawState['instanceIndex']);
+        $serviceClonerStatusDTO->setDockerState(
+            $this->dockerStateService->dockerState(
+                $this->serviceClonerNamingService->getDockerName(
+                    $serviceClonerStatusDTO->getMasterName(),
+                    $serviceClonerStatusDTO->getInstanceName()
+                )
+            )
+        );
 
         return $serviceClonerStatusDTO;
     }
 
     public function getStates(): array
     {
-        $states = array_values(array_map(function (SplFileInfo $filename) {
+        $states = array_filter(array_values(array_map(function (SplFileInfo $filename) {
             $rawData = json_decode(file_get_contents($filename->getPathname()), true);
-            return $this->getState($rawData['masterName'], $rawData['instanceName']);
+
+            return $this->refreshState(ServiceClonerStatusDTO::createFromArray($rawData));
         }, iterator_to_array(Finder::create()
             ->files()
             ->name('*.json')
             ->in($this->configurationService->getConfiguration()->getstateRoot())->getIterator()
-        )));
+        ))));
 
         uasort($states, function (ServiceClonerStatusDTO $stateA, ServiceClonerStatusDTO $stateB) {
             return $stateA->getContainerName() <=> $stateB->getContainerName();
         });
 
         return $states;
+    }
+
+    private function getStateFileName(string $masterName, string $instanceName): string
+    {
+        return sprintf(
+            '%s/%s.json',
+            $this->configurationService->getConfiguration()->getstateRoot(),
+            $this->serviceClonerNamingService->getFullName(
+                $masterName,
+                $instanceName,
+                '@'
+            )
+        );
     }
 }
