@@ -9,10 +9,7 @@ use Symfony\Component\Process\Process as SymfonyProcess;
 
 final class Process implements ProcessInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(
         LoggerInterface $logger

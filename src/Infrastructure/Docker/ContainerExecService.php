@@ -9,24 +9,14 @@ use Docker\API\Model\ContainersIdExecPostBody;
 use Docker\API\Model\ExecIdStartPostBody;
 use Docker\Docker;
 use Docker\Stream\DockerRawStream;
+use DomainException;
 use Psr\Log\LoggerInterface;
 
 final class ContainerExecService implements ContainerExecServiceInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Docker
-     */
-    private $docker;
-
-    /**
-     * @var ContainerFinderServiceInterface
-     */
-    private $dockerFinderService;
+    private LoggerInterface $logger;
+    private Docker $docker;
+    private ContainerFinderServiceInterface $dockerFinderService;
 
     public function __construct(
         Docker $docker,
@@ -42,7 +32,7 @@ final class ContainerExecService implements ContainerExecServiceInterface
     {
         $container = $this->dockerFinderService->getDockerByName($dockerName);
         if ($container === null) {
-            return '';
+            throw new DomainException(sprintf('Container %s not found', $dockerName));
         }
         $execConfig = new ContainersIdExecPostBody();
         $execConfig

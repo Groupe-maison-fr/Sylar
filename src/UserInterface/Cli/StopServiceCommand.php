@@ -16,15 +16,8 @@ final class StopServiceCommand extends Command
     private const ARGUMENT_SERVICE_NAME = 'serviceName';
     private const ARGUMENT_INSTANCE_NAME = 'instanceName';
 
-    /**
-     * @var ConfigurationServiceInterface
-     */
-    private $dockerConfiguration;
-
-    /**
-     * @var ServiceClonerServiceInterface
-     */
-    private $serviceClonerService;
+    private ConfigurationServiceInterface $dockerConfiguration;
+    private ServiceClonerServiceInterface $serviceClonerService;
 
     public function __construct(
         ConfigurationServiceInterface $dockerConfiguration,

@@ -20,11 +20,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleHookServiceInterface
 {
     private ContainerWaitUntilLogServiceInterface $dockerWaitUntilLogService;
-
     private ContainerExecServiceInterface $containerExecService;
-
     private SudoProcess $process;
-
     private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
 
     public function __construct(

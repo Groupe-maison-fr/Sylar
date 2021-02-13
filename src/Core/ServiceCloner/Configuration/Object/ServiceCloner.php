@@ -8,25 +8,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class ServiceCloner
 {
-    /**
-     * @var string
-     */
-    private $stateRoot;
-
-    /**
-     * @var string
-     */
-    private $zpoolName;
-
-    /**
-     * @var string
-     */
-    private $zpoolRoot;
-
-    /**
-     * @var string
-     */
-    private $configurationRoot;
+    private string $stateRoot;
+    private string $zpoolName;
+    private string $zpoolRoot;
+    private string $configurationRoot;
 
     /**
      * @var Service[]|ArrayCollection

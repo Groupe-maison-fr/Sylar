@@ -12,7 +12,6 @@ final class ServiceClonerNamingService implements ServiceClonerNamingServiceInte
     private const MASTER_NAME = 'master';
 
     private SluggerInterface $slugger;
-
     private ConfigurationServiceInterface $dockerConfiguration;
 
     public function __construct(

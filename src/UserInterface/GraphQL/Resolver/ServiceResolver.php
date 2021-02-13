@@ -13,10 +13,7 @@ use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 final class ServiceResolver implements ResolverInterface
 {
-    /**
-     * @var ConfigurationServiceInterface
-     */
-    private $configurationService;
+    private ConfigurationServiceInterface $configurationService;
 
     public function __construct(
         ConfigurationServiceInterface $configurationService

@@ -19,7 +19,6 @@ if (is_array($env = @include dirname(__DIR__) . '/.env.local.php') && $env['APP_
     (new Dotenv(false))->loadEnv(dirname(__DIR__) . '/.env');
 }
 
-
 $_SERVER += $_ENV;
 $inPhar = substr(Phar::running(), 0, 4) === 'phar';
 if ($inPhar) {

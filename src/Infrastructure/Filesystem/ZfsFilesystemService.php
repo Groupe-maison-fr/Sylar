@@ -14,11 +14,7 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
 {
     private const headerList = ['name', 'avail', 'used', 'usedsnap', 'usedds', 'usedrefreserv', 'usedchild', 'refer', 'mountpoint', 'origin', 'type'];
 
-    /**
-     * @var ProcessInterface
-     */
-    private $process;
-
+    private ProcessInterface $process;
     private BytesFormatConvertorInterface $sizeFormatConvertor;
 
     public function __construct(ProcessInterface $process, BytesFormatConvertorInterface $sizeFormatConvertor)

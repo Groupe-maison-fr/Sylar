@@ -19,25 +19,10 @@ use Tests\AbstractIntegrationTest;
  */
 final class ZfsFilesystemServiceIntegrationTest extends AbstractIntegrationTest
 {
-    /**
-     * @var ConfigurationServiceInterface
-     */
-    private $configurationService;
-
-    /**
-     * @var FilesystemServiceInterface
-     */
-    private $zfsFilesystemService;
-
-    /**
-     * @var ProcessInterface
-     */
-    private $process;
-
-    /**
-     * @var string
-     */
-    private $testRoot;
+    private ConfigurationServiceInterface $configurationService;
+    private FilesystemServiceInterface $zfsFilesystemService;
+    private ProcessInterface $process;
+    private string $testRoot;
 
     protected function setUp(): void
     {

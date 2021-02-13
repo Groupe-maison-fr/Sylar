@@ -9,11 +9,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ConfigurationExpressionGenerator implements ConfigurationExpressionGeneratorInterface
 {
-    /**
-     * @var ExpressionLanguage
-     */
-    private $expressionLanguage;
-
+    private ExpressionLanguage $expressionLanguage;
     private ConfigurationServiceInterface $configurationService;
 
     public function __construct(

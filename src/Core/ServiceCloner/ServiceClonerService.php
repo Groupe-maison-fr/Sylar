@@ -24,31 +24,18 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
     private const MASTER_NAME = 'master';
 
     private ConfigurationServiceInterface $dockerConfiguration;
-
     private Filesystem $filesystem;
-
     private LoggerInterface $logger;
-
     private FilesystemServiceInterface $zfsService;
-
     private SluggerInterface $slugger;
-
     private ContainerCreationServiceInterface $containerStateService;
-
     private ServiceCloner $configuration;
-
     private ContainerStateServiceInterface $dockerStateService;
-
     private ServiceClonerLifeCycleHookServiceInterface $serviceClonerLifeCycleHookService;
-
     private ServiceClonerNamingServiceInterface $serviceClonerNamingService;
-
     private ServiceClonerStateService $serviceClonerStateService;
-
     private ContainerStopServiceInterface $containerStopService;
-
     private ContainerDeleteServiceInterface $containerDestroyService;
-
     private IndexManagerServiceInterface $indexManagerService;
 
     public function __construct(

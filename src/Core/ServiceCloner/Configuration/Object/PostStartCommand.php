@@ -8,10 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class PostStartCommand
 {
-    /**
-     * @var string
-     */
-    private $executionEnvironment;
+    private string $executionEnvironment;
 
     /**
      * @var string[] | ArrayCollection

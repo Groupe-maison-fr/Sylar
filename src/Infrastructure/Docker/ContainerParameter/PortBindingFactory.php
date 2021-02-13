@@ -9,10 +9,7 @@ use Docker\API\Model\PortBinding;
 
 final class PortBindingFactory implements PortBindingFactoryInterface
 {
-    /**
-     * @var ConfigurationExpressionGeneratorInterface
-     */
-    private $configurationExpressionGenerator;
+    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
 
     public function __construct(
         ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator

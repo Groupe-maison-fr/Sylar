@@ -16,15 +16,10 @@ use Symfony\Component\Finder\Finder;
 final class ServiceClonerStateService implements ServiceClonerStateServiceInterface
 {
     private FilesystemServiceInterface $zfsService;
-
     private Filesystem $filesystem;
-
     private ServiceClonerNamingServiceInterface $serviceClonerNamingService;
-
     private ConfigurationServiceInterface $configurationService;
-
     private LoggerInterface $logger;
-
     private ContainerStateServiceInterface $dockerStateService;
 
     public function __construct(

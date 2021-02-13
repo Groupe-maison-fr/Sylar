@@ -26,40 +26,13 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerCreationService implements ContainerCreationServiceInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Docker
-     */
-    private $docker;
-
-    /**
-     * @var PortBindingFactoryInterface
-     */
-    private $bindingSpecificationFactory;
-
-    /**
-     * @var MountFactoryInterface
-     */
-    private $mountSpecificationFactory;
-
-    /**
-     * @var EnvironmentFactoryInterface
-     */
-    private $environmentSpecificationFactory;
-
-    /**
-     * @var LabelFactoryInterface
-     */
-    private $labelSpecificationFactory;
-
-    /**
-     * @var ContainerImageServiceInterface
-     */
-    private $dockerPullService;
+    private LoggerInterface $logger;
+    private Docker $docker;
+    private PortBindingFactoryInterface $bindingSpecificationFactory;
+    private MountFactoryInterface $mountSpecificationFactory;
+    private EnvironmentFactoryInterface $environmentSpecificationFactory;
+    private LabelFactoryInterface $labelSpecificationFactory;
+    private ContainerImageServiceInterface $dockerPullService;
 
     public function __construct(
         Docker $docker,

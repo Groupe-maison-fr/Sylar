@@ -6,10 +6,7 @@ namespace App\Infrastructure\Process;
 
 final class SudoProcess implements ProcessInterface
 {
-    /**
-     * @var Process
-     */
-    private $process;
+    private Process $process;
 
     public function __construct(Process $process)
     {

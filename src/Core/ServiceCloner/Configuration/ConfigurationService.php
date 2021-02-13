@@ -21,7 +21,6 @@ use Symfony\Component\Yaml\Yaml;
 final class ConfigurationService implements ConfigurationServiceInterface
 {
     private string $configurationFilename;
-
     private string $configurationRoot;
 
     public function __construct(

@@ -8,53 +8,15 @@ use App\Infrastructure\Filesystem\FilesystemDTO;
 
 final class ServiceClonerStatusDTO
 {
-    /**
-     * @var string
-     */
-    private $masterName;
-
-    /**
-     * @var string
-     */
-    private $instanceName;
-
-    /**
-     * @var string
-     */
-    private $containerName;
-
-    /**
-     * @var string|null
-     */
-    private $stateFilename;
-
-    /**
-     * @var string|null
-     */
-    private $zfsFilesystemName;
-
+    private string $masterName;
+    private string $instanceName;
+    private int $index;
+    private string $containerName;
+    private string $zfsFilesystemName;
     private string $zfsFilesystemPath;
-
-    /**
-     * @var FilesystemDTO|null
-     */
-    private $zfsFilesystem;
-
-    /**
-     * @var bool|null
-     */
-    private $isMaster;
-
-    /**
-     * @var int|null
-     */
-    private $index;
-
-    /**
-     * @var string|null
-     */
-    private $dockerState;
-
+    private bool $isMaster;
+    private ?FilesystemDTO $zfsFilesystem;
+    private ?string $dockerState;
     private ?int $createdAt;
 
     public function __construct(
@@ -105,7 +67,7 @@ final class ServiceClonerStatusDTO
         );
     }
 
-    public function isMaster(): ?bool
+    public function isMaster(): bool
     {
         return $this->isMaster;
     }

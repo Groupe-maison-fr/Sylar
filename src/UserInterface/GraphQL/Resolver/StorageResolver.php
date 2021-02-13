@@ -14,15 +14,8 @@ use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 final class StorageResolver implements ResolverInterface
 {
-    /**
-     * @var ConfigurationServiceInterface
-     */
-    private $configurationService;
-
-    /**
-     * @var ZfsFilesystemService
-     */
-    private $zfsService;
+    private ConfigurationServiceInterface $configurationService;
+    private ZfsFilesystemService $zfsService;
 
     public function __construct(
         ConfigurationServiceInterface $configurationService,

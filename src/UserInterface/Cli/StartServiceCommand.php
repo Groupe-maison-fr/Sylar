@@ -17,15 +17,8 @@ final class StartServiceCommand extends Command
     private const ARGUMENT_INSTANCE_NAME = 'instanceName';
     private const ARGUMENT_INSTANCE_INDEX = 'instanceIndex';
 
-    /**
-     * @var ConfigurationServiceInterface
-     */
-    private $dockerConfiguration;
-
-    /**
-     * @var ServiceClonerServiceInterface
-     */
-    private $serviceClonerService;
+    private ConfigurationServiceInterface $dockerConfiguration;
+    private ServiceClonerServiceInterface $serviceClonerService;
 
     public function __construct(
         ConfigurationServiceInterface $dockerConfiguration,

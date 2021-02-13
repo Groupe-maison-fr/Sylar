@@ -6,20 +6,9 @@ namespace App\Core\ServiceCloner\Configuration\Object;
 
 final class Port
 {
-    /**
-     * @var string
-     */
-    private $containerPort;
-
-    /**
-     * @var string
-     */
-    private $hostPort;
-
-    /**
-     * @var string
-     */
-    private $hostIp;
+    private string $containerPort;
+    private string $hostPort;
+    private string $hostIp;
 
     public function getContainerPort(): string
     {

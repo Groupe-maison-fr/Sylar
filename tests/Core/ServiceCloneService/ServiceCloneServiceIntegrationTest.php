@@ -22,35 +22,13 @@ use Tests\AbstractIntegrationTest;
 final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
 {
     use LoggerAwareTestTrait;
-    /**
-     * @var ServiceClonerServiceInterface
-     */
-    private $serviceCloneService;
 
-    /**
-     * @var ContainerExecServiceInterface
-     */
-    private $containerExecService;
-
-    /**
-     * @var ContainerCreationServiceInterface
-     */
-    private $containerCreationService;
-
-    /**
-     * @var ConfigurationServiceInterface
-     */
-    private $configurationService;
-
-    /**
-     * @var string
-     */
-    private $testRoot;
-
-    /**
-     * @var SudoProcess
-     */
-    private $process;
+    private ServiceClonerServiceInterface $serviceCloneService;
+    private ContainerExecServiceInterface $containerExecService;
+    private ContainerCreationServiceInterface $containerCreationService;
+    private ConfigurationServiceInterface $configurationService;
+    private string $testRoot;
+    private SudoProcess $process;
 
     private ContainerFinderServiceInterface $containerFinderService;
 

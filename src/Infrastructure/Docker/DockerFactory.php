@@ -11,10 +11,7 @@ use Http\Client\Common\PluginClient;
 
 final class DockerFactory implements DockerFactoryInterface
 {
-    /**
-     * @var DockerApiLogger
-     */
-    private $dockerApiLogger;
+    private DockerApiLogger $dockerApiLogger;
 
     public function __construct(
         DockerApiLogger $dockerApiLogger

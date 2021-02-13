@@ -13,15 +13,8 @@ use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 final class ContainerResolver implements ResolverInterface
 {
-    /**
-     * @var ConfigurationServiceInterface
-     */
-    private $configurationService;
-
-    /**
-     * @var ServiceClonerStateService
-     */
-    private $serviceClonerStateService;
+    private ConfigurationServiceInterface $configurationService;
+    private ServiceClonerStateService $serviceClonerStateService;
 
     public function __construct(
         ConfigurationServiceInterface $configurationService,

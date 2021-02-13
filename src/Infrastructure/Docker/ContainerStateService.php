@@ -10,15 +10,8 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerStateService implements ContainerStateServiceInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Docker
-     */
-    private $docker;
+    private LoggerInterface $logger;
+    private Docker $docker;
 
     /**
      * @var ContainerFinderService

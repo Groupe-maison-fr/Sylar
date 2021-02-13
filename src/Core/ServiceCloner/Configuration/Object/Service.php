@@ -8,25 +8,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class Service
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $image;
-
-    /**
-     * @var string|null
-     */
-    private $command;
-
-    /**
-     * @var string|null
-     */
-    private $entryPoint;
+    private string $name;
+    private string $image;
+    private string $command;
+    private ?string $entryPoint;
 
     /**
      * @var LifeCycleHooks|null

@@ -9,23 +9,36 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 final class ConsoleCommandFilterCompilerPass implements CompilerPassInterface
 {
-    private $filteredNamespaces;
+    private array $excluded;
+
+    private array $whitelisted;
 
     public function __construct()
     {
-        $this->filteredNamespaces = ['Doctrine', 'Symfony', 'Overblog'];
+        $this->excluded = ['^Doctrine', '^Symfony', '^Overblog'];
+        $this->whitelisted = ['.*\\\\Cache.*Command$', 'Messenger', '^App', 'Doctrine\\\\Migrations\\\\Tools\\\\Console\\\\Command\\\\StatusCommand'];
     }
 
     public function process(ContainerBuilder $container): void
     {
         foreach ($container->findTaggedServiceIds('console.command') as $id => $attributes) {
-            $definition = $container->getDefinition($id);
-            foreach ($this->filteredNamespaces as $filteredNamespace) {
-                if (strpos($definition->getClass(), $filteredNamespace) === 0) {
-                    $this->removeCommand($container, $id);
-                }
+            $class = $container->getDefinition($id)->getClass();
+            if ($this->pregMatchPatternArray($this->excluded, $class) &&
+                !$this->pregMatchPatternArray($this->whitelisted, $class)) {
+                $this->removeCommand($container, $id);
             }
         }
+    }
+
+    private function pregMatchPatternArray(array $regularExpressions, string $className): bool
+    {
+        foreach ($regularExpressions as $regularExpression) {
+            if (preg_match('!' . $regularExpression . '!', $className)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function removeCommand(ContainerBuilder $container, $id): void

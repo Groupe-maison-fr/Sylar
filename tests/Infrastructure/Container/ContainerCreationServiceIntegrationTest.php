@@ -19,30 +19,11 @@ use Tests\AbstractIntegrationTest;
  */
 final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationTest
 {
-    /**
-     * @var ConfigurationServiceInterface
-     */
-    private $configurationService;
-
-    /**
-     * @var ContainerCreationServiceInterface
-     */
-    private $containerCreationService;
-
-    /**
-     * @var ContainerFinderServiceInterface
-     */
-    private $containerFinderService;
-
-    /**
-     * @var SudoProcess
-     */
-    private $sudoProcess;
-
-    /**
-     * @var ContainerExecServiceInterface
-     */
-    private $containerExecService;
+    private ConfigurationServiceInterface $configurationService;
+    private ContainerCreationServiceInterface $containerCreationService;
+    private ContainerFinderServiceInterface $containerFinderService;
+    private SudoProcess $sudoProcess;
+    private ContainerExecServiceInterface $containerExecService;
 
     protected function setUp(): void
     {

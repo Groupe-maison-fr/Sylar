@@ -13,20 +13,9 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerWaitUntilLogService implements ContainerWaitUntilLogServiceInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Docker
-     */
-    private $docker;
-
-    /**
-     * @var ContainerFinderServiceInterface
-     */
-    private $containerFinderService;
+    private LoggerInterface $logger;
+    private Docker $docker;
+    private ContainerFinderServiceInterface $containerFinderService;
 
     public function __construct(
         Docker $docker,
