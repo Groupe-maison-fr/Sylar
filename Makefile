@@ -117,3 +117,30 @@ build: node_modules vendor-prod
 	box compile -vvv
 	mv build/sylar.phar build/sylar
 	ls -lah build
+
+#start-local:
+#	rm data/mysql*.json
+#	docker rm -f mysql mysql_slave1 mysql_slave2 mysql_slave3 mysql_slave4 mysql_slave5
+#	sudo zpool destroy local-mysql-pool
+#	- sudo zfs destroy -Rf local-mysql-pool || true
+#	- sudo zpool destroy -f local-mysql-pool || true
+#	- sudo rm -rf /tmp/localroot || true
+#	- sudo rm -rf /local-mysql-pool || true
+#	- sudo mkdir /tmp/localroot || true
+#	sudo fallocate -l 2G /tmp/localroot/local-mysql-root
+#	sudo zpool create local-mysql-pool /tmp/localroot/local-mysql-root
+#	bin/console --no-debug service:start-master mysql
+#	bin/console --no-debug service:start mysql slave1
+#	bin/console --no-debug service:start mysql slave2
+
+start-local:
+	- rm data/mysql*.json
+	- docker rm -f mysql mysql_slave1 mysql_slave2 mysql_slave3 mysql_slave4 mysql_slave5
+	sudo zpool destroy sylar
+	sudo zpool create -f sylar /dev/sdb /dev/sdc
+	bin/console --no-debug service:start-master mysql
+	bin/console --no-debug service:start mysql slave1
+	bin/console --no-debug service:start mysql slave2
+
+
+# stop slave;CHANGE MASTER TO MASTER_HOST='192.168.99.21', MASTER_USER='replication_user', MASTER_PASSWORD='replication_password';start slave;
