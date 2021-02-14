@@ -49,18 +49,18 @@ final class ContainerWaitUntilLogService implements ContainerWaitUntilLogService
 
     private function initTimeoutAlarm(int $timeout, DockerRawStreamUntil $logsStream, ContainerParameterDTO $containerParameter): void
     {
-        pcntl_signal(SIGALRM, function (int $signo) use ($logsStream, $containerParameter): void {
+        \pcntl_signal(SIGALRM, function (int $signo) use ($logsStream, $containerParameter): void {
             $this->logger->debug(sprintf('SIGALRM (%d) DockerWaitUntilLogService for %s', $signo, $containerParameter->getName()));
             $logsStream->exitWait();
         }, true);
-        pcntl_alarm($timeout);
+        \pcntl_alarm($timeout);
     }
 
     private function getStreamMatcherCallback(string $type, string $expression, DockerRawStreamUntil $logsStream, ContainerParameterDTO $containerParameter)
     {
         return function ($buffer) use ($type, $expression, $logsStream, $containerParameter): void {
             if (preg_match($expression, $buffer)) {
-                pcntl_alarm(0);
+                \pcntl_alarm(0);
                 $logsStream->exitWait();
             }
             $this->logger->debug(sprintf('%s on "%s": %s', strtoupper($type), $containerParameter->getName(), $buffer));
