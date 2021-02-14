@@ -1,0 +1,6 @@
+ErrorInterface:
+  type: interface
+  config:
+    fields:
+      code: String!
+      message: String!

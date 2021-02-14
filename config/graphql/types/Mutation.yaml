@@ -1,3 +1,3 @@
-#Mutation:
-#  type: object
-#  inherits: [MutationUserInterface]
+Mutations:
+  type: object
+  inherits: [MutationUserInterface]

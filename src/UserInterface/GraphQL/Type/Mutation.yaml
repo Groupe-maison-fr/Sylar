@@ -1,11 +1,17 @@
-MutationFacilities:
+MutationUserInterface:
   type: object
   decorator: true
   config:
     fields:
       loginUser:
         type: LoginUserOutput!
-        resolve: '@=mutation("App\\Core\\Facilities\\Infrastructure\\Graphql\\Mutation\\LoginUserMutation", [args["input"]["username"], args["input"]["password"]])'
+        resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\LoginUserMutation", [args["input"]["username"], args["input"]["password"]])'
         args:
           input:
             type: LoginUserInput!
+      startService:
+        type: StartServiceOutput!
+        resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\StartServiceMutation", [args["input"]["masterName"], args["input"]["instanceName"], args["input"]["index"]])'
+        args:
+          input:
+            type: StartServiceInput!

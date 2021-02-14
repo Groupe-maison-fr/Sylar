@@ -34,3 +34,7 @@ services:
 
     Docker\Docker:
         factory: ['@App\Infrastructure\Docker\DockerFactory', 'create']
+
+    App\UserInterface\GraphQL\ResolverMap\:
+        resource: '%kernel.project_dir%/src/UserInterface/GraphQL/ResolverMap'
+        tags: [{ name: overblog_graphql.resolver_map, schema: default }]
