@@ -17,7 +17,8 @@ import {
 } from '@material-ui/core';
 import queryContainers from "../../graphQL/ServiceCloner/queryContainers";
 import Filesystems from "./Filesystems";
-
+import DeleteIcon from '@material-ui/icons/Delete';
+import mutationStopService from "../../graphQL/ServiceCloner/mutationStopService";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -33,6 +34,12 @@ const Containers = ({className, ...rest}) => {
   useEffect(() => {
     queryContainers().then(setData)
   }, []);
+
+  const stopService = (masterName, instanceName) =>{
+    mutationStopService(masterName, instanceName).then(() => {
+      queryContainers().then(setData)
+    })
+  }
 
   return (
       <Card
@@ -51,6 +58,7 @@ const Containers = ({className, ...rest}) => {
                   <TableCell>Instance</TableCell>
                   <TableCell>Index</TableCell>
                   <TableCell>Filesystem</TableCell>
+                  <TableCell>&nbsp;</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -64,6 +72,11 @@ const Containers = ({className, ...rest}) => {
                       <TableCell>{service.instanceName}</TableCell>
                       <TableCell>{service.instanceIndex}</TableCell>
                       <TableCell>{service.zfsFilesystemName}</TableCell>
+                      <TableCell>
+                        {service.instanceName !=="master" &&
+                          <DeleteIcon onClick={() => stopService(service.masterName, service.instanceName)}></DeleteIcon>
+                        }
+                      </TableCell>
                     </TableRow>
                 ))}
               </TableBody>
