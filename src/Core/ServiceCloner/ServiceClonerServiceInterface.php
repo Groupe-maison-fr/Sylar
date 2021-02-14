@@ -6,7 +6,9 @@ namespace App\Core\ServiceCloner;
 
 interface ServiceClonerServiceInterface
 {
-    public function start(string $masterName, string $instanceName, ?int $index): void;
+    public function startMaster(string $masterName): void;
+
+    public function startService(string $masterName, string $instanceName, ?int $index): void;
 
     public function stop(string $masterName, string $instanceName): void;
 }

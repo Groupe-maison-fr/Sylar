@@ -114,7 +114,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
     public function it_should_start_mysql_master_and_can_query_on_it(): void
     {
         $this->setDependentServices('start_master');
-        $this->serviceCloneService->start('mysql_start_master', 'master', 0);
+        $this->serviceCloneService->startMaster('mysql_start_master');
         $tableNames = explode(PHP_EOL, $this->containerExecMysql('mysql-start-master', 'select TABLE_NAME from information_schema.TABLES'));
         $slowQueryVariables = explode(PHP_EOL, $this->containerExecMysql('mysql-start-master', 'show variables like \'slow_query_log_file\''));
 
@@ -131,7 +131,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
     public function it_should_start_master_and_clones(): void
     {
         $this->setDependentServices('start_master_clones');
-        $this->serviceCloneService->start('mysql_start_master_clones', 'master', 0);
+        $this->serviceCloneService->startMaster('mysql_start_master_clones');
         $this->containerExecMysql('mysql-start-master-clones', 'create database testdb;');
         $this->containerExecMysql('mysql-start-master-clones', <<<EOS
             create table testdb.test (
@@ -146,13 +146,13 @@ EOS);
             (2,'value_2');
 EOS);
 
-        $this->serviceCloneService->start('mysql_start_master_clones', '01', 1);
+        $this->serviceCloneService->startService('mysql_start_master_clones', '01', 1);
         $this->containerExecMysql('mysql-start-master-clones_01', <<<EOS
             insert into testdb.test values 
             (3,'value_3'),
             (4,'value_4');
 EOS);
-        $this->serviceCloneService->start('mysql_start_master_clones', '02', 2);
+        $this->serviceCloneService->startService('mysql_start_master_clones', '02', 2);
 
         $this->containerExecMysql('mysql-start-master-clones', <<<EOS
             insert into testdb.test values 
@@ -195,7 +195,7 @@ EOS);
         $this->resetBufferedLoggerHandler();
 
         $dockerName = $this->configurationService->getConfiguration()->getServices()[0]->getName();
-        $this->serviceCloneService->start($dockerName, 'master', 0);
+        $this->serviceCloneService->startMaster($dockerName);
 
         /** @var ContainerSummaryItem $containerSummaryItem */
         $containerSummaryItem = $this->containerFinderService->getDockerByName($dockerName);

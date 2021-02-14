@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\UserInterface\Cli;
 
 use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
+use App\Core\ServiceCloner\Exception\StartServiceException;
 use App\Core\ServiceCloner\ServiceClonerServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -49,14 +50,16 @@ final class StopServiceCommand extends Command
         $serviceName = $input->getArgument(self::ARGUMENT_SERVICE_NAME);
         $instanceName = $input->getArgument(self::ARGUMENT_INSTANCE_NAME);
 
-        $serviceConfiguration = $this->dockerConfiguration->getConfiguration()->getServiceByName($serviceName);
-        if ($serviceConfiguration === null) {
-            $output->writeln(sprintf('<error>Service name %s does not exists</error>', $serviceName));
+        try {
+            $this->serviceClonerService->stop(
+                $serviceName,
+                $instanceName
+            );
+        } catch (StartServiceException $exception) {
+            $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
 
             return 1;
         }
-
-        $this->serviceClonerService->stop($serviceName, $instanceName);
 
         return 0;
     }

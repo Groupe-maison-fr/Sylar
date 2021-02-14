@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\UserInterface\Cli;
 
 use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
+use App\Core\ServiceCloner\Exception\StartServiceException;
 use App\Core\ServiceCloner\ServiceClonerServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -44,14 +45,13 @@ final class StartMasterServiceCommand extends Command
     {
         $serviceName = $input->getArgument(self::ARGUMENT_SERVICE_NAME);
 
-        $serviceConfiguration = $this->dockerConfiguration->getConfiguration()->getServiceByName($serviceName);
-        if ($serviceConfiguration === null) {
-            $output->writeln(sprintf('<error>Service name %s does not exists</error>', $serviceName));
+        try {
+            $this->serviceClonerService->startMaster($serviceName);
+        } catch (StartServiceException $exception) {
+            $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
 
             return 1;
         }
-
-        $this->serviceClonerService->start($serviceName, 'master', 0);
 
         return 0;
     }

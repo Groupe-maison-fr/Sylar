@@ -6,8 +6,10 @@ namespace App\Core\ServiceCloner;
 
 use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\Configuration\Object\ServiceCloner;
+use App\Core\ServiceCloner\Exception\StartServiceException;
 use App\Core\ServiceCloner\Exception\NonExistingServiceException;
 use App\Core\ServiceCloner\Exception\NonExistingServiceInstanceException;
+use App\Core\ServiceCloner\Exception\StopServiceException;
 use App\Infrastructure\Docker\ContainerCreationServiceInterface;
 use App\Infrastructure\Docker\ContainerDeleteServiceInterface;
 use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
@@ -69,7 +71,19 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         $this->serviceClonerStateService = $serviceClonerStateService;
     }
 
-    public function start(string $masterName, string $instanceName, ?int $index): void
+    public function startMaster(string $masterName): void
+    {
+        $this->assertStartMasterParameters($masterName);
+        $this->start($masterName, 'master', 0);
+    }
+
+    public function startService(string $masterName, string $instanceName, ?int $index): void
+    {
+        $this->assertStartServiceParameters($masterName, $instanceName, $index);
+        $this->start($masterName, $instanceName, $index);
+    }
+
+    private function start(string $masterName, string $instanceName, ?int $index): void
     {
         if ($index === null) {
             $index = $this->indexManagerService->getNextAvailable();
@@ -82,6 +96,8 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
 
     public function stop(string $masterName, string $instanceName): void
     {
+        $this->assertStopParameters($masterName, $instanceName);
+
         $serviceState = $this->serviceClonerStateService->loadState($masterName, $instanceName);
         if ($serviceState === null) {
             throw new NonExistingServiceInstanceException($masterName, $instanceName);
@@ -200,5 +216,34 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         $snapshotName = $this->slugger->slug($instanceName)->toString();
 
         $this->zfsService->destroySnapshot($filesystem, $snapshotName);
+    }
+
+    private function assertStartMasterParameters(string $masterName): void
+    {
+        if ($this->dockerConfiguration->getConfiguration()->getServiceByName($masterName) === null) {
+            throw new StartServiceException(sprintf('Service name %s does not exists', $masterName));
+        }
+    }
+
+    private function assertStartServiceParameters(string $masterName, string $instanceName, ?int $index): void
+    {
+        if ($instanceName === 'master') {
+            throw new StartServiceException(sprintf('Service name %s can not be master', $instanceName));
+        }
+
+        if ($index !== null && (int) $index === 0) {
+            throw new StartServiceException(sprintf('Service index %s can not be 0', $instanceName));
+        }
+
+        if ($this->dockerConfiguration->getConfiguration()->getServiceByName($masterName) === null) {
+            throw new StartServiceException(sprintf('Service name %s does not exists', $masterName));
+        }
+    }
+
+    private function assertStopParameters(string $masterName, string $instanceName): void
+    {
+        if ($this->dockerConfiguration->getConfiguration()->getServiceByName($masterName) === null) {
+            throw new StopServiceException(sprintf('Service name %s does not exists', $masterName));
+        }
     }
 }
