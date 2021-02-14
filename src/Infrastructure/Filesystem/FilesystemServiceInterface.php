@@ -20,9 +20,9 @@ interface FilesystemServiceInterface
 
     public function isSnapshoted($name): bool;
 
-    public function getSnapshots(string $name): FilesystemCollection;
+    public function getSnapshots(): FilesystemCollection;
 
-    public function getSnapshot(string $name, string $instance): ?FilesystemDTO;
+    public function getSnapshot(string $name, ?string $instance = null): ?FilesystemDTO;
 
     public function hasSnapshot(string $name, string $instance): bool;
 

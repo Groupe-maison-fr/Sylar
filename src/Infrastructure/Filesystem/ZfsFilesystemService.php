@@ -78,26 +78,25 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
     public function isSnapshoted($name): bool
     {
         try {
-            return !$this->getSnapshots($name)->isEmpty();
+            return $this->getSnapshot($name) !== null;
         } catch (Exception $exception) {
             return false;
         }
     }
 
-    public function getSnapshots(string $name): FilesystemCollection
+    public function getSnapshots(): FilesystemCollection
     {
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList), '-t', 'snapshot', '-r', $name)
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList), '-t', 'snapshot')
         );
     }
 
-    public function getSnapshot(string $name, string $instance): ?FilesystemDTO
+    public function getSnapshot(string $name, ?string $instance = null): ?FilesystemDTO
     {
+        $snapshotName = $instance === null ? $name : sprintf('%s@%s', $name, $instance);
         $snapshots = $this
-            ->getSnapshots($name)
-            ->filter(function (FilesystemDTO $filesystem) use ($name, $instance) {
-                return $filesystem->getName() === sprintf('%s@%s', $name, $instance);
-            });
+            ->getSnapshots()
+            ->filter(fn (FilesystemDTO $filesystemDTO) => $filesystemDTO->getName() === $snapshotName);
         if ($snapshots->isEmpty()) {
             return null;
         }
