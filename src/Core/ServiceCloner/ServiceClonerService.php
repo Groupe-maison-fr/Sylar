@@ -6,9 +6,9 @@ namespace App\Core\ServiceCloner;
 
 use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\Configuration\Object\ServiceCloner;
-use App\Core\ServiceCloner\Exception\StartServiceException;
 use App\Core\ServiceCloner\Exception\NonExistingServiceException;
 use App\Core\ServiceCloner\Exception\NonExistingServiceInstanceException;
+use App\Core\ServiceCloner\Exception\StartServiceException;
 use App\Core\ServiceCloner\Exception\StopServiceException;
 use App\Infrastructure\Docker\ContainerCreationServiceInterface;
 use App\Infrastructure\Docker\ContainerDeleteServiceInterface;
