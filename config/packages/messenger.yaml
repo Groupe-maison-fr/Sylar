@@ -1,0 +1,18 @@
+framework:
+    messenger:
+        failure_transport: failed
+
+        transports:
+            - name: failed
+              dsn: 'doctrine://default?queue_name=failed'
+            - name: sync
+              dsn: 'sync://'
+            - name: async
+              dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+              retry_strategy:
+                  max_retries: 1
+                  delay: 3000
+
+        routing:
+            'App\Infrastructure\Messenger\AsyncCommandInterface' : async
+            'App\Infrastructure\Messenger\SyncCommandInterface' : sync

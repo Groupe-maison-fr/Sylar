@@ -21,6 +21,7 @@ services:
          - '../../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
          - '../../src/**/*DTO.php'
          - '../../src/**/*Exception.php'
+         - '../../src/**/*Command.php'
          - '../../src/Infrastructure/Docker/Endpoint/ContainerLogsUntil.php'
          - '../../src/Infrastructure/Docker/Stream/DockerRawStreamUntil.php'
 
