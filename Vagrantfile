@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "slave" do |subconfig|
         subconfig.vm.box = "bento/ubuntu-18.04"
 
-        subconfig.vm.synced_folder "./", "/app"
+        subconfig.vm.synced_folder "./", "/app", type: "nfs"
 
         subconfig.vm.network "private_network", ip: "192.168.99.21"
         subconfig.vm.network "forwarded_port", guest: 8080, host: 8082

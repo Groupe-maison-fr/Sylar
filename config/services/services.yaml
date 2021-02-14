@@ -1,8 +1,10 @@
 parameters:
     service_are_public: false
+
     sylar_data_path_default: /app/data
     sylar_data_path: '%env(default:sylar_data_path_default:SYLAR_DATA_PATH)%'
-    sylar_config_filename_default: '%kernel.project_dir%/data/sylar.yaml'
+
+    sylar_config_filename_default: '%sylar_data_path%/sylar.yaml'
     sylar_config_filename: '%env(default:sylar_config_filename_default:SYLAR_CONFIG_FILENAME)%'
 
 services:
