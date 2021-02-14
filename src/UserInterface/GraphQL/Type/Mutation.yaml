@@ -15,3 +15,9 @@ MutationUserInterface:
         args:
           input:
             type: StartServiceInput!
+      stopService:
+        type: StopServiceOutput!
+        resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\StopServiceMutation", [args["input"]["masterName"], args["input"]["instanceName"]])'
+        args:
+          input:
+            type: StopServiceInput!
