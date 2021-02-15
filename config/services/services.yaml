@@ -7,6 +7,14 @@ parameters:
     sylar_config_filename_default: '%sylar_data_path%/sylar.yaml'
     sylar_config_filename: '%env(default:sylar_config_filename_default:SYLAR_CONFIG_FILENAME)%'
 
+    default_supervisord_url: 'http://127.0.0.1:9001/RPC2'
+    default_supervisord_user: 'admin'
+    default_supervisord_password: 'adminpass'
+
+    supervisord_url: '%env(default:default_supervisord_url:SUPERVISORD_URL)%'
+    supervisord_user: '%env(default:default_supervisord_user:SUPERVISORD_USER)%'
+    supervisord_password: '%env(default:default_supervisord_password:SUPERVISORD_PASSWORD)%'
+
 services:
     _defaults:
         autowire: true
@@ -39,3 +47,11 @@ services:
     App\UserInterface\GraphQL\ResolverMap\:
         resource: '%kernel.project_dir%/src/UserInterface/GraphQL/ResolverMap'
         tags: [{ name: overblog_graphql.resolver_map, schema: default }]
+
+    App\Infrastructure\PostContainerDumpActions\PostContainerDumpServiceInterface: '@App\Infrastructure\PostContainerDumpActions\PostContainerDumpService'
+
+    App\UserInterface\Cli\RestartSupervisordWorkersCommand:
+        arguments:
+            $supervisordUrl: '%supervisord_url%'
+            $supervisordUser: '%supervisord_user%'
+            $supervisordPassword: '%supervisord_password%'
