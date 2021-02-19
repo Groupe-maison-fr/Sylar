@@ -4,29 +4,26 @@ declare(strict_types=1);
 
 namespace App\UserInterface\Cli;
 
-use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
-use App\Core\ServiceCloner\Exception\StartServiceException;
-use App\Core\ServiceCloner\ServiceClonerServiceInterface;
+use App\Core\ServiceCloner\Exception\StopServiceException;
+use App\Core\ServiceCloner\UseCase\StopServiceCommand as StopServiceBusCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final class StopServiceCommand extends Command
 {
     private const ARGUMENT_SERVICE_NAME = 'serviceName';
     private const ARGUMENT_INSTANCE_NAME = 'instanceName';
 
-    private ConfigurationServiceInterface $dockerConfiguration;
-    private ServiceClonerServiceInterface $serviceClonerService;
+    private MessageBusInterface $messageBus;
 
     public function __construct(
-        ConfigurationServiceInterface $dockerConfiguration,
-        ServiceClonerServiceInterface $serviceClonerService
+        MessageBusInterface $messageBus
     ) {
         parent::__construct();
-        $this->dockerConfiguration = $dockerConfiguration;
-        $this->serviceClonerService = $serviceClonerService;
+        $this->messageBus = $messageBus;
     }
 
     protected function configure(): void
@@ -51,11 +48,11 @@ final class StopServiceCommand extends Command
         $instanceName = $input->getArgument(self::ARGUMENT_INSTANCE_NAME);
 
         try {
-            $this->serviceClonerService->stop(
+            $this->messageBus->dispatch(new StopServiceBusCommand(
                 $serviceName,
                 $instanceName
-            );
-        } catch (StartServiceException $exception) {
+            ));
+        } catch (StopServiceException $exception) {
             $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
 
             return 1;
