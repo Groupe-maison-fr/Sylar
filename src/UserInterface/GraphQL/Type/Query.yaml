@@ -12,3 +12,12 @@ QueryUserInterface:
       filesystems:
         type: "[Filesystem]"
         resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver::resolve")'
+      commands:
+        type: "[Command]"
+        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolve")'
+      commandByName:
+        type: Command
+        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolveByName",[args["commandName"]])'
+        args:
+          commandName: String!
+

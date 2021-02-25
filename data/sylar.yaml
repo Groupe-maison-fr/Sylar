@@ -49,6 +49,10 @@ services:
       - source: '=(configurationRoot)~"/"~((containerParameter.getIndex() === 0)?"mysql-master/etc/mysql/conf.d":"mysql-replicate/etc/mysql/conf.d")'
         target: /etc/mysql/conf.d
 commands:
-  - name:
-    command:
-      - ls /tmp
+  - name: test1
+    subCommands:
+      - pwd
+      - cd /tmp;pwd
+  - name: test2
+    subCommands:
+      - cd /var;pwd
