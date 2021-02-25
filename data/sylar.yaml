@@ -48,3 +48,7 @@ services:
         target: /app
       - source: '=(configurationRoot)~"/"~((containerParameter.getIndex() === 0)?"mysql-master/etc/mysql/conf.d":"mysql-replicate/etc/mysql/conf.d")'
         target: /etc/mysql/conf.d
+commands:
+  - name:
+    command:
+      - ls /tmp

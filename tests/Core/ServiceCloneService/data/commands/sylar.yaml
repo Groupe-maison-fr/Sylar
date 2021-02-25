@@ -1,0 +1,19 @@
+stateRoot: '/app/data'
+zpoolName: 'testpool'
+zpoolRoot: '/testpool'
+services:
+  - name: go-static-webserver
+    image: 'pierrezemb/gostatic:latest'
+    labels:
+      - name: environment
+        value: unit-test
+commands:
+  - name: test1
+    subCommands:
+      - ls /
+      - ls /tmp
+  - name: test2
+    subCommands:
+      - pwd
+      - cd /tmp
+      - ls

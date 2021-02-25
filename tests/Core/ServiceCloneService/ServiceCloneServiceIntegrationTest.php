@@ -101,6 +101,19 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
     /**
      * @test
      */
+    public function it_should_load_configuration_service_with_commands(): void
+    {
+        $this->setDependentServices('commands');
+        self::assertCount(2, $this->configurationService->getConfiguration()->getCommands()->toArray());
+        self::assertCount(2, $this->configurationService->getConfiguration()->getCommandByName('test1')->getSubCommands()->toArray());
+        self::assertCount(3, $this->configurationService->getConfiguration()->getCommandByName('test2')->getSubCommands()->toArray());
+        self::assertSame('pwd', $this->configurationService->getConfiguration()->getCommandByName('test2')->getSubCommands()->toArray()[0]);
+        self::assertNull($this->configurationService->getConfiguration()->getCommandByName('test3'));
+    }
+
+    /**
+     * @test
+     */
     public function it_should_not_retrieve_configuration_for_non_existing_service(): void
     {
         $this->setDependentServices('specific_configuration');
