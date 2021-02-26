@@ -11,4 +11,6 @@ interface ServiceClonerServiceInterface
     public function startService(string $masterName, string $instanceName, ?int $index): void;
 
     public function stop(string $masterName, string $instanceName): void;
+
+    public function restartService(string $masterName, string $instanceName, ?int $index): void;
 }

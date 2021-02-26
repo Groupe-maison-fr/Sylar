@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Core\ServiceCloner;
 
 use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
+use App\Core\ServiceCloner\Exception\NonExistingServiceStateFileException;
 use App\Infrastructure\Docker\ContainerStateServiceInterface;
 use App\Infrastructure\Filesystem\FilesystemServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -57,8 +58,13 @@ final class ServiceClonerStateService implements ServiceClonerStateServiceInterf
 
     public function loadState(string $masterName, string $instanceName): ?ServiceClonerStatusDTO
     {
+        $stateFileName = $this->getStateFileName($masterName, $instanceName);
+        if (!file_exists($stateFileName)) {
+            throw new NonExistingServiceStateFileException($masterName, $instanceName);
+        }
+
         return $this->refreshState(ServiceClonerStatusDTO::createFromArray(
-            json_decode(file_get_contents($this->getStateFileName($masterName, $instanceName)), true)
+            json_decode(file_get_contents($stateFileName), true)
         ));
     }
 

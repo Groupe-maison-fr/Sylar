@@ -1,0 +1,16 @@
+RestartServiceInput:
+  type: input-object
+  config:
+    fields:
+      masterName:
+        type: String!
+      instanceName:
+        type: String!
+      index:
+        type: Int
+        defaultValue: ~
+
+RestartServiceOutput:
+  type: union
+  config:
+    types: [SuccessOutput, FailedOutput]

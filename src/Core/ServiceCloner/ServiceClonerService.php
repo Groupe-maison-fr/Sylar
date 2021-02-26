@@ -8,6 +8,7 @@ use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\Configuration\Object\ServiceCloner;
 use App\Core\ServiceCloner\Exception\NonExistingServiceException;
 use App\Core\ServiceCloner\Exception\NonExistingServiceInstanceException;
+use App\Core\ServiceCloner\Exception\NonExistingServiceStateFileException;
 use App\Core\ServiceCloner\Exception\StartServiceException;
 use App\Core\ServiceCloner\Exception\StopServiceException;
 use App\Infrastructure\Docker\ContainerCreationServiceInterface;
@@ -16,6 +17,7 @@ use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
 use App\Infrastructure\Docker\ContainerStateServiceInterface;
 use App\Infrastructure\Docker\ContainerStopServiceInterface;
 use App\Infrastructure\Filesystem\FilesystemServiceInterface;
+use Docker\API\Exception\ContainerDeleteNotFoundException;
 use DomainException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -80,6 +82,16 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
     public function startService(string $masterName, string $instanceName, ?int $index): void
     {
         $this->assertStartServiceParameters($masterName, $instanceName, $index);
+        $this->start($masterName, $instanceName, $index);
+    }
+
+    public function restartService(string $masterName, string $instanceName, ?int $index): void
+    {
+        $this->assertStartServiceParameters($masterName, $instanceName, $index);
+        try {
+            $this->stop($masterName, $instanceName);
+        } catch (NonExistingServiceInstanceException | NonExistingServiceStateFileException | ContainerDeleteNotFoundException $exception) {
+        }
         $this->start($masterName, $instanceName, $index);
     }
 
