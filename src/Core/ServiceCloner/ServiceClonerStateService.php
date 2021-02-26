@@ -93,13 +93,17 @@ final class ServiceClonerStateService implements ServiceClonerStateServiceInterf
             );
         }
 
+        $dockerName = $this->serviceClonerNamingService->getDockerName(
+            $serviceClonerStatusDTO->getMasterName(),
+            $serviceClonerStatusDTO->getInstanceName()
+        );
+
         $serviceClonerStatusDTO->setDockerState(
-            $this->dockerStateService->dockerState(
-                $this->serviceClonerNamingService->getDockerName(
-                    $serviceClonerStatusDTO->getMasterName(),
-                    $serviceClonerStatusDTO->getInstanceName()
-                )
-            )
+            $this->dockerStateService->dockerState($dockerName)
+        );
+
+        $serviceClonerStatusDTO->setExposedPorts(
+            $this->dockerStateService->dockerExposedPorts($dockerName)
         );
 
         return $serviceClonerStatusDTO;

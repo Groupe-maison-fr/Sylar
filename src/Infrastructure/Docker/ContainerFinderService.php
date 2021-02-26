@@ -24,21 +24,33 @@ final class ContainerFinderService implements ContainerFinderServiceInterface
 
     public function getDockerByName(string $dockerName): ?ContainerSummaryItem
     {
-        $containers = $this->docker->containerList([
-            'filters' => json_encode([
-                'name' => [$dockerName],
-            ]),
-        ]);
+        try {
+            $containers = $this->docker->containerList([
+                'filters' => json_encode([
+                    'name' => [$dockerName],
+                ]),
+            ]);
+        } catch (\Exception $exception) {
+            $this->logger->error(sprintf('Can not get DockerByName "%s" because "%s"', $dockerName, $exception->getMessage()));
+
+            return null;
+        }
 
         if (empty($containers)) {
             return null;
         }
 
-        return current(array_filter(
+        $filteredContainers = array_filter(
             $containers,
             function (ContainerSummaryItem $containerSummeryItem) use ($dockerName) {
                 return $containerSummeryItem->getNames()[0] === '/' . $dockerName;
             }
-        ));
+        );
+
+        if (empty($filteredContainers)) {
+            return null;
+        }
+
+        return current($filteredContainers);
     }
 }

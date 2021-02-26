@@ -15,6 +15,7 @@ final class ServiceClonerStatusDTO
     private string $zfsFilesystemName;
     private string $zfsFilesystemPath;
     private bool $isMaster;
+    private array $exposedPorts;
     private ?FilesystemDTO $zfsFilesystem;
     private ?string $dockerState;
     private ?int $createdAt;
@@ -38,6 +39,7 @@ final class ServiceClonerStatusDTO
         $this->createdAt = $createdAt;
         $this->zfsFilesystem = null;
         $this->dockerState = null;
+        $this->exposedPorts = [];
     }
 
     public function toArray(): array
@@ -115,6 +117,16 @@ final class ServiceClonerStatusDTO
     public function setDockerState(?string $dockerState): void
     {
         $this->dockerState = $dockerState;
+    }
+
+    public function getExposedPorts(): array
+    {
+        return $this->exposedPorts;
+    }
+
+    public function setExposedPorts(array $exposedPorts): void
+    {
+        $this->exposedPorts = $exposedPorts;
     }
 
     public function setZfsFilesystem(?FilesystemDTO $zfsFilesystem): void

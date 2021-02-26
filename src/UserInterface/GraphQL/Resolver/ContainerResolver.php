@@ -39,6 +39,8 @@ final class ContainerResolver implements ResolverInterface
                 return $state->isMaster();
             case 'dockerState':
                 return $state->getDockerState();
+            case 'exposedPorts':
+                return $state->getExposedPorts();
             case 'zfsFilesystemName':
                 return $state->getZfsFilesystemName();
             case 'zfsFilesystem':
