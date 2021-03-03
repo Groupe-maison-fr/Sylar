@@ -61,6 +61,7 @@ final class TreeBuilderConfiguration implements ConfigurationInterface
                                     ->end()
                                 ->end()
                             ->end()
+                            ->scalarNode('networkMode')->end()
                             ->arrayNode('lifeCycleHooks')
                                 ->children()
                                     ->arrayNode('preStartCommands')

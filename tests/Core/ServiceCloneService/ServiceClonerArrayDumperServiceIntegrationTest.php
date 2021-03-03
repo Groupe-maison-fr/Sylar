@@ -46,6 +46,7 @@ final class ServiceClonerArrayDumperServiceIntegrationTest extends AbstractInteg
                     "image": "library\/mariadb:10.5.3",
                     "command": "",
                     "entryPoint": null,
+                    "networkMode": "n1",
                     "lifeCycleHooks": {
                         "preStartCommands": [
                             {

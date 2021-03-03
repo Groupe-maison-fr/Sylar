@@ -24,6 +24,7 @@ services:
       value: '=containerParameter.getIndex()'
     - name: CLONE_REPLICATED_FILESYSTEM
       value: '=containerParameter.getReplicatedFilesystem()'
+    networkMode: '=((containerParameter.getIndex() === 0)?"n1":"none")'
     ports:
       - hostPort: '=(3406+containerParameter.getIndex())~"/tcp"'
         containerPort: '3306/tcp'

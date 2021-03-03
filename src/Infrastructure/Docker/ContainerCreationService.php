@@ -15,8 +15,10 @@ use App\Infrastructure\Docker\ContainerParameter\EnvironmentFactoryInterface;
 use App\Infrastructure\Docker\ContainerParameter\LabelFactoryInterface;
 use App\Infrastructure\Docker\ContainerParameter\MountFactoryInterface;
 use App\Infrastructure\Docker\ContainerParameter\PortBindingFactoryInterface;
+use App\Infrastructure\Docker\ContainerParameter\StringParameterFactoryInterface;
 use ArrayObject;
 use Docker\API\Exception\ContainerCreateBadRequestException;
+use Docker\API\Exception\ContainerStartNotFoundException;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\API\Model\ContainersCreatePostResponse201;
 use Docker\API\Model\HostConfig;
@@ -34,6 +36,8 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
     private LabelFactoryInterface $labelSpecificationFactory;
     private ContainerImageServiceInterface $dockerPullService;
 
+    private StringParameterFactoryInterface $stringParameterFactory;
+
     public function __construct(
         Docker $docker,
         LoggerInterface $logger,
@@ -41,7 +45,8 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         MountFactoryInterface $mountSpecificationFactory,
         EnvironmentFactoryInterface $environmentSpecificationFactory,
         LabelFactoryInterface $labelSpecificationFactory,
-        ContainerImageServiceInterface $dockerPullService
+        ContainerImageServiceInterface $dockerPullService,
+        StringParameterFactoryInterface $stringParameterFactory
     ) {
         $this->docker = $docker;
         $this->logger = $logger;
@@ -50,6 +55,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         $this->environmentSpecificationFactory = $environmentSpecificationFactory;
         $this->labelSpecificationFactory = $labelSpecificationFactory;
         $this->dockerPullService = $dockerPullService;
+        $this->stringParameterFactory = $stringParameterFactory;
     }
 
     public function createDocker(
@@ -69,6 +75,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         $container->setHostConfig($hostConfig);
         $this->setLabel($containerParameter, $container, $service);
         $this->setEnv($containerParameter, $container, $service);
+        $this->setNetworkMode($containerParameter, $hostConfig, $service);
 
         try {
             /** @var ContainersCreatePostResponse201 $containerCreate */
@@ -76,6 +83,8 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
             $this->docker->containerStart($containerCreate->getId());
         } catch (ContainerCreateBadRequestException $exception) {
             $this->logger->error(sprintf('createDocker: %s %s', $exception->getMessage(), $exception->getErrorResponse()->getMessage()));
+        } catch (ContainerStartNotFoundException $exception) {
+            $this->logger->error(sprintf('createDocker start failure: %s %s', $exception->getMessage(), $exception->getErrorResponse()->getMessage()));
         } catch (Exception $exception) {
             $this->logger->error(sprintf('createDocker: %s', $exception->getMessage()));
             throw $exception;
@@ -110,6 +119,14 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
             },
             []
         )));
+    }
+
+    private function setNetworkMode(ContainerParameterDTO $containerParameter, HostConfig $hostConfig, service $service): void
+    {
+        if ($service->getNetworkMode() === null) {
+            return;
+        }
+        $hostConfig->setNetworkMode($this->stringParameterFactory->createFromConfiguration($containerParameter, $service->getNetworkMode()));
     }
 
     private function setEnv(ContainerParameterDTO $containerParameter, ContainersCreatePostBody $container, Service $service): void

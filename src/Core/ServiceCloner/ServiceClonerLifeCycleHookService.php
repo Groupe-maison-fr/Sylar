@@ -45,6 +45,9 @@ final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleH
 
     public function preStart(Service $dockerConfiguration, ContainerParameterDTO $containerParameter): void
     {
+        if ($dockerConfiguration->getLifeCycleHooks() === null) {
+            return;
+        }
         $dockerConfiguration->getLifeCycleHooks()->getPreStartCommands()->map(function (PreStartCommand $command) use ($containerParameter): void {
             $arguments = $this->processArray($containerParameter, $command->getCommand());
             if ($command->getExecutionEnvironment() === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_HOST) {
@@ -62,6 +65,9 @@ final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleH
 
     public function postStartWaiter(Service $dockerConfiguration, ContainerParameterDTO $containerParameter): void
     {
+        if ($dockerConfiguration->getLifeCycleHooks() === null) {
+            return;
+        }
         $dockerConfiguration->getLifeCycleHooks()->getPostStartWaiters()->map(function (PostStartWaiter $waiter) use ($containerParameter): void {
             if ($waiter->getType() === TreeBuilderConfiguration::POST_START_WAITER_LOG_MATCH) {
                 $this->dockerWaitUntilLogService->wait($containerParameter, $waiter->getExpression(), $waiter->getTimeout());
@@ -71,6 +77,9 @@ final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleH
 
     public function postStart(Service $dockerConfiguration, ContainerParameterDTO $containerParameter): void
     {
+        if ($dockerConfiguration->getLifeCycleHooks() === null) {
+            return;
+        }
         $dockerConfiguration->getLifeCycleHooks()->getPostStartCommands()->map(function (PostStartCommand $command) use ($containerParameter): void {
             $arguments = $this->processArray($containerParameter, $command->getCommand());
             if ($command->getExecutionEnvironment() === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_HOST) {
@@ -88,6 +97,9 @@ final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleH
 
     public function postDestroy(Service $dockerConfiguration, ContainerParameterDTO $containerParameter): void
     {
+        if ($dockerConfiguration->getLifeCycleHooks() === null) {
+            return;
+        }
         $dockerConfiguration->getLifeCycleHooks()->getPostDestroyCommands()->map(function (PostDestroyCommand $command) use ($containerParameter): void {
             $arguments = $this->processArray($containerParameter, $command->getCommand());
             if ($command->getExecutionEnvironment() === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_HOST) {

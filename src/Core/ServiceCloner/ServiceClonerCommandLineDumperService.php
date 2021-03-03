@@ -40,12 +40,8 @@ final class ServiceClonerCommandLineDumperService
         return $this->dumpNode($container, $this->dockerConfiguration->getConfiguration());
     }
 
-    private function evaluate(ContainerParameterDTO $container, string $expression): ?string
+    private function evaluate(ContainerParameterDTO $container, string $expression): string
     {
-        if ($expression === null) {
-            return null;
-        }
-
         return $this->configurationExpressionGenerator->generate($container, $expression);
     }
 
@@ -88,13 +84,17 @@ final class ServiceClonerCommandLineDumperService
                     $this->evaluate($container, $node->getContainerPort()),
                 );
             case $node instanceof Service:
+                $networkMode = $node->getNetworkMode() === null ? '' : $this->evaluate($container, $node->getNetworkMode());
+
                 return implode(' ', array_filter([
                     'docker run',
                     $this->dumpNode($container, $node->getEnvironments()),
                     $this->dumpNode($container, $node->getMounts()),
                     $this->dumpNode($container, $node->getPorts()),
                     $this->dumpNode($container, $node->getLabels()),
+                    $node->getNetworkMode() !== null ? sprintf('--net=%s', $networkMode) : '',
                     '--name ' . $this->evaluate($container, $container->getName()),
+                    '--detach',
                     $this->evaluate($container, $node->getImage()),
                     $node->getEntryPoint() != '' ? sprintf('--entrypoint %s', $this->evaluate($container, $node->getEntryPoint())) : '',
                     $this->evaluate($container, $node->getCommand()),

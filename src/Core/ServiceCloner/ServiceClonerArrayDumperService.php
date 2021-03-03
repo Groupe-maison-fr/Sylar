@@ -115,6 +115,7 @@ final class ServiceClonerArrayDumperService
                     'image' => $this->evaluate($containerParameter, $node->getImage()),
                     'command' => $this->evaluate($containerParameter, $node->getCommand()),
                     'entryPoint' => $this->evaluate($containerParameter, $node->getEntryPoint()),
+                    'networkMode' => $this->evaluate($containerParameter, $node->getNetworkMode()),
                     'lifeCycleHooks' => $this->dumpNode($containerParameter, $node->getLifeCycleHooks()),
                     'environments' => $this->dumpNode($containerParameter, $node->getEnvironments()),
                     'mounts' => $this->dumpNode($containerParameter, $node->getMounts()),

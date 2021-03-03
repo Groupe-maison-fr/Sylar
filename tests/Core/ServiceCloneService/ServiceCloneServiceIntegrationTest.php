@@ -49,6 +49,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
         echo $this->process->mayRun('rm', '-f', $this->testRoot . '/testdisk');
         echo $this->process->run('fallocate', '-l', '2G', $this->testRoot . '/testdisk');
         echo $this->process->run('zpool', 'create', 'testpool', $this->testRoot . '/testdisk');
+        echo $this->process->mayRun('docker', 'network', 'create', 'n1');
 
         $this->resetBufferedLoggerHandler();
     }
@@ -71,6 +72,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
         $this->process->run('zfs', 'destroy', '-Rf', 'testpool');
         $this->process->run('zpool', 'destroy', '-f', 'testpool');
         $this->process->run('rm', '-f', $this->testRoot . '/testdisk');
+        $this->process->mayRun('docker', 'network', 'delete', 'n1');
     }
 
     private function containerExecShell(string $containerName, string $command): string
@@ -109,6 +111,22 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
         self::assertCount(3, $this->configurationService->getConfiguration()->getCommandByName('test2')->getSubCommands()->toArray());
         self::assertSame('pwd', $this->configurationService->getConfiguration()->getCommandByName('test2')->getSubCommands()->toArray()[0]);
         self::assertNull($this->configurationService->getConfiguration()->getCommandByName('test3'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_load_configuration_service_with_network(): void
+    {
+        $this->setDependentServices('network');
+        $this->serviceCloneService->startMaster('go-static-webserver');
+        $this->serviceCloneService->startService('go-static-webserver', '02', 2);
+        $dockerInspectionMaster = json_decode($this->process->run('docker', 'inspect', 'go-static-webserver'), true);
+        $dockerInspectionService = json_decode($this->process->run('docker', 'inspect', 'go-static-webserver_02'), true);
+        self::assertArrayHasKey('n1', $dockerInspectionMaster[0]['NetworkSettings']['Networks']);
+        self::assertArrayNotHasKey('none', $dockerInspectionMaster[0]['NetworkSettings']['Networks']);
+        self::assertArrayNotHasKey('n1', $dockerInspectionService[0]['NetworkSettings']['Networks']);
+        self::assertArrayHasKey('none', $dockerInspectionService[0]['NetworkSettings']['Networks']);
     }
 
     /**

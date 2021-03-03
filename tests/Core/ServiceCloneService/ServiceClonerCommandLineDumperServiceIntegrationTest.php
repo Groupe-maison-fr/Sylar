@@ -39,6 +39,6 @@ final class ServiceClonerCommandLineDumperServiceIntegrationTest extends Abstrac
             ' --env CLONE_NAME=mysql-test --env CLONE_INDEX=0 --env CLONE_REPLICATED_FILESYSTEM=toto/tata' .
             ' --mount type=bind,target=/var/lib/mysql,source=toto/tata --mount type=bind,target=/app,source=/app' .
             ' --mount type=bind,target=/etc/mysql/conf.d,source=/vagrant/tests/Core/ServiceCloneService/data/start_master/mysql/etc/mysql/conf.d' .
-            ' --publish 0.0.0.0:3406:3306/tcp --label environment=unit-test --name mysql-test library/mariadb:10.5.3';
+            ' --publish 0.0.0.0:3406:3306/tcp --label environment=unit-test --net=n1 --name mysql-test --detach library/mariadb:10.5.3';
     }
 }
