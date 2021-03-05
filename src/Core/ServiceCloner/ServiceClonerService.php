@@ -90,6 +90,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         $this->assertStartServiceParameters($masterName, $instanceName, $index);
         try {
             $this->stop($masterName, $instanceName);
+            sleep(5);
         } catch (NonExistingServiceInstanceException | NonExistingServiceStateFileException | ContainerDeleteNotFoundException $exception) {
         }
         $this->start($masterName, $instanceName, $index);
@@ -227,7 +228,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         );
         $snapshotName = $this->slugger->slug($instanceName)->toString();
 
-        $this->zfsService->destroySnapshot($filesystem, $snapshotName);
+        $this->zfsService->destroySnapshot($filesystem, $snapshotName, true);
     }
 
     private function assertStartMasterParameters(string $masterName): void

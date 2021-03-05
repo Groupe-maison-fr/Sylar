@@ -16,7 +16,7 @@ interface FilesystemServiceInterface
 
     public function createSnapshot(string $name, string $snap): void;
 
-    public function destroySnapshot(string $name, string $snap): void;
+    public function destroySnapshot(string $name, string $snap, bool $force = false): void;
 
     public function isSnapshoted($name): bool;
 

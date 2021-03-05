@@ -51,10 +51,10 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
         $this->process->run('/sbin/zfs', 'snapshot', sprintf('%s@%s', $name, $snap));
     }
 
-    public function destroySnapshot(string $name, string $snap): void
+    public function destroySnapshot(string $name, string $snap, bool $force = false): void
     {
-        $this->process->run('/sbin/zfs', 'destroy', sprintf('%s-%s', $name, $snap));
-        $this->process->run('/sbin/zfs', 'destroy', sprintf('%s@%s', $name, $snap));
+        $this->process->run('/sbin/zfs', 'destroy', sprintf('%s-%s', $name, $snap), ($force ? '-R' : null));
+        $this->process->run('/sbin/zfs', 'destroy', sprintf('%s@%s', $name, $snap), ($force ? '-R' : null));
     }
 
     public function cloneSnapshot(string $name, string $snap, ?string $mountPoint = null): void
