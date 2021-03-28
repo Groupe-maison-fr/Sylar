@@ -1,8 +1,8 @@
 import GraphQL from '../GraphQL';
 
 export default () => GraphQL.query(`
-    query {
-      services {
+  query {
+    services {
         name
         image
         command
@@ -10,18 +10,38 @@ export default () => GraphQL.query(`
           name
           value
         }
-        environments{
+        environments {
           name
           value
         }
-        ports{
+        ports {
           containerPort
           hostPort
           hostIp
         }
-      }
-    }`)
+        containers {
+          containerName
+          masterName
+          instanceName
+          instanceIndex
+          zfsFilesystemName
+          exposedPorts
+          time
+          dockerState
+          zfsFilesystem{
+            name
+            type
+            origin
+            mountPoint
+            available
+            used
+            usedByChild
+            usedByDataset
+            usedByRefreservation
+            usedBySnapshot
+          }
+        }
+    }
+  }`)
     .then((response) => response.json())
-    .then((json) => {
-      return json.data.services;
-    });
+    .then((json) => json.data.services);

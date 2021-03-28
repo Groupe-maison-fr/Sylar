@@ -2,9 +2,9 @@ import React, {useEffect,useState} from 'react';
 import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
-
+import ReplayIcon from '@material-ui/icons/Replay';
 import {
-  Box,
+  Box, Button,
   Card,
   CardHeader,
   Divider,
@@ -29,8 +29,16 @@ const Filesystems = ({className, ...rest}) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    queryFilesystem().then(setData)
+    loadFilesystem();
   }, []);
+
+  const loadFilesystem = () => {
+    queryFilesystem().then(setData)
+  }
+
+  const numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  }
 
   return (
       <Card
@@ -49,6 +57,11 @@ const Filesystems = ({className, ...rest}) => {
                   <TableCell>Available</TableCell>
                   <TableCell>Used</TableCell>
                   <TableCell>Used by Dataset</TableCell>
+                  <TableCell>
+                    <Button onClick={loadFilesystem}>
+                      <ReplayIcon/>
+                    </Button>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -57,11 +70,12 @@ const Filesystems = ({className, ...rest}) => {
                         hover
                         key={service.name}
                     >
-                      <TableCell>{service.name}</TableCell>
-                      <TableCell>{service.mountPoint}</TableCell>
-                      <TableCell>{service.available}</TableCell>
-                      <TableCell>{service.used}</TableCell>
-                      <TableCell>{service.usedByDataset}</TableCell>
+                      <TableCell align="left">{service.name}</TableCell>
+                      <TableCell align="left">{service.mountPoint}</TableCell>
+                      <TableCell align="right">{numberWithCommas(service.available)}</TableCell>
+                      <TableCell align="right">{numberWithCommas(service.used)}</TableCell>
+                      <TableCell align="right">{numberWithCommas(service.usedByDataset)}</TableCell>
+                      <TableCell align="right">&nbsp;</TableCell>
                     </TableRow>
                 ))}
               </TableBody>

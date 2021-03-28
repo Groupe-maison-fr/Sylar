@@ -1,78 +1,71 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
+import React from 'react';
+import {Link as RouterLink} from 'react-router-dom';
 import PropTypes from 'prop-types';
+import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
+import Brightness3Icon from '@material-ui/icons/Brightness3';
 import {
-  AppBar,
-  Badge,
-  Box,
-  Hidden,
-  IconButton,
-  Toolbar,
-  makeStyles
+    AppBar,
+    Box,
+    Hidden,
+    IconButton,
+    Toolbar,
+    Typography,
 } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import InputIcon from '@material-ui/icons/Input';
 import Logo from '../../components/Logo';
+import PrefersDarkModeContext from "../../Context/PrefersDarkModeContext";
+import {initialDarkMode, setInitialDarkMode} from "../../components/DarkMode";
 
-const useStyles = makeStyles(() => ({
-  root: {},
-  avatar: {
-    width: 60,
-    height: 60
-  }
-}));
+class TopBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            darkMode: initialDarkMode()
+        }
+    }
 
-const TopBar = ({
-  className,
-  onMobileNavOpen,
-  ...rest
-}) => {
-  const classes = useStyles();
-  const [notifications] = useState([]);
+    render() {
+        const {
+            className,
+            onMobileNavOpen,
+            ...rest
+        } = this.props;
+        const {
+            darkMode
+        } = this.state;
 
-  return (
-    <AppBar
-      className={clsx(classes.root, className)}
-      elevation={0}
-      {...rest}
-    >
-      <Toolbar>
-        <RouterLink to="/">
-          <Logo />
-        </RouterLink>
-        <Box flexGrow={1} />
-        <Hidden mdDown>
-          <IconButton color="inherit">
-            <Badge
-              badgeContent={notifications.length}
-              color="primary"
-              variant="dot"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit">
-            <InputIcon />
-          </IconButton>
-        </Hidden>
-        <Hidden lgUp>
-          <IconButton
-            color="inherit"
-            onClick={onMobileNavOpen}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Hidden>
-      </Toolbar>
-    </AppBar>
-  );
+        return <AppBar
+            elevation={0}
+            {...rest}
+        >
+            <Toolbar>
+                <RouterLink to="/">
+                    <Logo/>
+                </RouterLink>
+                <Box flexGrow={1}>
+                    <Typography variant={"h4"} style={{paddingLeft: 20}}>
+                        Sylar Dashboard
+                    </Typography>
+                </Box>
+                <Hidden mdDown>
+                    <PrefersDarkModeContext.Consumer>{(context) =>
+                        <IconButton color="inherit" onClick={() => {
+                            const newDarkMode = !darkMode
+                            context.setPrefersDarkMode(newDarkMode);
+                            setInitialDarkMode(newDarkMode)
+                            this.setState({darkMode: newDarkMode});
+                        }}>
+                            {darkMode ? <Brightness3Icon/> : <BrightnessHighIcon/>}
+                        </IconButton>
+                    }</PrefersDarkModeContext.Consumer>
+                </Hidden>
+            </Toolbar>
+        </AppBar>
+    }
 };
 
 TopBar.propTypes = {
-  className: PropTypes.string,
-  onMobileNavOpen: PropTypes.func
+    className: PropTypes.string,
+    onMobileNavOpen: PropTypes.func
 };
 
 export default TopBar;

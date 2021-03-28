@@ -4,7 +4,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 
 import {
-  Box,
+  Box, Button,
   Card,
   CardHeader,
   Divider,
@@ -16,9 +16,10 @@ import {
   TableRow
 } from '@material-ui/core';
 import queryContainers from "../../graphQL/ServiceCloner/queryContainers";
-import Filesystems from "./Filesystems";
 import DeleteIcon from '@material-ui/icons/Delete';
 import mutationStopService from "../../graphQL/ServiceCloner/mutationStopService";
+import mutationRestartService from "../../graphQL/ServiceCloner/mutationRestartService";
+import ReplayIcon from "@material-ui/icons/Replay";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -32,13 +33,23 @@ const Containers = ({className, ...rest}) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    queryContainers().then(setData)
+    loadContainers();
   }, []);
 
   const stopService = (masterName, instanceName) =>{
-    mutationStopService(masterName, instanceName).then(() => {
+    return mutationStopService(masterName, instanceName).then(() => {
       queryContainers().then(setData)
     })
+  }
+
+  const restartService = (masterName, instanceName) =>{
+    return mutationRestartService(masterName, instanceName).then(() => {
+      queryContainers().then(setData)
+    })
+  }
+
+  const loadContainers = () => {
+    return queryContainers().then(setData)
   }
 
   return (
@@ -58,7 +69,13 @@ const Containers = ({className, ...rest}) => {
                   <TableCell>Instance</TableCell>
                   <TableCell>Index</TableCell>
                   <TableCell>Filesystem</TableCell>
-                  <TableCell>&nbsp;</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Time</TableCell>
+                  <TableCell>
+                      <Button onClick={loadContainers}>
+                        <ReplayIcon/>
+                      </Button>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -71,11 +88,20 @@ const Containers = ({className, ...rest}) => {
                       <TableCell>{service.masterName}</TableCell>
                       <TableCell>{service.instanceName}</TableCell>
                       <TableCell>{service.instanceIndex}</TableCell>
+                      <TableCell>{service.dockerState}</TableCell>
+                      <TableCell>{service.time}</TableCell>
                       <TableCell>{service.zfsFilesystemName}</TableCell>
                       <TableCell>
-                        {service.instanceName !=="master" &&
-                          <DeleteIcon onClick={() => stopService(service.masterName, service.instanceName)}></DeleteIcon>
-                        }
+                        {service.instanceName !=="master" && (
+                            <>
+                              <Button onClick={() => stopService(service.masterName, service.instanceName)}>
+                                <DeleteIcon />
+                              </Button>
+                              <Button onClick={() => restartService(service.masterName, service.instanceName)}>
+                                <ReplayIcon />
+                              </Button>
+                            </>
+                        )}
                       </TableCell>
                     </TableRow>
                 ))}

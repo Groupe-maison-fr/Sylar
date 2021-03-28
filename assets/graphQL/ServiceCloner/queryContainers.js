@@ -9,6 +9,7 @@ export default () => GraphQL.query(`
         instanceIndex
         zfsFilesystemName
         time
+        dockerState
       }
     }`)
     .then((response) => response.json())

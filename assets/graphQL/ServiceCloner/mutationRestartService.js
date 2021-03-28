@@ -2,7 +2,7 @@ import GraphQL from '../GraphQL';
 
 export default (masterName, instanceName) => GraphQL.query(`
     mutation {
-      stopService (input:{
+      restartService (input:{
         masterName: "${masterName}"
         instanceName: "${instanceName}"
       }){ 
@@ -16,4 +16,4 @@ export default (masterName, instanceName) => GraphQL.query(`
       } 
     }`)
     .then((response) => response.json())
-    .then((json) => json.data.stopService);
+    .then((json) => json.data.restartService);

@@ -2,17 +2,17 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import DashboardLayout from './layouts/DashboardLayout';
 import MainLayout from './layouts/MainLayout';
-import DashboardView from './views/DashboardView';
+import ServicesView from './views/ServicesView';
 import NotFoundView from './views/NotFoundView';
-import SettingsView from './views/SettingsView';
+import SystemView from './views/SystemView';
 
 const routes = [
   {
     path: 'app',
     element: <DashboardLayout />,
     children: [
-      { path: 'dashboard', element: <DashboardView /> },
-      { path: 'settings', element: <SettingsView /> },
+      { path: 'services', element: <ServicesView /> },
+      { path: 'system', element: <SystemView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
@@ -21,7 +21,7 @@ const routes = [
     element: <MainLayout />,
     children: [
       { path: '404', element: <NotFoundView /> },
-      { path: '/', element: <Navigate to="/app/dashboard" /> },
+      { path: '/', element: <Navigate to="/app/services" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   }

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -23,14 +23,14 @@ const user = {
 
 const items = [
   {
-    href: '/app/dashboard',
+    href: '/app/services',
     icon: BarChartIcon,
-    title: 'Dashboard'
+    title: 'Services'
   },
   {
-    href: '/app/settings',
+    href: '/app/system',
     icon: SettingsIcon,
-    title: 'Settings'
+    title: 'System'
   }
 ];
 
