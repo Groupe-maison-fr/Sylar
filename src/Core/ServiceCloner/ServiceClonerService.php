@@ -206,6 +206,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         }
         $zfsFilesystemPath = $this->serviceClonerNamingService->getZfsFilesystempath($masterName, $instanceName);
         if (!$this->zfsService->hasFilesystem($zfsFilesystemPath)) {
+            $this->logger->debug(sprintf('Can not stop filesystem, !hasFilesystem %s', $zfsFilesystemPath));
             return;
         }
 

@@ -15,3 +15,5 @@ Service:
         type: '[Environment]'
       ports:
         type: '[Port]'
+      containers:
+        type: '[Container]'
