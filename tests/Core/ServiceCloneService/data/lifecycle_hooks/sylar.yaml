@@ -17,16 +17,16 @@ services:
     lifeCycleHooks:
       preStartCommands:
         - executionEnvironment: host
-          command: ['docker','ps']
+          command: ['docker','ps','--no-trunc']
         - executionEnvironment: masterContainer
-          command: ['docker','ps']
+          command: ['docker','ps','--last','2']
       postStartWaiters:
         - type: logMatch
           expression: '!Listening at 0\.0\.0\.0!'
           timeout: 30
       postStartCommands:
         - executionEnvironment: host
-          command: ['ls','/']
+          command: ['ls','-lah','/']
       postDestroyCommands:
         - executionEnvironment: host
-          command: ['ls','/']
+          command: ['ls','-ahl','/']

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\UserInterface\Cli;
 
-use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
-use App\Core\ServiceCloner\ServiceClonerServiceInterface;
+use App\Core\ServiceCloner\Exception\StartServiceException;
+use App\Core\ServiceCloner\UseCase\StartServiceCommand as StartServiceBusCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final class StartServiceCommand extends Command
 {
@@ -17,23 +18,13 @@ final class StartServiceCommand extends Command
     private const ARGUMENT_INSTANCE_NAME = 'instanceName';
     private const ARGUMENT_INSTANCE_INDEX = 'instanceIndex';
 
-    /**
-     * @var ConfigurationServiceInterface
-     */
-    private $dockerConfiguration;
-
-    /**
-     * @var ServiceClonerServiceInterface
-     */
-    private $serviceClonerService;
+    private MessageBusInterface $messageBus;
 
     public function __construct(
-        ConfigurationServiceInterface $dockerConfiguration,
-        ServiceClonerServiceInterface $serviceClonerService
+        MessageBusInterface $messageBus
     ) {
         parent::__construct();
-        $this->dockerConfiguration = $dockerConfiguration;
-        $this->serviceClonerService = $serviceClonerService;
+        $this->messageBus = $messageBus;
     }
 
     protected function configure(): void
@@ -52,7 +43,7 @@ final class StartServiceCommand extends Command
             )
             ->addArgument(
                 self::ARGUMENT_INSTANCE_INDEX,
-                InputArgument::REQUIRED,
+                InputArgument::OPTIONAL,
                 'Instance index'
             );
     }
@@ -63,13 +54,17 @@ final class StartServiceCommand extends Command
         $instanceName = $input->getArgument(self::ARGUMENT_INSTANCE_NAME);
         $instanceIndex = $input->getArgument(self::ARGUMENT_INSTANCE_INDEX);
 
-        $serviceConfiguration = $this->dockerConfiguration->getConfiguration()->getServiceByName($serviceName);
-        if ($serviceConfiguration === null) {
-            $output->writeln(sprintf('<error>Service name %s does not exists</error>', $serviceName));
+        try {
+            $this->messageBus->dispatch(new StartServiceBusCommand(
+                $serviceName,
+                $instanceName,
+                $instanceIndex === null ? null : (int) $instanceIndex
+            ));
+        } catch (StartServiceException $exception) {
+            $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
+
             return 1;
         }
-
-        $this->serviceClonerService->start($serviceName, $instanceName, (int) $instanceIndex);
 
         return 0;
     }

@@ -6,20 +6,9 @@ namespace App\Infrastructure\Docker\ContainerParameter;
 
 final class ContainerParameterDTO
 {
-    /**
-     * @var int
-     */
-    private $index;
-
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $replicatedFilesystem;
+    private int $index;
+    private string $name;
+    private string $replicatedFilesystem;
 
     public function __construct(
         string $name,

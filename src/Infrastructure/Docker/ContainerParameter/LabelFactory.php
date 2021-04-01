@@ -8,10 +8,7 @@ use App\Core\ServiceCloner\Configuration\Object\Label;
 
 final class LabelFactory implements LabelFactoryInterface
 {
-    /**
-     * @var ConfigurationExpressionGeneratorInterface
-     */
-    private $configurationExpressionGenerator;
+    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
 
     public function __construct(
         ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator

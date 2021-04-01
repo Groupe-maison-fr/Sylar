@@ -1,0 +1,13 @@
+StopServiceInput:
+  type: input-object
+  config:
+    fields:
+      masterName:
+        type: String!
+      instanceName:
+        type: String!
+
+StopServiceOutput:
+  type: union
+  config:
+    types: [SuccessOutput, FailedOutput]

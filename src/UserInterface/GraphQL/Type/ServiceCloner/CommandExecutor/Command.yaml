@@ -1,0 +1,11 @@
+Command:
+  type: object
+  config:
+    resolveField: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver", [info, value, args])'
+    fields:
+      name:
+        type: String!
+      subCommands:
+        type: '[String]'
+      output:
+        type: '[CommandExecutorResult]'

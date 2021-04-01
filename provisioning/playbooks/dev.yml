@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   vars:
-    - NODEJS_VERSION: "11"
+    - NODEJS_VERSION: "12"
     - ansible_distribution_release: "bionic"
 
   tasks:
@@ -26,34 +26,38 @@
         repo: deb https://dl.yarnpkg.com/debian/ stable main
         state: present
 
-    - name: additional PPA for php
+    - name: Additional PPA for php
       apt_repository:
         validate_certs: no
         repo: 'ppa:ondrej/php'
         state: present
         update_cache: yes
 
-    - name: Update apt and install yarn
-      apt:
-        name: yarn
-        state: latest
-        #update_cache: yes
-
     - name: Install the nodejs
       apt:
         name: nodejs
         state: present
 
+    - name: Install yarn
+      apt:
+        name: yarn
+        state: latest
+
+    - name: remove 7.3
+      apt: name={{ item }} state=absent
+      loop:
+        - 'php7.3-common'
+
     - name: Install required system packages
-      apt: name={{ item }} state=latest update_cache=yes
+      apt: name={{ item }} state=latest
       loop:
         - 'php7.4-cli'
         - 'php7.4-curl'
         - 'php7.4-json'
+        - 'php7.4-sqlite3'
         - 'php7.4-zip'
         - 'php7.4-xml'
         - 'php7.4-mbstring'
-        - 'composer'
         - 'php7.4-fpm'
 
     - name: adding existing user 'vagrant' to group www-data

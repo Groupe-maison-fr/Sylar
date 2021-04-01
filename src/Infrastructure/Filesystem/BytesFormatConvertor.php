@@ -32,14 +32,14 @@ final class BytesFormatConvertor implements BytesFormatConvertorInterface
         if (empty($precision)) {
             return $value * $unitSize;
         }
-        return $value * $unitSize + ((int ) (floatval($precision) * $unitSize));
+
+        return $value * $unitSize + ((int) (floatval($precision) * $unitSize));
     }
 
     public function format($bytes, $precision = 3): string
     {
         $base = log($bytes, 1024);
 
-        return round(pow(1024, $base - floor($base)), $precision) . array_keys(self::units)[floor($base)];
+        return round(1024 ** ($base - floor($base)), $precision) . array_keys(self::units)[floor($base)];
     }
-
 }

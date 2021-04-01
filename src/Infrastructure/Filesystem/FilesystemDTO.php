@@ -7,25 +7,15 @@ namespace App\Infrastructure\Filesystem;
 final class FilesystemDTO
 {
     private string $name;
-
     private int $available;
-
     private int $used;
-
     private int $usedBySnapshot;
-
     private int $usedByDataset;
-
     private int $usedByRefReservation;
-
     private int $usedByChild;
-
     private int $refer;
-
     private string $mountPoint;
-
     private string $origin;
-
     private string $type;
 
     public function __construct(

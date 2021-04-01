@@ -2,7 +2,7 @@ stateRoot: '/app/data'
 zpoolName: 'testpool'
 zpoolRoot: '/testpool'
 services:
-  - name: mysql
+  - name: mysql_start_master
     image: 'library/mariadb:10.5.3'
     labels:
       - name: environment
@@ -24,8 +24,9 @@ services:
       value: '=containerParameter.getIndex()'
     - name: CLONE_REPLICATED_FILESYSTEM
       value: '=containerParameter.getReplicatedFilesystem()'
+    networkMode: '=((containerParameter.getIndex() === 0)?"n1":"none")'
     ports:
-      - hostPort: '=(3306+containerParameter.getIndex())~"/tcp"'
+      - hostPort: '=(3406+containerParameter.getIndex())~"/tcp"'
         containerPort: '3306/tcp'
     lifeCycleHooks:
       preStartCommands:
@@ -52,5 +53,5 @@ services:
         target: /var/lib/mysql
       - source: /app
         target: /app
-      - source: /app/data/mysql/etc/mysql/conf.d
+      - source: '=configurationRoot~"/mysql/etc/mysql/conf.d"'
         target: /etc/mysql/conf.d

@@ -8,7 +8,7 @@ use Docker\Stream\DockerRawStream;
 
 final class DockerRawStreamUntil extends DockerRawStream
 {
-    private $shouldExit = false;
+    private bool $shouldExit = false;
 
     public function exitWait(): void
     {

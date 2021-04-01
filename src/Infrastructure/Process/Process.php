@@ -9,10 +9,7 @@ use Symfony\Component\Process\Process as SymfonyProcess;
 
 final class Process implements ProcessInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(
         LoggerInterface $logger
@@ -32,8 +29,12 @@ final class Process implements ProcessInterface
             $process->run();
         }
         $output = $process->getOutput();
+        $errorOutput = $process->getErrorOutput();
 
         $this->logger->debug(sprintf('Process result "%s"', $output));
+        if ($errorOutput) {
+            $this->logger->debug(sprintf('Process error output "%s"', $errorOutput));
+        }
 
         return $output;
     }

@@ -12,7 +12,6 @@ final class ServiceClonerNamingService implements ServiceClonerNamingServiceInte
     private const MASTER_NAME = 'master';
 
     private SluggerInterface $slugger;
-
     private ConfigurationServiceInterface $dockerConfiguration;
 
     public function __construct(
@@ -38,7 +37,12 @@ final class ServiceClonerNamingService implements ServiceClonerNamingServiceInte
         $masterNameSlug = $this->slugger->slug($masterName)->toString();
         $instanceNameSlug = $this->slugger->slug($instanceName)->toString();
 
-        return $instanceName === self::MASTER_NAME ? $masterNameSlug : sprintf('%s%s%s', $masterNameSlug, $separator, $instanceNameSlug);
+        return $this->isMasterName($instanceName) ? $masterNameSlug : sprintf('%s%s%s', $masterNameSlug, $separator, $instanceNameSlug);
+    }
+
+    public function getDockerName(string $masterName, string $instanceName): string
+    {
+        return $this->getFullName($masterName, $instanceName, '_');
     }
 
     public function isMasterName(string $instanceName): bool

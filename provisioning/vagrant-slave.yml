@@ -1,22 +1,15 @@
 ---
 - hosts: slave
   become: true
+  pre_tasks:
+  - name: stop replication if running
+    ansible.builtin.shell:
+      cmd: mysql -u root -pmysql_root_password -h 127.0.0.1 -e 'STOP SLAVE;' || true
   vars_files:
     - vars/mysql-slave-vars.yml
   roles:
     - { role: geerlingguy.mysql }
-#
-#- name: install python3
-#  hosts: "*"
-#  gather_facts: false
-#  tasks:
-#    - name: run apt-get update and install python
-#      raw: "{{ item }}"
-#      loop:
-#        - sudo apt-get update
-#        - sudo apt-get -y install python
-#      become: true
-#
+
 - name: Vagrant system
   import_playbook: playbooks/system.yml
 
@@ -37,3 +30,5 @@
 
 - name: Vagrant mysql slave
   import_playbook: playbooks/mysql-slave.yml
+
+# sudo apt-get purge -y mysql*;sudo apt-get remove -y dbconfig-mysql; sudo rm -f /etc/mysql/my.cnf

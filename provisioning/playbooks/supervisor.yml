@@ -4,7 +4,7 @@
 
   tasks:
     - name: Install required system packages
-      apt: name={{ item }} state=latest update_cache=yes
+      apt: name={{ item }} state=latest
       loop:
         - 'supervisor'
 
@@ -20,7 +20,3 @@
   handlers:
     - name: restart app
       action: supervisorctl name=site state=restarted
-
-##  - name: start app
-##    action: supervisorctl name=${app_name} state=started
-

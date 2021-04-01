@@ -2,3 +2,12 @@ parameters:
     service_are_public: false
 
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Infrastructure\PostContainerDumpActions\PostContainerDumpService:
+        arguments:
+            $actions:
+            - '@App\Infrastructure\PostContainerDumpActions\RestartSupervisorMessengerConsumer'
+

@@ -8,25 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class Service
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $image;
-
-    /**
-     * @var string|null
-     */
-    private $command;
-
-    /**
-     * @var string|null
-     */
-    private $entryPoint;
+    private string $name = '';
+    private string $image = '';
+    private string $command = '';
+    private ?string $entryPoint = null;
+    private ?string $networkMode = null;
 
     /**
      * @var LifeCycleHooks|null
@@ -109,6 +95,16 @@ final class Service
     public function setEntryPoint(?string $entryPoint): void
     {
         $this->entryPoint = $entryPoint;
+    }
+
+    public function getNetworkMode(): ?string
+    {
+        return $this->networkMode;
+    }
+
+    public function setNetworkMode(?string $networkMode): void
+    {
+        $this->networkMode = $networkMode;
     }
 
     public function addEnvironment(Environment $environment): void

@@ -11,15 +11,8 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerFinderService implements ContainerFinderServiceInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Docker
-     */
-    private $docker;
+    private LoggerInterface $logger;
+    private Docker $docker;
 
     public function __construct(
         Docker $docker,
@@ -41,11 +34,17 @@ final class ContainerFinderService implements ContainerFinderServiceInterface
             return null;
         }
 
-        return current(array_filter(
+        $filteredContainers = array_filter(
             $containers,
             function (ContainerSummaryItem $containerSummeryItem) use ($dockerName) {
                 return $containerSummeryItem->getNames()[0] === '/' . $dockerName;
             }
-        ));
+        );
+
+        if (empty($filteredContainers)) {
+            return null;
+        }
+
+        return current($filteredContainers);
     }
 }

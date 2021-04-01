@@ -6,15 +6,8 @@ namespace App\Core\ServiceCloner\Configuration\Object;
 
 final class Mount
 {
-    /**
-     * @var string
-     */
-    private $source;
-
-    /**
-     * @var string
-     */
-    private $target;
+    private string $source;
+    private string $target;
 
     public function getSource(): string
     {

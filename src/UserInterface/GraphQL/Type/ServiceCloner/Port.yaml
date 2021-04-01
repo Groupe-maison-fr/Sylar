@@ -1,0 +1,13 @@
+Port:
+  type: object
+  config:
+    fields:
+      containerPort:
+        type: String
+      hostPort:
+        type: String
+      hostIp:
+        type: String
+
+
+

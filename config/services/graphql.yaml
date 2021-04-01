@@ -1,0 +1,8 @@
+overblog_graphql:
+  definitions:
+    mappings:
+      types:
+        - type: yaml
+          dir: "%kernel.project_dir%/src/UserInterface/GraphQL/Type"
+          suffix: null
+

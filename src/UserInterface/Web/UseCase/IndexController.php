@@ -9,10 +9,7 @@ use Twig\Environment;
 
 final class IndexController
 {
-    /**
-     * @var Environment
-     */
-    private $environment;
+    private Environment $environment;
 
     public function __construct(Environment $environment)
     {

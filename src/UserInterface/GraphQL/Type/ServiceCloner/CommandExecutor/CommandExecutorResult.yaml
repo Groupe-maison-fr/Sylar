@@ -1,0 +1,8 @@
+CommandExecutorResult:
+  type: object
+  config:
+    fields:
+      subCommand:
+        type: String!
+      output:
+        type: '[String]'

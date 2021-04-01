@@ -6,15 +6,8 @@ namespace App\Core\ServiceCloner\Configuration\Object;
 
 final class Environment
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $value;
+    private string $name;
+    private string $value;
 
     public function getName(): string
     {

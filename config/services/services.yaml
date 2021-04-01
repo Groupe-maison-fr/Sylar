@@ -1,9 +1,19 @@
 parameters:
     service_are_public: false
+
     sylar_data_path_default: /app/data
     sylar_data_path: '%env(default:sylar_data_path_default:SYLAR_DATA_PATH)%'
-    sylar_config_filename_default: /app/data/sylar.yaml
+
+    sylar_config_filename_default: '%sylar_data_path%/sylar.yaml'
     sylar_config_filename: '%env(default:sylar_config_filename_default:SYLAR_CONFIG_FILENAME)%'
+
+    default_supervisord_url: 'http://127.0.0.1:9001/RPC2'
+    default_supervisord_user: 'admin'
+    default_supervisord_password: 'adminpass'
+
+    supervisord_url: '%env(default:default_supervisord_url:SUPERVISORD_URL)%'
+    supervisord_user: '%env(default:default_supervisord_user:SUPERVISORD_USER)%'
+    supervisord_password: '%env(default:default_supervisord_password:SUPERVISORD_PASSWORD)%'
 
 services:
     _defaults:
@@ -19,6 +29,7 @@ services:
          - '../../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
          - '../../src/**/*DTO.php'
          - '../../src/**/*Exception.php'
+         - '../../src/**/*Command.php'
          - '../../src/Infrastructure/Docker/Endpoint/ContainerLogsUntil.php'
          - '../../src/Infrastructure/Docker/Stream/DockerRawStreamUntil.php'
 
@@ -32,3 +43,15 @@ services:
 
     Docker\Docker:
         factory: ['@App\Infrastructure\Docker\DockerFactory', 'create']
+
+    App\UserInterface\GraphQL\ResolverMap\:
+        resource: '%kernel.project_dir%/src/UserInterface/GraphQL/ResolverMap'
+        tags: [{ name: overblog_graphql.resolver_map, schema: default }]
+
+    App\Infrastructure\PostContainerDumpActions\PostContainerDumpServiceInterface: '@App\Infrastructure\PostContainerDumpActions\PostContainerDumpService'
+
+    App\UserInterface\Cli\RestartSupervisordWorkersCommand:
+        arguments:
+            $supervisordUrl: '%supervisord_url%'
+            $supervisordUser: '%supervisord_user%'
+            $supervisordPassword: '%supervisord_password%'

@@ -1,0 +1,23 @@
+{
+  "directories": [
+    "assets",
+    "src",
+    "config",
+    "vendor",
+    "var"
+  ],
+  "files": [
+    "LICENSE",
+    ".env"
+  ],
+  "finder": [{
+    "name": "*.php",
+    "exclude": ["Tests"],
+    "in": "vendor"
+  },{
+    "name": "*.php",
+    "in": "var"
+  }],
+  "main": "bin/console",
+  "output": "build/sylar.phar"
+}

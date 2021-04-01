@@ -1,0 +1,16 @@
+StartServiceInput:
+  type: input-object
+  config:
+    fields:
+      masterName:
+        type: String!
+      instanceName:
+        type: String!
+      index:
+        type: Int
+        defaultValue: ~
+
+StartServiceOutput:
+  type: union
+  config:
+    types: [SuccessOutput, FailedOutput]

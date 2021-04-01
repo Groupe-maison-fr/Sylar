@@ -1,0 +1,10 @@
+stateRoot: '/app/data'
+zpoolName: 'testpool'
+zpoolRoot: '/testpool'
+services:
+  - name: go-static-webserver
+    image: 'pierrezemb/gostatic:latest'
+    labels:
+      - name: environment
+        value: unit-test
+    networkMode: '=((containerParameter.getIndex() === 0)?"n1":"none")'

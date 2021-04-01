@@ -13,20 +13,9 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerExecService implements ContainerExecServiceInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Docker
-     */
-    private $docker;
-
-    /**
-     * @var ContainerFinderServiceInterface
-     */
-    private $dockerFinderService;
+    private LoggerInterface $logger;
+    private Docker $docker;
+    private ContainerFinderServiceInterface $dockerFinderService;
 
     public function __construct(
         Docker $docker,
