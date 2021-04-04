@@ -30,26 +30,33 @@ const useStyles = makeStyles(() => ({
 
 const Containers = ({className, ...rest}) => {
   const classes = useStyles();
-  const [data, setData] = useState([]);
+  const [containers, setContainers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadContainers();
   }, []);
 
+  const loadContainers = () => {
+    setLoading(true);
+    return queryContainers().then((result)=>{
+      setLoading(false);
+      setContainers(result);
+    });
+  }
+
   const stopService = (masterName, instanceName) =>{
+    setLoading(true);
     return mutationStopService(masterName, instanceName).then(() => {
-      queryContainers().then(setData)
-    })
+      loadContainers();
+    });
   }
 
   const restartService = (masterName, instanceName) =>{
+    setLoading(true);
     return mutationRestartService(masterName, instanceName).then(() => {
-      queryContainers().then(setData)
-    })
-  }
-
-  const loadContainers = () => {
-    return queryContainers().then(setData)
+      loadContainers();
+    });
   }
 
   return (
@@ -61,7 +68,7 @@ const Containers = ({className, ...rest}) => {
         <Divider/>
         <PerfectScrollbar>
           <Box minWidth={800}>
-            <Table>
+            <Table size="small">
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
@@ -79,7 +86,14 @@ const Containers = ({className, ...rest}) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((service) => (
+                {loading && (
+                    <TableRow
+                        hover
+                    >
+                      <TableCell colSpan={8}>loading</TableCell>
+                    </TableRow>
+                )}
+                {!loading && containers.map((service) => (
                     <TableRow
                         hover
                         key={service.containerName}
@@ -115,7 +129,8 @@ const Containers = ({className, ...rest}) => {
 
 Containers.propTypes = {
   className: PropTypes.string.isRequired
-};
+}
+
 Containers.defaultProps = {
   className: ''
 }

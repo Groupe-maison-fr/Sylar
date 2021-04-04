@@ -26,14 +26,19 @@ const useStyles = makeStyles(() => ({
 
 const Filesystems = ({className, ...rest}) => {
   const classes = useStyles();
-  const [data, setData] = useState([]);
+  const [fileSystems, setFileSystems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadFilesystem();
   }, []);
 
   const loadFilesystem = () => {
-    queryFilesystem().then(setData)
+    setLoading(true);
+    queryFilesystem().then((result) => {
+      setLoading(false);
+      setFileSystems(result);
+    })
   }
 
   const numberWithCommas = (x) => {
@@ -49,7 +54,7 @@ const Filesystems = ({className, ...rest}) => {
         <Divider/>
         <PerfectScrollbar>
           <Box minWidth={800}>
-            <Table>
+            <Table size="small">
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
@@ -65,7 +70,14 @@ const Filesystems = ({className, ...rest}) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((service) => (
+                {loading && (
+                    <TableRow
+                        hover
+                    >
+                      <TableCell colSpan={6}>loading</TableCell>
+                    </TableRow>
+                )}
+                {!loading && fileSystems.map((service) => (
                     <TableRow
                         hover
                         key={service.name}

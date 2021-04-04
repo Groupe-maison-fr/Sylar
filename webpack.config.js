@@ -24,28 +24,17 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('index', './assets/index.jsx')
-    //.addEntry('page1', './assets/page1.js')
-    //.addEntry('page2', './assets/page2.js')
+    .addEntry('serviceWorker', './assets/serviceWorker.jsx')
 
-    // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 
-    // will require an extra script tag for runtime.js
-    // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
 
-    /*
-     * FEATURE CONFIG
-     *
-     * Enable & configure other features below. For a full
-     * list of features, see:
-     * https://symfony.com/doc/current/frontend.html#adding-more-features
-     */
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning(Encore.isProduction())
+    //.enableVersioning(Encore.isProduction())
 
     // enables @babel/preset-env polyfills
     //.configureBabelPresetEnv((config) => {
@@ -70,5 +59,9 @@ Encore
     //.enableReactPreset()
     //.addEntry('admin', './assets/admin.js')
 ;
-
+Encore.configureWatchOptions(function(watchOptions) {
+    // enable polling and check for changes every 250ms
+    // polling is useful when running Encore inside a Virtual Machine
+    watchOptions.poll = 250;
+});
 module.exports = Encore.getWebpackConfig();

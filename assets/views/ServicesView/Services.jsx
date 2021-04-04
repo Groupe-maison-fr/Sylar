@@ -58,7 +58,7 @@ const Services = ({className, ...rest}) => {
         <Divider/>
         <PerfectScrollbar>
           <Box minWidth={800}>
-            <Table>
+            <Table size="small">
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
@@ -98,7 +98,7 @@ const Services = ({className, ...rest}) => {
                             <Typography variant="h6" gutterBottom component="div">
                               Services
                             </Typography>
-                            <Table size="small" aria-label="purchases">
+                            <Table size="small">
                               <TableHead>
                                 <TableRow>
                                   <TableCell>Instance</TableCell>
