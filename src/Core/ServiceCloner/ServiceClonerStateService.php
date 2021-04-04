@@ -50,10 +50,12 @@ final class ServiceClonerStateService implements ServiceClonerStateServiceInterf
             $this->serviceClonerNamingService->getZfsFilesystemPath($masterName, $instanceName),
             time()
         );
+        $filename = $this->getStateFileName($masterName, $instanceName);
         $this->filesystem->dumpFile(
-            $this->getStateFileName($masterName, $instanceName),
+            $filename,
             json_encode($serviceClonerStatusDTO->toArray(), JSON_PRETTY_PRINT)
         );
+        $this->filesystem->chmod($filename, 0766, umask());
     }
 
     public function loadState(string $masterName, string $instanceName): ?ServiceClonerStatusDTO

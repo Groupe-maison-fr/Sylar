@@ -2,7 +2,6 @@
 - hosts: all
   become: true
   vars:
-    - NODEJS_VERSION: "11"
     - ansible_distribution_release: "bionic"
 
   tasks:
@@ -19,6 +18,12 @@
     - name: Update apt and install docker-ce
       apt:
         name: docker-ce
+        state: latest
+        update_cache: yes
+
+    - name: Update apt and install docker-compose
+      apt:
+        name: docker-compose
         state: latest
         update_cache: yes
 

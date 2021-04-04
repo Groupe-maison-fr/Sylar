@@ -56,7 +56,13 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
 
     private function setDependentServices(string $testConfigurationName): void
     {
-        $this->configurationService = new ConfigurationService(sprintf('%s/data/%s/sylar.yaml', __DIR__, $testConfigurationName));
+        preg_match('!/tests/(.*)!', __DIR__, $matches);
+        $this->configurationService = new ConfigurationService(
+            sprintf('%s/data/%s/sylar.yaml', __DIR__, $testConfigurationName),
+            sprintf('%s/tests/%s/data/%s', getenv('MOUNTED_CONFIGURATION_PATH'), $matches[1], $testConfigurationName),
+            sprintf('%s/tests/%s/data/%s', getenv('CONTAINER_CONFIGURATION_PATH'), $matches[1], $testConfigurationName)
+        );
+
         $this->setService(ConfigurationServiceInterface::class, $this->configurationService);
         $this->serviceCloneService = $this->getService(ServiceClonerServiceInterface::class);
         $this->containerCreationService = $this->getService(ContainerCreationServiceInterface::class);
@@ -87,7 +93,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
 
     private function cleanExistingDockers(): void
     {
-        $this->process->mayRun('bash', '-c', 'docker rm --force $(docker ps --filter "label=environment=unit-test" -a --format "{{.ID}}")');
+        $this->process->mayRun('docker', 'rm', '--force', '$(docker ps --filter "label=environment=unit-test" -a --format "{{.ID}}")');
     }
 
     /**

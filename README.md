@@ -32,3 +32,11 @@ insert into example_database.test values(1,"a");
 ```
 select * from example_database.test;
 ```
+
+```
+vagrant plugin install vagrant-fsnotify
+```
+
+ssh-keygen
+ssh-copy-id 192.168.99.21
+cp id_rsa readable.id_rsa;chmod a+r readable.id_rsa

@@ -1,0 +1,93 @@
+version: "3.5"
+
+volumes:
+  builder-build:
+  node-modules-builder:
+  node-modules-monitor:
+  vendor-sylar:
+
+services:
+  runner:
+    build: .docker/runner
+    entrypoint: ["/app/.docker/runner/entrypoint.sh"]
+    restart: unless-stopped
+    working_dir: /app
+    privileged: true
+    volumes:
+      - /home/vagrant/.ssh/readable.id_rsa:/app/data/id_rsa:ro
+      - ./.docker/runner/etc/ssh/ssh_config:/etc/ssh/ssh_config:ro
+      - ./.docker/runner/etc/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf:ro
+      - ./.docker/runner/etc/php/7.4/fpm/pool.d/www.conf:/etc/php/7.4/fpm/pool.d/www.conf:ro
+      - ./:/app
+      - builder-build:/app/public/build
+      - vendor-sylar:/app/vendor
+      - /dev/zfs:/dev/zfs
+      - /sylar:/sylar
+
+  monitor:
+    build: .docker/monitor
+    entrypoint: ["/monitor/entrypoint.sh"]
+    restart: unless-stopped
+    working_dir: /monitor
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./.docker/monitor:/monitor
+      - node-modules-monitor:/monitor/node_modules
+
+  builder:
+    build: .docker/builder
+    entrypoint: ["/app/.docker/builder/entrypoint.sh"]
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - builder-build:/app/public/build
+      - node-modules-builder:/app/node_modules
+
+  webserver:
+    image: nginx:latest
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./.docker/webserver/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./.docker/webserver/etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - builder-build:/app/public/build
+    depends_on:
+      - builder
+      - runner
+      - monitor
+    ports:
+      - 8080:80
+
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - LOG_LEVEL=debug
+      - ALLOW_RESTARTS=1
+      - AUTH=1
+      - BUILD=1
+      - COMMIT=1
+      - CONFIGS=1
+      - CONTAINERS=1
+      - DISTRIBUTION=1
+      - EVENTS=1
+      - EXEC=1
+      - GRPC=1
+      - IMAGES=1
+      - INFO=1
+      - NETWORKS=1
+      - NODES=1
+      - PING=1
+      - PLUGINS=1
+      - POST=1
+      - SECRETS=1
+      - SERVICES=1
+      - SESSION=1
+      - SWARM=1
+      - SYSTEM=1
+      - TASKS=1
+      - VERSION=1
+      - VOLUMES=1

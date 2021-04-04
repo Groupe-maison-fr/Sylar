@@ -20,7 +20,13 @@ final class ServiceClonerArrayDumperServiceIntegrationTest extends AbstractInteg
      */
     public function it_should_do_get_an_array_representing_a_configuration(): void
     {
-        $configurationService = new ConfigurationService(sprintf('%s/data/%s/sylar.yaml', __DIR__, 'start_master'));
+        preg_match('!/tests/(.*)!', __DIR__, $matches);
+        $testConfigurationName = 'start_master';
+        $configurationService = new ConfigurationService(
+            sprintf('%s/data/%s/sylar.yaml', __DIR__, $testConfigurationName),
+            sprintf('%s/tests/%s/data/%s', getenv('MOUNTED_CONFIGURATION_PATH'), $matches[1], $testConfigurationName),
+            sprintf('%s/tests/%s/data/%s', getenv('CONTAINER_CONFIGURATION_PATH'), $matches[1], $testConfigurationName)
+        );
         $configurationExpressionGenerator = new ConfigurationExpressionGenerator($configurationService);
         $serviceClonerCommandLineDumperService = new ServiceClonerArrayDumperService($configurationService, $configurationExpressionGenerator);
         $containerParameter = new ContainerParameterDTO(
@@ -36,7 +42,7 @@ final class ServiceClonerArrayDumperServiceIntegrationTest extends AbstractInteg
     {
         return json_decode(<<<EOJ
             {
-            "configurationRoot": "\/vagrant\/tests\/Core\/ServiceCloneService\/data\/start_master",
+            "configurationRoot": "\/opt\/sylar\/tests\/Core\/ServiceCloneService\/data\/start_master",
             "stateRoot": "\/app\/data",
             "zpoolName": "testpool",
             "zpoolRoot": "\/testpool",
@@ -121,10 +127,10 @@ final class ServiceClonerArrayDumperServiceIntegrationTest extends AbstractInteg
                         "source": "toto/tata",
                         "target": "/var/lib/mysql"
                     },{
-                        "source": "/app",
+                        "source": "/opt/sylar/tests/Core/ServiceCloneService/data/start_master",
                         "target": "/app"
                     },{
-                        "source": "/vagrant/tests/Core/ServiceCloneService/data/start_master/mysql/etc/mysql/conf.d",
+                        "source": "/opt/sylar/tests/Core/ServiceCloneService/data/start_master/mysql/etc/mysql/conf.d",
                         "target": "/etc/mysql/conf.d"
                     }],
                     "ports": [{

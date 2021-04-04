@@ -7,3 +7,5 @@ services:
         public: true
         arguments:
             $configurationFilename: '%sylar_config_filename%'
+            $mountedConfigurationPath: '/opt/sylar/tests/Core/ServiceCloneService/data'
+            $containerConfigurationPath: '/app/tests/Core/ServiceCloneService/data'

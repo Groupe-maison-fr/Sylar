@@ -36,18 +36,70 @@ install-composer:
 	sudo chmod +x composer.phar
 	sudo mv composer.phar /usr/bin/composer
 
-.PHONY: dev-up
-dev-up:
+.PHONY: host-dev-up
+host-dev-up:
 	vagrant up --provision
-	vagrant ssh slave -c 'cd /app;make install-composer;make vendor-dev;make node_modules'
+	#vagrant ssh slave -c 'cd /app;make install-composer;make vendor-dev;make node_modules'
 
-.PHONY: dev-down
-dev-down:
+.PHONY: host-dev-down
+host-dev-down:
 	vagrant halt
 
-.PHONY: dev-destroy
-dev-destroy:
+.PHONY: host-dev-destroy
+host-dev-destroy:
 	vagrant destroy -f
+
+.PHONY: host-shell-runner
+host-shell-runner:
+	vagrant ssh slave -c 'cd /opt/sylar;docker-compose exec runner bash'
+
+.PHONY: host-tests
+host-tests:
+	vagrant ssh slave -c 'cd /opt/sylar;make tests'
+
+.PHONY: host-mysql-user-master
+host-mysql-user-master:
+	vagrant ssh master -c 'mysql -u root -ptheR00tP455w0rdmaster -h 127.0.0.1  -e "select Host,User from mysql.user;"'
+
+.PHONY: host-mysql-master-replication-status
+host-mysql-master-replication-status:
+	vagrant ssh master -c 'mysql -u root -ptheR00tP455w0rdmaster -h 127.0.0.1  -e "SHOW SLAVE STATUS;"'
+
+.PHONY: host-mysql-slave-replication-status
+host-mysql-slave-replication-status:
+	vagrant ssh slave -c 'mysql -u root -ptheR00tP455w0rdslave -h 127.0.0.1  -e "SHOW SLAVE STATUS;"'
+
+.PHONY: host-shell-master
+host-shell-master:
+	vagrant ssh master
+
+.PHONY: host-shell-slave
+host-shell-slave:
+	vagrant ssh slave -c 'cd /opt/sylar;zsh'
+
+.PHONY: shell
+shell:
+	$(MAKE) host-shell-slave
+
+.PHONY: host-fsnotify
+host-fsnotify:
+	vagrant fsnotify slave
+
+.PHONY: host-vagrant-init-docker-compose
+host-vagrant-init-docker-compose:
+	vagrant ssh slave -- "\
+		sudo chmod 666 /var/run/docker.sock;\
+		rm ~/.ssh/id_rsa ~/.ssh/readable.id_rsa || true;\
+		ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa <<<y 2>&1 >/dev/null;\
+		sshpass -p vagrant ssh-copy-id -o StrictHostKeyChecking=no vagrant@127.0.0.1; \
+		cp ~/.ssh/id_rsa ~/.ssh/readable.id_rsa; \
+		chmod a+r ~/.ssh/readable.id_rsa;\
+		docker-compose -f /opt/sylar/docker-compose.yaml up -d --build;\
+	"
+
+.PHONY: host-watch-assets
+host-watch-assets:
+	 vagrant ssh slave -- docker-compose -f /opt/sylar/docker-compose.yaml exec builder yarn run watch
 
 .PHONY: build-dev
 build-dev: bin/box vendor-dev node_modules
@@ -56,13 +108,6 @@ build-dev: bin/box vendor-dev node_modules
 .PHONY: cs-fixer-fix
 cs-fixer-fix:
 	vendor/bin/php-cs-fixer fix --verbose
-
-.PHONY: test
-test:
-	APP_ENV=test composer install --prefer-dist
-	vendor/bin/phpstan analyse src --level 5
-	vendor/bin/php-cs-fixer fix --verbose --dry-run
-	/usr/bin/php /app/vendor/phpunit/phpunit/phpunit --configuration /app/phpunit.xml.dist tests --testdox
 
 .PHONY: docker-stats
 docker-stats:
@@ -81,33 +126,16 @@ vendor-prod:
 vendor-dev:
 	APP_ENV=dev composer install --prefer-dist
 
-.PHONY: watch-assets
-watch-assets:
-	yarn run watch
-
-.PHONY: vagrant-mysql-user-master
-vagrant-mysql-user-master:
-	vagrant ssh master -c 'mysql -u root -ptheR00tP455w0rdmaster -h 127.0.0.1  -e "select Host,User from mysql.user;"'
-
-.PHONY: vagrant-mysql-master-replication-status
-vagrant-mysql-master-replication-status:
-	vagrant ssh master -c 'mysql -u root -ptheR00tP455w0rdmaster -h 127.0.0.1  -e "SHOW SLAVE STATUS;"'
-
-.PHONY: vagrant-mysql-slave-replication-status
-vagrant-mysql-slave-replication-status:
-	vagrant ssh slave -c 'mysql -u root -ptheR00tP455w0rdslave -h 127.0.0.1  -e "SHOW SLAVE STATUS;"'
-
-.PHONY: shell-master
-shell-master:
-	vagrant ssh master
-
-.PHONY: shell
-shell:
-	vagrant ssh slave -c 'cd /app;bash'
+.PHONY: test
+test:
+	APP_ENV=test composer install --prefer-dist
+	vendor/bin/phpstan analyse src --level 5
+	vendor/bin/php-cs-fixer fix --verbose --dry-run
+	vendor/bin/phpunit --configuration phpunit.xml.dist tests --testdox
 
 .PHONY: tests
 tests:
-	vagrant ssh slave -c 'cd /app;make test'
+	docker-compose exec runner make test
 
 .PHONY: build
 build: node_modules vendor-prod
@@ -118,20 +146,25 @@ build: node_modules vendor-prod
 	mv build/sylar.phar build/sylar
 	ls -lah build
 
-#start-local:
-#	rm data/mysql*.json
-#	docker rm -f mysql mysql_slave1 mysql_slave2 mysql_slave3 mysql_slave4 mysql_slave5
-#	sudo zpool destroy local-mysql-pool
-#	- sudo zfs destroy -Rf local-mysql-pool || true
-#	- sudo zpool destroy -f local-mysql-pool || true
-#	- sudo rm -rf /tmp/localroot || true
-#	- sudo rm -rf /local-mysql-pool || true
-#	- sudo mkdir /tmp/localroot || true
-#	sudo fallocate -l 2G /tmp/localroot/local-mysql-root
-#	sudo zpool create local-mysql-pool /tmp/localroot/local-mysql-root
-#	bin/console --no-debug service:start-master mysql
-#	bin/console --no-debug service:start mysql slave1
-#	bin/console --no-debug service:start mysql slave2
+.PHONY: docker-down
+docker-down:
+	docker-compose down --remove-orphans
+
+.PHONY: docker-up
+docker-up:
+	docker-compose up --build -d
+
+.PHONY: docker-logs
+docker-logs:
+	docker-compose logs -f
+
+.PHONY: docker-volume-clean
+docker-volume-clean: docker-down
+	docker volume rm --force \
+		sylarinternal_builder-build \
+		sylarinternal_node-modules-builder \
+		sylarinternal_node-modules-monitor \
+		sylarinternal_vendor-sylar
 
 start-local:
 	- rm data/mysql*.json
@@ -142,5 +175,15 @@ start-local:
 	bin/console --no-debug service:start mysql slave1
 	bin/console --no-debug service:start mysql slave2
 
+start-local-docker:
+	- rm data/mysql*.json
+	- docker rm -f mysql mysql_slave1 mysql_slave2 mysql_slave3 mysql_slave4 mysql_slave5
+#	sudo zpool destroy sylar
+#	sudo zpool create -f sylar /dev/sdb /dev/sdc
+	sylar --no-debug service:start-master mysql
+	sylar --no-debug service:start mysql slave1
+	sylar --no-debug service:start mysql slave2
 
+restart-worker:
+	docker-compose exec runner supervisorctl restart php-worker
 # stop slave;CHANGE MASTER TO MASTER_HOST='192.168.99.21', MASTER_USER='replication_user', MASTER_PASSWORD='replication_password';start slave;

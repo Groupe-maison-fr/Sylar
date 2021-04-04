@@ -12,7 +12,7 @@ bin/box
 .vagrant
 .vboxhdd/
 /node_modules
-provisioning/roles/geerlingguy.mysql/
+provisioning/roles/namiops.fish_shell/
 ###< symfony/framework-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###
@@ -32,3 +32,11 @@ provisioning/roles/geerlingguy.mysql/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+supervisord.pid
+.docker/monitor/node_modules/
+.DS_Store
+.env
+.idea/
+application_php_errors.log
+provisioning/slow_query.log

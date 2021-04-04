@@ -48,7 +48,7 @@ final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationT
     public function it_should_create_a_container_from_config(): void
     {
         $dockerName = 'unit-test-' . Uuid::uuid4()->toString();
-        file_put_contents('/tmp/' . $dockerName, $dockerName);
+        $this->sudoProcess->run(sprintf('echo "%s" > /tmp/%s', $dockerName, $dockerName));
         $config = $this->configurationService->createServiceFromArray([
             'name' => 'mini-webserver',
             'image' => 'tobilg/mini-webserver:0.5.1',
@@ -62,7 +62,7 @@ final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationT
             ]],
             'ports' => [[
               'hostIp' => '0.0.0.0',
-              'hostPort' => '8082/tcp',
+              'hostPort' => '8198/tcp',
               'containerPort' => '3000/tcp',
             ]],
             'mounts' => [[
@@ -85,22 +85,24 @@ final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationT
         /** @var ContainerSummaryItem $containerSummaryItem */
         $containerSummaryItem = $this->containerFinderService->getDockerByName($dockerName);
 
+        self::assertNotNull($containerSummaryItem);
         self::assertSame('unit-test', $containerSummaryItem->getLabels()['environment']);
         self::assertSame('running', $containerSummaryItem->getState());
         self::assertSame('node /app/mini-webserver.js', $containerSummaryItem->getCommand());
         self::assertCount(1, $containerSummaryItem->getPorts());
         $port = $containerSummaryItem->getPorts()[0];
         self::assertSame('0.0.0.0', $port->getIP());
-        self::assertSame(8082, $port->getPublicPort());
+        self::assertSame(8198, $port->getPublicPort());
         self::assertSame(3000, $port->getPrivatePort());
         self::assertSame('tcp', $port->getType());
-        self::assertSame($dockerName, $this->containerExecService->exec($dockerName, 'sh', '-c', 'cat /app/tmp/' . $dockerName));
+        self::assertSame($dockerName, trim($this->sudoProcess->run(sprintf('cat /tmp/%s', $dockerName))));
+        self::assertSame($dockerName, trim($this->containerExecService->exec($dockerName, 'cat', '/app/tmp/' . $dockerName)));
         $this->containerExecService->exec($dockerName, 'sh', '-c', 'rm /app/tmp/' . $dockerName);
-        self::assertFalse(file_exists('/tmp/' . $dockerName));
+        self::assertSame('', $this->sudoProcess->run(sprintf('ls "/tmp/%s" || true', $dockerName)));
     }
 
     private function cleanExistingDockers(): void
     {
-        $this->sudoProcess->mayRun('bash', '-c', 'docker rm --force $(docker ps --filter "label=environment=unit-test" -a --format "{{.ID}}")');
+        $this->sudoProcess->mayRun('docker', 'rm', '--force', '$(docker ps --filter "label=environment=unit-test" -a --format "{{.ID}}")');
     }
 }

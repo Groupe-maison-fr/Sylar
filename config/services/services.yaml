@@ -22,6 +22,8 @@ services:
         public: '%service_are_public%'
         bind:
             $configurationFilename: '%sylar_config_filename%'
+            $mountedConfigurationPath: '/opt/sylar/data'
+            $containerConfigurationPath: '/app/data'
 
     App\:
         resource: '../../src/*'
@@ -43,6 +45,10 @@ services:
 
     Docker\Docker:
         factory: ['@App\Infrastructure\Docker\DockerFactory', 'create']
+
+    App\Infrastructure\Docker\DockerFactory:
+        arguments:
+            $dockerRemoteSocket: 'tcp://docker-socket-proxy:2375'
 
     App\UserInterface\GraphQL\ResolverMap\:
         resource: '%kernel.project_dir%/src/UserInterface/GraphQL/ResolverMap'

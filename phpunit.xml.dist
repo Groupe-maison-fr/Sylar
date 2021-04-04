@@ -16,6 +16,8 @@
         <server name="APP_ENV" value="test" force="true"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="KERNEL_CLASS" value="App\Kernel"/>
+        <env name="MOUNTED_CONFIGURATION_PATH" value="/opt/sylar"/>
+        <env name="CONTAINER_CONFIGURATION_PATH" value="/app"/>
     </php>
     <testsuites>
         <testsuite name="Project Test Suite">

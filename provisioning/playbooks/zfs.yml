@@ -1,6 +1,11 @@
 ---
 - hosts: all
   become: true
+  post_tasks:
+    - name: Create zfs pool
+      ansible.builtin.shell:
+        cmd: sudo zpool create sylar /dev/sdc || true
+
   vars:
     - role: ansible-zfs
 

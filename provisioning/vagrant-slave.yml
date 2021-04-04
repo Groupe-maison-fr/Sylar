@@ -1,14 +1,21 @@
 ---
 - hosts: slave
   become: true
-  pre_tasks:
-  - name: stop replication if running
-    ansible.builtin.shell:
-      cmd: mysql -u root -pmysql_root_password -h 127.0.0.1 -e 'STOP SLAVE;' || true
-  vars_files:
-    - vars/mysql-slave-vars.yml
+
   roles:
-    - { role: geerlingguy.mysql }
+    - role: gantsign.antigen
+      users:
+        - username: vagrant
+          antigen_libraries:
+            - name: oh-my-zsh
+          antigen_theme:
+            name: agnoster
+          antigen_bundles:
+            - name: git
+            - name: docker
+            - name: command-not-found
+            - name: zsh-syntax-highlighting
+              url: zsh-users/zsh-syntax-highlighting
 
 - name: Vagrant system
   import_playbook: playbooks/system.yml
@@ -18,17 +25,3 @@
 
 - name: Vagrant zfs
   import_playbook: playbooks/zfs.yml
-
-- name: Vagrant dev tools
-  import_playbook: playbooks/dev.yml
-
-- name: Vagrant nginx
-  import_playbook: playbooks/nginx.yml
-
-- name: Vagrant supervisor
-  import_playbook: playbooks/supervisor.yml
-
-- name: Vagrant mysql slave
-  import_playbook: playbooks/mysql-slave.yml
-
-# sudo apt-get purge -y mysql*;sudo apt-get remove -y dbconfig-mysql; sudo rm -f /etc/mysql/my.cnf

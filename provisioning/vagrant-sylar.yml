@@ -1,0 +1,18 @@
+---
+- hosts: sylar
+  become: true
+
+  roles:
+    - role: namiops.fish_shell
+
+- name: Vagrant fish
+  import_playbook: playbooks/fish.yml
+
+- name: Vagrant system
+  import_playbook: playbooks/system.yml
+
+- name: Vagrant docker
+  import_playbook: playbooks/docker.yml
+
+- name: Vagrant zfs
+  import_playbook: playbooks/zfs.yml

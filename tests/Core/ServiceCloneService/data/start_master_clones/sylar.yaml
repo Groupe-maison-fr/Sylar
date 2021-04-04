@@ -44,7 +44,7 @@ services:
     mounts:
       - source: '=containerParameter.getReplicatedFilesystem()'
         target: /var/lib/mysql
-      - source: /app
+      - source: '=configurationRoot'
         target: /app
       - source: '=configurationRoot~"/mysql/etc/mysql/conf.d"'
         target: /etc/mysql/conf.d
