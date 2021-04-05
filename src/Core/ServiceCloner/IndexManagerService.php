@@ -24,6 +24,7 @@ final class IndexManagerService implements IndexManagerServiceInterface
                 ++$nextAvailableIndex;
             }
         }
+
         return $nextAvailableIndex;
     }
 }
