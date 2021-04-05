@@ -21,6 +21,8 @@ import {
 import queryService from "../../graphQL/ServiceCloner/queryServices";
 import ReplayIcon from "@material-ui/icons/Replay";
 import DeleteIcon from "@material-ui/icons/Delete";
+import mutationStopService from '../../graphQL/ServiceCloner/mutationStopService';
+import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -35,16 +37,36 @@ const useStyles = makeStyles(() => ({
 const Services = ({className, ...rest}) => {
   const classes = useStyles();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     loadServices();
   }, []);
 
   const loadServices = () =>{
-    return queryService().then(setData)
+    setLoading(true);
+    return queryService().then((result)=>{
+      setLoading(false);
+      setData(result);
+    })
   }
 
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  const stopService = (masterName, instanceName) =>{
+    setLoading(true);
+    return mutationStopService(masterName, instanceName).then(() => {
+      loadServices();
+    })
+  }
+
+  const restartService = (masterName, instanceName) =>{
+    setLoading(true);
+    return mutationRestartService(masterName, instanceName).then(() => {
+      loadServices();
+    })
   }
 
   const sortBy = (key) => (valueA, valueB) => valueA[key] < valueB[key] ? -1 : 1;
@@ -73,7 +95,14 @@ const Services = ({className, ...rest}) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((service) => (<React.Fragment key={service.name}>
+                {loading && (
+                    <TableRow
+                        hover
+                    >
+                      <TableCell colSpan={5}>loading</TableCell>
+                    </TableRow>
+                )}
+                {!loading && data.map((service) => (<React.Fragment key={service.name}>
                     <TableRow
                         hover
                     >
@@ -116,7 +145,7 @@ const Services = ({className, ...rest}) => {
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {service.containers.map((service) => (
+                                {service.containers && service.containers.map((service) => (
                                     <TableRow
                                         hover
                                         key={service.containerName}
@@ -128,7 +157,7 @@ const Services = ({className, ...rest}) => {
                                       <TableCell>{service.zfsFilesystem && service.zfsFilesystem.name}</TableCell>
                                       <TableCell>{service.zfsFilesystem && service.zfsFilesystem.mountPoint}</TableCell>
                                       <TableCell align="right">{service.zfsFilesystem && numberWithCommas(service.zfsFilesystem.used)}</TableCell>
-                                      <TableCell align="right">{service.zfsFilesystem &&numberWithCommas(service.zfsFilesystem.available)}</TableCell>
+                                      <TableCell align="right">{service.zfsFilesystem && numberWithCommas(service.zfsFilesystem.available)}</TableCell>
                                       <TableCell>{service.dockerState}</TableCell>
                                       <TableCell>{moment(service.time * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
                                       <TableCell>
