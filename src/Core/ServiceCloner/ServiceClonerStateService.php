@@ -126,7 +126,8 @@ final class ServiceClonerStateService implements ServiceClonerStateServiceInterf
         }, iterator_to_array(Finder::create()
             ->files()
             ->name('*.json')
-            ->in($this->configurationService->getConfiguration()->getstateRoot())->getIterator()
+            ->in($this->configurationService->getConfiguration()->getstateRoot())
+            ->getIterator()
         ))));
 
         uasort($states, function (ServiceClonerStatusDTO $stateA, ServiceClonerStatusDTO $stateB) {

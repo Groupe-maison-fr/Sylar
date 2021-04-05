@@ -144,7 +144,7 @@ final class ZfsFilesystemServiceIntegrationTest extends AbstractIntegrationTest
         $this->zfsFilesystemService->createFilesystem('testpool/test');
         $this->zfsFilesystemService->createSnapshot('testpool/test', 'one');
         $this->zfsFilesystemService->cloneSnapshot('testpool/test', 'one', 'testpool/testclone_one');
-        $snapshot = $this->zfsFilesystemService->getSnapshots('testpool/test')->first();
+        $this->zfsFilesystemService->getSnapshots('testpool/test')->first();
         self::assertInstanceOf(FilesystemDTO::class, $this->zfsFilesystemService->getClones('testpool/test', 'one')->first());
         self::assertTrue($this->zfsFilesystemService->getClones('testpool/test', 'two')->isEmpty());
     }

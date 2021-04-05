@@ -117,7 +117,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         }
 
         if ($this->serviceClonerNamingService->isMasterName($instanceName) && $this->serviceClonerStateService->hasMasterDependantService($masterName)) {
-            throw new DomainException(sprintf('Can not delete "%s", some dependant services are still there', $masterName));
+            throw new DomainException(sprintf('Can not delete "%s", some dependant services are still there [%s]', $masterName, $instanceName));
         }
 
         $containerParameter = new ContainerParameterDTO(
@@ -207,6 +207,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         $zfsFilesystemPath = $this->serviceClonerNamingService->getZfsFilesystempath($masterName, $instanceName);
         if (!$this->zfsService->hasFilesystem($zfsFilesystemPath)) {
             $this->logger->debug(sprintf('Can not stop filesystem, !hasFilesystem %s', $zfsFilesystemPath));
+
             return;
         }
 

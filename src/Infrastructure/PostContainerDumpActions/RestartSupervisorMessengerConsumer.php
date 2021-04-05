@@ -19,6 +19,6 @@ final class RestartSupervisorMessengerConsumer implements PostContainerDumpServi
 
     public function execute(): void
     {
-        $this->process->run('bin/console', RestartSupervisordWorkersCommand::TOOLS_RESTART_WORKER_COMMAND);
+        //$this->process->run('bin/console', RestartSupervisordWorkersCommand::TOOLS_RESTART_WORKER_COMMAND);
     }
 }

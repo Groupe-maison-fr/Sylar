@@ -19,6 +19,13 @@ abstract class AbstractIntegrationTest extends KernelTestCase
         parent::tearDown();
     }
 
+    /**
+     * @template T
+     *
+     * @param T $value
+     *
+     * @return T
+     */
     protected function getService($serviceName)
     {
         return static::$container->get($serviceName);

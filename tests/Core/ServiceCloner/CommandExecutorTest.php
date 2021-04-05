@@ -15,9 +15,9 @@ use Tests\AbstractIntegrationTest;
 final class CommandExecutorTest extends AbstractIntegrationTest
 {
     /**
-     * @var CommandExecutorInterface
+     * @var
      */
-    private $commandExecutor;
+    private CommandExecutorInterface $commandExecutor;
 
     protected function setUp(): void
     {
