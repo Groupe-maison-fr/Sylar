@@ -1,6 +1,5 @@
 import React from 'react';
 import { SvgIcon } from '@material-ui/core';
-
 const Logo = (props) => {
   return (
       <SvgIcon {...props}  enableBackground="new 0 0 400 400" viewBox="0 0 400 400" width="400" height="400">
