@@ -12,7 +12,7 @@ use App\Infrastructure\Docker\ContainerCreationServiceInterface;
 use App\Infrastructure\Docker\ContainerExecServiceInterface;
 use App\Infrastructure\Docker\ContainerFinderServiceInterface;
 use App\Infrastructure\Docker\ContainerStopServiceInterface;
-use App\Infrastructure\Process\SudoProcess;
+use App\Infrastructure\Process\ProcessInterface;
 use Docker\API\Model\ContainerSummaryItem;
 use Tests\AbstractIntegrationTest;
 
@@ -28,7 +28,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
     private ContainerCreationServiceInterface $containerCreationService;
     private ConfigurationServiceInterface $configurationService;
     private string $testRoot;
-    private SudoProcess $process;
+    private ProcessInterface $process;
 
     private ContainerFinderServiceInterface $containerFinderService;
 
@@ -40,16 +40,16 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
 
         $this->initLoggerBufferedHandler($this->getService('logger'));
 
-        $this->process = $this->getService(SudoProcess::class);
+        $this->process = $this->getService(ProcessInterface::class);
         $this->testRoot = '/tmp';
         $this->cleanExistingDockers();
 
-        echo $this->process->mayRun('zfs', 'destroy', '-Rf', 'testpool');
-        echo $this->process->mayRun('zpool', 'destroy', '-f', 'testpool');
-        echo $this->process->mayRun('rm', '-f', $this->testRoot . '/testdisk');
-        echo $this->process->run('fallocate', '-l', '2G', $this->testRoot . '/testdisk');
-        echo $this->process->run('zpool', 'create', 'testpool', $this->testRoot . '/testdisk');
-        echo $this->process->mayRun('docker', 'network', 'create', 'n1');
+        echo $this->process->mayRun('zfs', 'destroy', '-Rf', 'testpool')->getStdOutput();
+        echo $this->process->mayRun('zpool', 'destroy', '-f', 'testpool')->getStdOutput();
+        echo $this->process->mayRun('rm', '-f', $this->testRoot . '/testdisk')->getStdOutput();
+        echo $this->process->run('fallocate', '-l', '2G', $this->testRoot . '/testdisk')->getStdOutput();
+        echo $this->process->run('zpool', 'create', 'testpool', $this->testRoot . '/testdisk')->getStdOutput();
+        echo $this->process->mayRun('docker', 'network', 'create', 'n1')->getStdOutput();
 
         $this->resetBufferedLoggerHandler();
     }
@@ -127,8 +127,8 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
         $this->setDependentServices('network');
         $this->serviceCloneService->startMaster('go-static-webserver');
         $this->serviceCloneService->startService('go-static-webserver', '02', 2);
-        $dockerInspectionMaster = json_decode($this->process->run('docker', 'inspect', 'go-static-webserver'), true);
-        $dockerInspectionService = json_decode($this->process->run('docker', 'inspect', 'go-static-webserver_02'), true);
+        $dockerInspectionMaster = json_decode($this->process->run('docker', 'inspect', 'go-static-webserver')->getStdOutput(), true);
+        $dockerInspectionService = json_decode($this->process->run('docker', 'inspect', 'go-static-webserver_02')->getStdOutput(), true);
         self::assertArrayHasKey('n1', $dockerInspectionMaster[0]['NetworkSettings']['Networks']);
         self::assertArrayNotHasKey('none', $dockerInspectionMaster[0]['NetworkSettings']['Networks']);
         self::assertArrayNotHasKey('n1', $dockerInspectionService[0]['NetworkSettings']['Networks']);

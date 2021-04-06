@@ -19,6 +19,7 @@
         "overblog/graphql-bundle": "^0.13.4",
         "php-http/guzzle6-adapter": "^2.0",
         "php-http/logger-plugin": "^1.2",
+        "phpseclib/phpseclib": "^3.0",
         "phpunit/phpunit": "^9.4",
         "ramsey/uuid": "^4.1",
         "supervisorphp/supervisor": "^4.0",

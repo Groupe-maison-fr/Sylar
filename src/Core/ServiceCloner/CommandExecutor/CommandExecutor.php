@@ -24,7 +24,7 @@ final class CommandExecutor implements CommandExecutorInterface
         return $command->getSubCommands()->map(function (string $subCommand) {
             return new CommandExecutorResultDTO(
                 $subCommand,
-                array_filter(explode(PHP_EOL, $this->process->run('bash', '-c', $subCommand))),
+                array_filter(explode(PHP_EOL, $this->process->run('bash', '-c', $subCommand)->getStdOutput())),
             );
         })->toArray();
     }

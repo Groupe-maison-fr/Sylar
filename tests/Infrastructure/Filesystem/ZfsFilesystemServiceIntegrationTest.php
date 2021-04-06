@@ -9,9 +9,9 @@ use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Infrastructure\Filesystem\FilesystemCollection;
 use App\Infrastructure\Filesystem\FilesystemDTO;
 use App\Infrastructure\Filesystem\FilesystemServiceInterface;
+use App\Infrastructure\Process\Exception\ProcessFailedException;
 use App\Infrastructure\Process\ProcessInterface;
-use App\Infrastructure\Process\SudoProcess;
-use Symfony\Component\Process\Exception\ProcessFailedException;
+use App\Infrastructure\Process\SshBinProcess;
 use Tests\AbstractIntegrationTest;
 
 /**
@@ -29,7 +29,7 @@ final class ZfsFilesystemServiceIntegrationTest extends AbstractIntegrationTest
         parent::setUp();
         $this->zfsFilesystemService = $this->getService(FilesystemServiceInterface::class);
         $this->configurationService = $this->getService(ConfigurationService::class);
-        $this->process = $this->getService(SudoProcess::class);
+        $this->process = $this->getService(SshBinProcess::class);
         $this->testRoot = '/tmp';
 
         $this->process->mayRun('zpool', 'destroy', '-f', 'testpool');

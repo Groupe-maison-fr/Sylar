@@ -41,7 +41,7 @@ services:
 
     App\Infrastructure\Filesystem\ZfsFilesystemService:
         arguments:
-            $process : '@App\Infrastructure\Process\SudoProcess'
+            $process : '@App\Infrastructure\Process\SshProcess'
 
     Docker\Docker:
         factory: ['@App\Infrastructure\Docker\DockerFactory', 'create']
@@ -61,3 +61,19 @@ services:
             $supervisordUrl: '%supervisord_url%'
             $supervisordUser: '%supervisord_user%'
             $supervisordPassword: '%supervisord_password%'
+
+    App\Infrastructure\Process\ProcessInterface: '@App\Infrastructure\Process\SshProcess'
+
+    App\Infrastructure\Process\SshProcess:
+        arguments:
+            $host: '192.168.99.21'
+            $user: 'vagrant'
+            $port: 22
+            $identityFile: '/app/data/id_rsa'
+
+    App\Infrastructure\Process\SshBinProcess:
+        arguments:
+            $host: '192.168.99.21'
+            $user: 'vagrant'
+            $port: 22
+            $identityFile: '/app/data/id_rsa'

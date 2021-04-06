@@ -6,7 +6,9 @@ namespace App\Infrastructure\Process;
 
 interface ProcessInterface
 {
-    public function run(...$arguments): string;
+    public function exec(CommandDTO $command): ExecutionResultDTO;
 
-    public function mayRun(...$arguments): string;
+    public function run(?string ...$arguments): ExecutionResultDTO;
+
+    public function mayRun(?string ...$arguments): ExecutionResultDTO;
 }

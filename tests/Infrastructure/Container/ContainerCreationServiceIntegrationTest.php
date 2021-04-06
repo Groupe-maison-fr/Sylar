@@ -9,7 +9,7 @@ use App\Infrastructure\Docker\ContainerCreationServiceInterface;
 use App\Infrastructure\Docker\ContainerExecServiceInterface;
 use App\Infrastructure\Docker\ContainerFinderServiceInterface;
 use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
-use App\Infrastructure\Process\SudoProcess;
+use App\Infrastructure\Process\ProcessInterface;
 use Docker\API\Model\ContainerSummaryItem;
 use Ramsey\Uuid\Uuid;
 use Tests\AbstractIntegrationTest;
@@ -22,13 +22,13 @@ final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationT
     private ConfigurationServiceInterface $configurationService;
     private ContainerCreationServiceInterface $containerCreationService;
     private ContainerFinderServiceInterface $containerFinderService;
-    private SudoProcess $sudoProcess;
+    private ProcessInterface $sudoProcess;
     private ContainerExecServiceInterface $containerExecService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->sudoProcess = $this->getService(SudoProcess::class);
+        $this->sudoProcess = $this->getService(ProcessInterface::class);
         $this->configurationService = $this->getService(ConfigurationServiceInterface::class);
         $this->containerCreationService = $this->getService(ContainerCreationServiceInterface::class);
         $this->containerFinderService = $this->getService(ContainerFinderServiceInterface::class);
@@ -95,10 +95,10 @@ final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationT
         self::assertSame(8198, $port->getPublicPort());
         self::assertSame(3000, $port->getPrivatePort());
         self::assertSame('tcp', $port->getType());
-        self::assertSame($dockerName, trim($this->sudoProcess->run(sprintf('cat /tmp/%s', $dockerName))));
+        self::assertSame($dockerName, trim($this->sudoProcess->run(sprintf('cat /tmp/%s', $dockerName))->getStdOutput()));
         self::assertSame($dockerName, trim($this->containerExecService->exec($dockerName, 'cat', '/app/tmp/' . $dockerName)));
         $this->containerExecService->exec($dockerName, 'sh', '-c', 'rm /app/tmp/' . $dockerName);
-        self::assertSame('', $this->sudoProcess->run(sprintf('ls "/tmp/%s" || true', $dockerName)));
+        self::assertSame('', $this->sudoProcess->run(sprintf('ls "/tmp/%s" || true', $dockerName))->getStdOutput());
     }
 
     private function cleanExistingDockers(): void

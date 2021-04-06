@@ -7,17 +7,17 @@ namespace App\Infrastructure\Process;
 final class CommandDTO
 {
     private array $arguments;
-    private bool $mayRun;
+    private bool $mustRun;
     private bool $sudo;
 
     public function __construct(
         array $arguments,
-        bool $mayRun,
+        bool $mustRun,
         bool $sudo
     ) {
         $this->arguments = $arguments;
-        $this->mayRun = $mayRun;
         $this->sudo = $sudo;
+        $this->mustRun = $mustRun;
     }
 
     public function getArguments(): array
@@ -25,12 +25,17 @@ final class CommandDTO
         return $this->arguments;
     }
 
-    public function isMayRun(): bool
+    public function mayRun(): bool
     {
-        return $this->mayRun;
+        return !$this->mustRun;
     }
 
-    public function isSudo(): bool
+    public function mustRun(): bool
+    {
+        return $this->mustRun;
+    }
+
+    public function sudo(): bool
     {
         return $this->sudo;
     }

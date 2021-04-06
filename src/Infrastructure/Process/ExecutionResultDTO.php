@@ -6,13 +6,13 @@ namespace App\Infrastructure\Process;
 
 final class ExecutionResultDTO
 {
-    private array $stdOutput;
-    private array $stdError;
+    private string $stdOutput;
+    private string $stdError;
     private int $exitCode;
 
     public function __construct(
-        array $stdOutput,
-        array $stdError,
+        string $stdOutput,
+        string $stdError,
         int $exitCode
     ) {
         $this->stdOutput = $stdOutput;
@@ -20,12 +20,17 @@ final class ExecutionResultDTO
         $this->exitCode = $exitCode;
     }
 
-    public function getStdOutput(): array
+    public function __toString(): string
+    {
+        return $this->getStdError() . ' ' . $this->getStdOutput();
+    }
+
+    public function getStdOutput(): string
     {
         return $this->stdOutput;
     }
 
-    public function getStdError(): array
+    public function getStdError(): string
     {
         return $this->stdError;
     }
