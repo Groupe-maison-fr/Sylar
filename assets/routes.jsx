@@ -5,6 +5,7 @@ import MainLayout from './layouts/MainLayout';
 import ServicesView from './views/ServicesView';
 import NotFoundView from './views/NotFoundView';
 import SystemView from './views/SystemView';
+import MessengerView from './views/MessengerView';
 
 const routes = [
   {
@@ -13,6 +14,7 @@ const routes = [
     children: [
       { path: 'services', element: <ServicesView /> },
       { path: 'system', element: <SystemView /> },
+      { path: 'messenger', element: <MessengerView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

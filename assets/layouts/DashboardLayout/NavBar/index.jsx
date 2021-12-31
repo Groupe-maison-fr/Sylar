@@ -12,6 +12,7 @@ import {
 import {
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
+  Cpu as CpuIcon,
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -31,6 +32,11 @@ const items = [
     href: '/app/system',
     icon: SettingsIcon,
     title: 'System'
+  },
+  {
+    href: '/app/messenger',
+    icon: CpuIcon,
+    title: 'Messenger'
   }
 ];
 

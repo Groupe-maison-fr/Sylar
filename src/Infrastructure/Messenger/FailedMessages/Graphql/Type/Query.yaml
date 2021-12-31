@@ -1,0 +1,17 @@
+QueryFailedMessage:
+  type: object
+  decorator: true
+  config:
+    fields:
+      failedMessages:
+        type: "[FailedMessage!]"
+        resolve: '@=resolver("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\MessagesResolver::findAll", [args["max"]])'
+        args:
+          max:
+            type: Int
+      failedMessage:
+        type: FailedMessage!
+        resolve: '@=resolver("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\MessagesResolver::resolve", [args["id"]])'
+        args:
+          id:
+            type: Int

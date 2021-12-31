@@ -676,6 +676,9 @@
             "config/routes.yaml"
         ]
     },
+    "symfony/security-core": {
+        "version": "v5.2.14"
+    },
     "symfony/serializer": {
         "version": "v5.0.11"
     },

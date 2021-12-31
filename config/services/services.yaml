@@ -77,3 +77,24 @@ services:
             $user: 'vagrant'
             $port: 22
             $identityFile: '/app/data/id_rsa'
+
+    App\Infrastructure\Messenger\FailedMessages\Repository\FailedMessagesRepository:
+        arguments:
+            $receiver: '@messenger.transport.failed'
+
+    App\Infrastructure\Messenger\FailedMessages\Graphql\Mutation\MutationRejectMessage:
+        arguments:
+            $receiver: '@messenger.transport.failed'
+
+    App\Infrastructure\Messenger\FailedMessages\Graphql\Mutation\MutationRetryMessage:
+        arguments:
+            $receiver: '@messenger.transport.failed'
+
+overblog_graphql:
+    definitions:
+        mappings:
+            types:
+                - type: yaml
+                  dir: "%kernel.project_dir%/src/Infrastructure/Messenger/FailedMessages/Graphql/Type"
+                  suffix: null
+

@@ -1,0 +1,6 @@
+FailedMessageOutput:
+    type: object
+    config:
+        fields:
+            success: Boolean
+
