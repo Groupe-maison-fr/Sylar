@@ -22,7 +22,7 @@ abstract class AbstractIntegrationTest extends KernelTestCase
     /**
      * @template T
      *
-     * @param T $value
+     * @param T $serviceName
      *
      * @return T
      */

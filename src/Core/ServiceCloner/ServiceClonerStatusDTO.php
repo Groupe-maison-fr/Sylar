@@ -14,11 +14,11 @@ final class ServiceClonerStatusDTO
     private string $containerName;
     private string $zfsFilesystemName;
     private string $zfsFilesystemPath;
+    private ?int $createdAt;
     private bool $isMaster;
     private array $exposedPorts;
     private ?FilesystemDTO $zfsFilesystem;
     private ?string $dockerState;
-    private ?int $createdAt;
 
     public function __construct(
         string $masterName,
@@ -33,10 +33,10 @@ final class ServiceClonerStatusDTO
         $this->instanceName = $instanceName;
         $this->index = $index;
         $this->containerName = $containerName;
-        $this->isMaster = $instanceName == 'master';
         $this->zfsFilesystemName = $zfsFilesystemName;
         $this->zfsFilesystemPath = $zfsFilesystemPath;
         $this->createdAt = $createdAt;
+        $this->isMaster = $instanceName == 'master';
         $this->zfsFilesystem = null;
         $this->dockerState = null;
         $this->exposedPorts = [];
@@ -45,27 +45,26 @@ final class ServiceClonerStatusDTO
     public function toArray(): array
     {
         return [
-            'masterName' => $this->masterName,
-            'instanceName' => $this->instanceName,
-            'index' => $this->index,
-            'containerName' => $this->containerName,
-            'zfsFilesystemName' => $this->zfsFilesystemName,
-            'zfsFilesystemPath' => $this->zfsFilesystemPath,
-            'createdAt' => $this->createdAt,
-            'isMaster' => $this->isMaster,
+            'sylar-masterName' => $this->masterName,
+            'sylar-instanceName' => $this->instanceName,
+            'sylar-index' => sprintf('%d', $this->index),
+            'sylar-containerName' => $this->containerName,
+            'sylar-zfsFilesystemName' => $this->zfsFilesystemName,
+            'sylar-zfsFilesystemPath' => $this->zfsFilesystemPath,
+            'sylar-createdAt' => sprintf('%d', $this->createdAt),
         ];
     }
 
     public static function createFromArray(array $data): self
     {
         return new self(
-            $data['masterName'],
-            $data['instanceName'],
-            (int) $data['index'],
-            $data['containerName'],
-            $data['zfsFilesystemName'],
-            $data['zfsFilesystemPath'],
-            (int) $data['createdAt']
+            $data['sylar-masterName'],
+            $data['sylar-instanceName'],
+            (int) $data['sylar-index'],
+            $data['sylar-containerName'],
+            $data['sylar-zfsFilesystemName'],
+            $data['sylar-zfsFilesystemPath'],
+            (int) $data['sylar-createdAt']
         );
     }
 
@@ -82,11 +81,6 @@ final class ServiceClonerStatusDTO
     public function getContainerName(): string
     {
         return $this->containerName;
-    }
-
-    public function setContainerName(string $containerName): void
-    {
-        $this->containerName = $containerName;
     }
 
     public function getMasterName(): string

@@ -77,7 +77,8 @@ final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationT
                 0,
                 '/tmp'
             ),
-            $config
+            $config,
+            ['sylar-label' => '1']
         );
 
         sleep(2);
@@ -95,6 +96,8 @@ final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationT
         self::assertSame(8198, $port->getPublicPort());
         self::assertSame(3000, $port->getPrivatePort());
         self::assertSame('tcp', $port->getType());
+        self::assertArrayHasKey('sylar-label', $containerSummaryItem->getLabels());
+        self::assertSame('1', $containerSummaryItem->getLabels()['sylar-label']);
         self::assertSame($dockerName, trim($this->sudoProcess->run(sprintf('cat /tmp/%s', $dockerName))->getStdOutput()));
         self::assertSame($dockerName, trim($this->containerExecService->exec($dockerName, 'cat', '/app/tmp/' . $dockerName)));
         $this->containerExecService->exec($dockerName, 'sh', '-c', 'rm /app/tmp/' . $dockerName);

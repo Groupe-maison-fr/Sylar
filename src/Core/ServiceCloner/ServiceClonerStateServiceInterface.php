@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace App\Core\ServiceCloner;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 interface ServiceClonerStateServiceInterface
 {
-    public function createState(string $masterName, string $instanceName, int $index): void;
-
     public function refreshState(ServiceClonerStatusDTO $serviceClonerStatusDTO): ServiceClonerStatusDTO;
 
     public function loadState(string $masterName, string $instanceName): ?ServiceClonerStatusDTO;
 
     public function hasMasterDependantService(string $masterName): bool;
 
-    public function deleteState(string $masterName, string $instanceName): void;
-
     /** @return ServiceClonerStatusDTO[] */
     public function getStates(): array;
+
+    public function createServiceClonerStatusDTO(string $masterName, string $instanceName, int $index): ServiceClonerStatusDTO;
+
+    public function getMasterDependantService(string $masterName): ArrayCollection;
 }

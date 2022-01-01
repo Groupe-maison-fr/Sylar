@@ -61,7 +61,8 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
 
     public function createDocker(
         ContainerParameterDTO $containerParameter,
-        Service $service
+        Service $service,
+        array $labels
     ): void {
         if (!$this->dockerPullService->imageExists($service->getImage())) {
             $this->dockerPullService->pullImage($service->getImage());
@@ -74,7 +75,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         $container = new ContainersCreatePostBody();
         $container->setImage($service->getImage());
         $container->setHostConfig($hostConfig);
-        $this->setLabel($containerParameter, $container, $service);
+        $this->setLabel($containerParameter, $container, $service, $labels);
         $this->setEnv($containerParameter, $container, $service);
         $this->setNetworkMode($containerParameter, $hostConfig, $service);
 
@@ -142,20 +143,19 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         })->toArray());
     }
 
-    private function setLabel(ContainerParameterDTO $containerParameter, ContainersCreatePostBody $container, Service $service): void
+    private function setLabel(ContainerParameterDTO $containerParameter, ContainersCreatePostBody $container, Service $service, array $labels): void
     {
-        if ($service->getLabels()->isEmpty()) {
+        if ($service->getLabels()->isEmpty() && empty($labels)) {
             return;
         }
-        $container->setLabels(
-            new ArrayObject(array_reduce($service->getLabels()->toArray(),
-                function (array $labels, Label $label) use ($containerParameter) {
-                    list($key, $value) = $this->labelSpecificationFactory->createFromConfiguration($containerParameter, $label);
-                    $labels[$key] = $value;
+        $containerLabels = new ArrayObject(array_reduce($service->getLabels()->toArray(),
+            function (array $labels, Label $label) use ($containerParameter) {
+                [$key, $value] = $this->labelSpecificationFactory->createFromConfiguration($containerParameter, $label);
+                $labels[$key] = $value;
 
-                    return $labels;
-                }, []
-            ))
-        );
+                return $labels;
+            }, $labels
+        ));
+        $container->setLabels($containerLabels);
     }
 }

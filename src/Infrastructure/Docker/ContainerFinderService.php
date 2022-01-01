@@ -5,6 +5,8 @@ declare(ticks=1);
 
 namespace App\Infrastructure\Docker;
 
+use Docker\API\Exception\ContainerListBadRequestException;
+use Docker\API\Exception\ContainerListInternalServerErrorException;
 use Docker\API\Model\ContainerSummaryItem;
 use Docker\Docker;
 use Psr\Log\LoggerInterface;
@@ -52,5 +54,30 @@ final class ContainerFinderService implements ContainerFinderServiceInterface
         }
 
         return current($filteredContainers);
+    }
+
+    public function getDockersByLabel(string $labelKey, string $labelValue): array
+    {
+        try {
+            $containers = $this->docker->containerList([
+                'filters' => json_encode([
+                    'label' => [sprintf('%s=%s', $labelKey, $labelValue)],
+                ]),
+            ]);
+        } catch (ContainerListBadRequestException | ContainerListInternalServerErrorException $exception) {
+            $this->logger->error(sprintf('Can not get getDockersByLabel "%s:%s" because "%s"', $labelKey, $labelValue, $exception->getErrorResponse()->getMessage()));
+
+            return [];
+        } catch (\Exception $exception) {
+            $this->logger->error(sprintf('Can not get getDockersByLabel "%s:%s" because "%s"', $labelKey, $labelValue, $exception->getMessage()));
+
+            return [];
+        }
+
+        if (empty($containers)) {
+            return [];
+        }
+
+        return array_map(fn (ContainerSummaryItem $containerSummaryItem) => substr($containerSummaryItem->getNames()[0], 1), $containers);
     }
 }
