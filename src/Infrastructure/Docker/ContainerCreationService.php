@@ -18,6 +18,7 @@ use App\Infrastructure\Docker\ContainerParameter\PortBindingFactoryInterface;
 use App\Infrastructure\Docker\ContainerParameter\StringParameterFactoryInterface;
 use ArrayObject;
 use Docker\API\Exception\ContainerCreateBadRequestException;
+use Docker\API\Exception\ContainerCreateInternalServerErrorException;
 use Docker\API\Exception\ContainerStartNotFoundException;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\API\Model\ContainersCreatePostResponse201;
@@ -85,6 +86,8 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
             $this->logger->error(sprintf('createDocker: %s %s', $exception->getMessage(), $exception->getErrorResponse()->getMessage()));
         } catch (ContainerStartNotFoundException $exception) {
             $this->logger->error(sprintf('createDocker start failure: %s %s', $exception->getMessage(), $exception->getErrorResponse()->getMessage()));
+        } catch (ContainerCreateInternalServerErrorException $exception) {
+            $this->logger->error(sprintf('createDocker internal error: %s %s', $exception->getMessage(), $exception->getErrorResponse()->getMessage()));
         } catch (Exception $exception) {
             $this->logger->error(sprintf('createDocker: %s', $exception->getMessage()));
             throw $exception;
