@@ -23,6 +23,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import DeleteIcon from "@material-ui/icons/Delete";
 import mutationStopService from '../../graphQL/ServiceCloner/mutationStopService';
 import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
+import EventBus from '../../components/EventBus';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -41,6 +42,12 @@ const Services = ({className, ...rest}) => {
 
   useEffect(() => {
     loadServices();
+    EventBus.on('serviceCloner:start', loadServices);
+    EventBus.on('serviceCloner:stop', loadServices);
+    return () =>{
+      EventBus.remove('serviceCloner:start', loadServices);
+      EventBus.remove('serviceCloner:stop', loadServices);
+    }
   }, []);
 
   const loadServices = () =>{

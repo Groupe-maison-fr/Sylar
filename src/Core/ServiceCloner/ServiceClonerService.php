@@ -17,8 +17,10 @@ use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
 use App\Infrastructure\Docker\ContainerStateServiceInterface;
 use App\Infrastructure\Docker\ContainerStopServiceInterface;
 use App\Infrastructure\Filesystem\FilesystemServiceInterface;
+use App\Infrastructure\ServerSideEvent\ServerSideEventPublisherInterface;
 use Docker\API\Exception\ContainerDeleteNotFoundException;
 use DomainException;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -39,6 +41,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
     private ContainerStopServiceInterface $containerStopService;
     private ContainerDeleteServiceInterface $containerDestroyService;
     private IndexManagerServiceInterface $indexManagerService;
+    private ServerSideEventPublisherInterface $serverSideEventPublisher;
 
     public function __construct(
         ConfigurationServiceInterface $dockerConfiguration,
@@ -52,7 +55,8 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         ServiceClonerStateService $serviceClonerStateService,
         ContainerStateServiceInterface $containerStateService,
         IndexManagerServiceInterface $indexManagerService,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
+        ServerSideEventPublisherInterface $serverSideEventPublisher
     ) {
         $this->dockerConfiguration = $dockerConfiguration;
         $this->configuration = $this->dockerConfiguration->getConfiguration();
@@ -67,18 +71,29 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         $this->serviceClonerNamingService = $serviceClonerNamingService;
         $this->indexManagerService = $indexManagerService;
         $this->serviceClonerStateService = $serviceClonerStateService;
+        $this->serverSideEventPublisher = $serverSideEventPublisher;
     }
 
     public function startMaster(string $masterName): void
     {
-        $this->assertStartMasterParameters($masterName);
-        $this->start($masterName, 'master', 0);
+        try {
+            $this->assertStartMasterParameters($masterName);
+            $this->start($masterName, 'master', 0);
+        } catch (Exception $exception) {
+            $this->publishError($exception->getMessage());
+            throw $exception;
+        }
     }
 
     public function startService(string $masterName, string $instanceName, ?int $index): void
     {
-        $this->assertStartServiceParameters($masterName, $instanceName, $index);
-        $this->start($masterName, $instanceName, $index);
+        try {
+            $this->assertStartServiceParameters($masterName, $instanceName, $index);
+            $this->start($masterName, $instanceName, $index);
+        } catch (Exception $exception) {
+            $this->publishError($exception->getMessage());
+            throw $exception;
+        }
     }
 
     public function restartService(string $masterName, string $instanceName, ?int $index): void
@@ -100,42 +115,63 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         $this->logger->debug(sprintf('-------------%s----------', $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '@')));
         $this->startFilesystem($masterName, $instanceName);
         $this->startDocker($masterName, $instanceName, $index);
+        $this->serverSideEventPublisher->publish('sylar', [
+            'type' => 'serviceCloner',
+            'action' => 'start',
+            'data' => [
+                'masterName' => $masterName,
+                'instanceName' => $instanceName,
+                'index' => $index,
+            ],
+        ]);
     }
 
     public function stop(string $masterName, string $instanceName): void
     {
-        $this->assertStopParameters($masterName, $instanceName);
+        try {
+            $this->assertStopParameters($masterName, $instanceName);
 
-        $serviceState = $this->serviceClonerStateService->loadState($masterName, $instanceName);
-        if ($serviceState === null) {
-            throw new NonExistingServiceInstanceException($masterName, $instanceName);
+            $serviceState = $this->serviceClonerStateService->loadState($masterName, $instanceName);
+            if ($serviceState === null) {
+                throw new NonExistingServiceInstanceException($masterName, $instanceName);
+            }
+
+            if ($this->serviceClonerNamingService->isMasterName($instanceName) && $this->serviceClonerStateService->hasMasterDependantService($masterName)) {
+                $dependantServiceNames = array_unique(array_map(
+                    fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getInstanceName(),
+                    $this->serviceClonerStateService->getMasterDependantService($masterName)->toArray()
+                ));
+                asort($dependantServiceNames);
+                throw new DomainException(sprintf('Can not delete "%s", some dependant services are still there [%s]', $masterName, implode(',', $dependantServiceNames)));
+            }
+
+            $containerParameter = new ContainerParameterDTO(
+                $serviceState->getContainerName(),
+                $serviceState->getIndex(),
+                $this->serviceClonerNamingService->getZfsFilesystemPath($masterName, $instanceName)
+            );
+
+            $service = $this->configuration->getServiceByName($masterName);
+            if ($service === null) {
+                throw new NonExistingServiceException($masterName);
+            }
+            $this->containerStopService->stop($serviceState->getContainerName());
+            $this->containerDestroyService->delete($serviceState->getContainerName());
+
+            $this->serviceClonerLifeCycleHookService->postDestroy($service, $containerParameter);
+            $this->stopFilesystem($masterName, $instanceName);
+            $this->serverSideEventPublisher->publish('sylar', [
+                'type' => 'serviceCloner',
+                'action' => 'stop',
+                'data' => [
+                    'masterName' => $masterName,
+                    'instanceName' => $instanceName,
+                ],
+            ]);
+        } catch (Exception $exception) {
+            $this->publishError($exception->getMessage());
+            throw $exception;
         }
-
-        if ($this->serviceClonerNamingService->isMasterName($instanceName) && $this->serviceClonerStateService->hasMasterDependantService($masterName)) {
-            $dependantServiceNames = array_unique(array_map(
-                fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getInstanceName(),
-                $this->serviceClonerStateService->getMasterDependantService($masterName)->toArray()
-            ));
-            asort($dependantServiceNames);
-
-            throw new DomainException(sprintf('Can not delete "%s", some dependant services are still there [%s]', $masterName, implode(',', $dependantServiceNames)));
-        }
-
-        $containerParameter = new ContainerParameterDTO(
-            $serviceState->getContainerName(),
-            $serviceState->getIndex(),
-            $this->serviceClonerNamingService->getZfsFilesystemPath($masterName, $instanceName)
-        );
-
-        $service = $this->configuration->getServiceByName($masterName);
-        if ($service === null) {
-            throw new NonExistingServiceException($masterName);
-        }
-        $this->containerStopService->stop($serviceState->getContainerName());
-        $this->containerDestroyService->delete($serviceState->getContainerName());
-
-        $this->serviceClonerLifeCycleHookService->postDestroy($service, $containerParameter);
-        $this->stopFilesystem($masterName, $instanceName);
     }
 
     private function startDocker(string $masterName, string $instanceName, int $index): void
@@ -262,5 +298,16 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         if ($this->dockerConfiguration->getConfiguration()->getServiceByName($masterName) === null) {
             throw new StopServiceException(sprintf('Service name %s does not exists', $masterName));
         }
+    }
+
+    private function publishError(string $errorMessage): void
+    {
+        $this->serverSideEventPublisher->publish('sylar', [
+            'type' => 'serviceCloner',
+            'action' => 'error',
+            'data' => [
+                'message' => $errorMessage,
+            ],
+        ]);
     }
 }

@@ -5,12 +5,15 @@ import * as serviceWorker from './serviceWorker';
 import App from './App';
 import { svgFavicon } from '@space-kit/hat';
 import RawSvg from './components/LogoPicture';
+import { SnackbarProvider } from 'notistack';
 
 svgFavicon(RawSvg);
 
 ReactDOM.render((
   <BrowserRouter>
-    <App />
+      <SnackbarProvider maxSnack={5}>
+          <App />
+      </SnackbarProvider>
   </BrowserRouter>
 ), document.getElementById('root'));
 

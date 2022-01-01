@@ -21,10 +21,12 @@ import {
     TextField
 } from "@material-ui/core";
 import Refresh from "@material-ui/icons/Refresh";
-import queryFailedMessages from "../../graphql/Messenger/queryFailedMessages.js";
-import queryFailedMessage from "../../graphql/Messenger/queryFailedMessage.js";
-import mutationRejectFailedMessage from "../../graphql/Messenger/mutationRejectFailedMessage.js";
-import mutationRetryFailedMessage from "../../graphql/Messenger/mutationRetryFailedMessage.js";
+
+import queryFailedMessages from "../../graphQL/Messenger/queryFailedMessages.js";
+import queryFailedMessage from "../../graphQL/Messenger/queryFailedMessage.js";
+import mutationRejectFailedMessage from "../../graphQL/Messenger/mutationRejectFailedMessage.js";
+import mutationRetryFailedMessage from "../../graphQL/Messenger/mutationRetryFailedMessage.js";
+import EventBus from '../../components/EventBus';
 
 const styles = theme => ({
     table: {
@@ -62,7 +64,13 @@ class MessengerMessages extends React.Component {
 
     componentDidMount() {
         this.reload();
+        EventBus.on('failedMessage:new', this.reload);
     }
+
+    componentWillUnmount() {
+        EventBus.remove('failedMessage:new', this.reload);
+    }
+
 
     reload() {
         return queryFailedMessages( 50)
