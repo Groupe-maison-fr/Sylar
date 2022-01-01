@@ -13,6 +13,11 @@ services:
     restart: unless-stopped
     working_dir: /app
     privileged: true
+    environment:
+      - MERCURE_URL=http://sylar-mercure/.well-known/mercure
+      - MERCURE_PUBLIC_URL=http://sylar-mercure/.well-known/mercure
+      - MERCURE_JWT_SECRET=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
+      - MERCURE_SUBSCRIBER_KEY=mercure_subscriber
     volumes:
       - /home/vagrant/.ssh/readable.id_rsa:/app/data/id_rsa:ro
       - ./.docker/runner/etc/ssh/ssh_config:/etc/ssh/ssh_config:ro
@@ -91,3 +96,16 @@ services:
       - TASKS=1
       - VERSION=1
       - VOLUMES=1
+  mercure:
+    container_name: mercure
+    restart: unless-stopped
+    image: dunglas/mercure:v0.10.4
+    environment:
+      - ALLOW_ANONYMOUS=1
+      - CORS_ALLOWED_ORIGINS=*
+      - MERCURE_EXTRA_DIRECTIVES=cors_allowed_origins *
+      - PUBLISHER_JWT_KEY=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
+      - PUBLISH_ALLOWED_ORIGINS=*
+      - SUBSCRIBER_JWT_KEY=mercure_subscriber
+      - SERVER_NAME=":80"
+      - USE_FORWARDED_HEADERS=1
