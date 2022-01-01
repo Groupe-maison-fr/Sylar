@@ -69,11 +69,13 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
         $this->containerExecService = $this->getService(ContainerExecServiceInterface::class);
         $this->containerFinderService = $this->getService(ContainerFinderServiceInterface::class);
         $this->containerStopService = $this->getService(ContainerStopServiceInterface::class);
+        $this->cleanExistingStateFiles();
     }
 
     protected function tearDown(): void
     {
         $this->resetBufferedLoggerHandler();
+        $this->cleanExistingStateFiles();
         $this->cleanExistingDockers();
         $this->process->run('zfs', 'destroy', '-Rf', 'testpool');
         $this->process->run('zpool', 'destroy', '-f', 'testpool');
@@ -89,6 +91,16 @@ final class ServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
     private function containerExecMysql(string $containerName, string $sql): string
     {
         return $this->containerExecShell($containerName, sprintf('mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "%s"', $sql));
+    }
+
+    private function cleanExistingStateFiles(): void
+    {
+        foreach (['mysql-start-master-clones', 'go-static-webserver'] as $mask) {
+            $pathMask = sprintf('%s/%s*.json', $this->configurationService->getConfiguration()->getstateRoot(), $mask);
+            foreach (glob($pathMask) as $filename) {
+                unlink($filename);
+            }
+        }
     }
 
     private function cleanExistingDockers(): void
