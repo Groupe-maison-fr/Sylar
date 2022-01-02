@@ -38,7 +38,7 @@ install-composer:
 
 .PHONY: host-dev-up
 host-dev-up:
-	vagrant up --provision
+	vagrant up --provision --parallel
 	#vagrant ssh slave -c 'cd /app;make install-composer;make vendor-dev;make node_modules'
 
 .PHONY: host-dev-down
@@ -52,6 +52,10 @@ host-dev-destroy:
 .PHONY: host-shell-runner
 host-shell-runner:
 	vagrant ssh slave -c 'cd /opt/sylar;docker-compose exec runner bash'
+
+.PHONY: host-shell-builder
+host-shell-builder:
+	vagrant ssh slave -c 'cd /opt/sylar;docker-compose exec builder sh'
 
 .PHONY: host-tests
 host-tests:
@@ -184,6 +188,6 @@ start-local-docker:
 	sylar --no-debug service:start mysql slave1
 	sylar --no-debug service:start mysql slave2
 
-restart-worker:
-	docker-compose exec runner supervisorctl restart php-worker
+host-restart-worker:
+	vagrant ssh slave -c 'cd /opt/sylar;docker-compose exec runner supervisorctl restart php-worker'
 # stop slave;CHANGE MASTER TO MASTER_HOST='192.168.99.21', MASTER_USER='replication_user', MASTER_PASSWORD='replication_password';start slave;
