@@ -9,14 +9,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import PrefersDarkModeContext from "./Context/PrefersDarkModeContext";
 import {initialDarkMode} from "./components/DarkMode";
 import EventBus from './components/EventBus';
-import { useSnackbar } from 'notistack';
 import AppSnackbars from './AppSnackbars';
 
 EventBus.handleEventSource('/.well-known/mercure?topic=sylar');
 
 const App = () => {
     const routing = useRoutes(routes);
-    const {enqueueSnackbar} = useSnackbar();
 
     const [prefersDarkMode, setPrefersDarkMode] = useState(initialDarkMode());
     const theme = React.useMemo(() => createMuiTheme({
