@@ -37,6 +37,16 @@ const items = [
     href: '/app/messenger',
     icon: CpuIcon,
     title: 'Messenger'
+  },
+  {
+    href: '/app/graph/docker',
+    icon: CpuIcon,
+    title: 'Dockers'
+  },
+  {
+    href: '/app/graph/host',
+    icon: CpuIcon,
+    title: 'Host'
   }
 ];
 

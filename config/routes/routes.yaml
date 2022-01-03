@@ -6,3 +6,6 @@ react_app:
   path: /app/{parameters}
   controller: App\UserInterface\Web\UseCase\IndexController::index
 
+react_app_sub:
+  path: /app/{parameters}/{subparameters}
+  controller: App\UserInterface\Web\UseCase\IndexController::index

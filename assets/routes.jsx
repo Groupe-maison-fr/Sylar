@@ -6,6 +6,7 @@ import ServicesView from './views/ServicesView';
 import NotFoundView from './views/NotFoundView';
 import SystemView from './views/SystemView';
 import MessengerView from './views/MessengerView';
+import GraphView from './views/GraphView';
 
 const routes = [
   {
@@ -15,6 +16,8 @@ const routes = [
       { path: 'services', element: <ServicesView /> },
       { path: 'system', element: <SystemView /> },
       { path: 'messenger', element: <MessengerView /> },
+      { path: 'graph/docker', element: <GraphView graphUrlId="pMEd7m0Mz/dockers" graphHeight={1300}/> },
+      { path: 'graph/host', element: <GraphView graphUrlId="rYdddlPWk/host" graphHeight={1300}/> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
