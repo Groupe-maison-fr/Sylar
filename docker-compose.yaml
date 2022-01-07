@@ -21,6 +21,9 @@ services:
       - MERCURE_PUBLIC_URL=http://sylar-mercure/.well-known/mercure
       - MERCURE_JWT_SECRET=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
       - MERCURE_SUBSCRIBER_KEY=mercure_subscriber
+      - SUPERVISORD_URL=http://127.0.0.1:9001/RPC2
+      - SUPERVISORD_USER=admin
+      - SUPERVISORD_PASSWORD=adminpassword
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./.docker/runner/etc/ssh/ssh_config:/etc/ssh/ssh_config:ro

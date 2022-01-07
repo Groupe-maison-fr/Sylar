@@ -7,7 +7,7 @@ parameters:
     sylar_config_filename_default: '%sylar_data_path%/sylar.yaml'
     sylar_config_filename: '%env(default:sylar_config_filename_default:SYLAR_CONFIG_FILENAME)%'
 
-    default_supervisord_url: 'http://127.0.0.1:9001/RPC2'
+    default_supervisord_url: 'http://127.0.0.1:9001'
     default_supervisord_user: 'admin'
     default_supervisord_password: 'adminpass'
 
@@ -58,7 +58,7 @@ services:
 
     App\UserInterface\Cli\RestartSupervisordWorkersCommand:
         arguments:
-            $supervisordUrl: '%supervisord_url%'
+            $supervisordUrl: '%supervisord_url%/RPC2'
             $supervisordUser: '%supervisord_user%'
             $supervisordPassword: '%supervisord_password%'
 
