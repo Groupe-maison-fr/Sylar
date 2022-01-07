@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SCRIPT_PATH=$(dirname $(dirname $(dirname $(realpath "$0"))))
+SYLAR_ROOT_PATH=${SYLAR_PATH:-${SCRIPT_PATH}}
+
+docker-compose -f "${SYLAR_ROOT_PATH}/docker-compose.yaml" exec runner bash -c "APP_ENV=dev bin/console --no-debug $*"
