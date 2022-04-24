@@ -32,6 +32,8 @@ services:
          - '../../src/**/*DTO.php'
          - '../../src/**/*Exception.php'
          - '../../src/**/*Command.php'
+         - '../../src/Infrastructure/Process/SshProcess.php'
+         - '../../src/Infrastructure/Process/SshBinProcess.php'
          - '../../src/Infrastructure/Docker/Endpoint/ContainerLogsUntil.php'
          - '../../src/Infrastructure/Docker/Stream/DockerRawStreamUntil.php'
 
@@ -39,9 +41,9 @@ services:
         resource: '../../src/UserInterface/Cli/**'
         tags: ['console.command']
 
-    App\Infrastructure\Filesystem\ZfsFilesystemService:
-        arguments:
-            $process : '@App\Infrastructure\Process\SshProcess'
+#    App\Infrastructure\Filesystem\ZfsFilesystemService:
+#        arguments:
+#            $process : '@App\Infrastructure\Process\Process'
 
     Docker\Docker:
         factory: ['@App\Infrastructure\Docker\DockerFactory', 'create']
@@ -62,21 +64,21 @@ services:
             $supervisordUser: '%supervisord_user%'
             $supervisordPassword: '%supervisord_password%'
 
-    App\Infrastructure\Process\ProcessInterface: '@App\Infrastructure\Process\SshProcess'
+    App\Infrastructure\Process\ProcessInterface: '@App\Infrastructure\Process\Process'
 
-    App\Infrastructure\Process\SshProcess:
-        arguments:
-            $host: '192.168.99.21'
-            $user: 'vagrant'
-            $port: 22
-            $identityFile: '/app/data/id_rsa'
-
-    App\Infrastructure\Process\SshBinProcess:
-        arguments:
-            $host: '192.168.99.21'
-            $user: 'vagrant'
-            $port: 22
-            $identityFile: '/app/data/id_rsa'
+#    App\Infrastructure\Process\SshProcess:
+#        arguments:
+#            $host: '192.168.99.21'
+#            $user: 'vagrant'
+#            $port: 22
+#            $identityFile: '/app/data/id_rsa'
+#
+#    App\Infrastructure\Process\SshBinProcess:
+#        arguments:
+#            $host: '192.168.99.21'
+#            $user: 'vagrant'
+#            $port: 22
+#            $identityFile: '/app/data/id_rsa'
 
     App\Infrastructure\Messenger\FailedMessages\Repository\FailedMessagesRepository:
         arguments:

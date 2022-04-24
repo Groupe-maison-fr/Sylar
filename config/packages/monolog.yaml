@@ -1,0 +1,20 @@
+monolog:
+    handlers:
+        security:
+            level: INFO
+            type: stream
+            #path: "%kernel.logs_dir%/%kernel.environment%.log"
+            path: "php://stderr"
+            channels: [php]
+        main:
+            type: fingers_crossed
+            action_level: error
+            handler: nested
+            channels: ["!event", "!doctrine"]
+        nested:
+            type: stream
+            path: "php://stderr"
+            level: debug
+        console:
+            type: console
+            channels: [ "!event", "!doctrine", "!console" ]

@@ -44,24 +44,6 @@ class Kernel extends BaseKernel
         }
     }
 
-    public function getCacheDir()
-    {
-        if (isset($_ENV['SYMFONY_CACHE_DIR'])) {
-            return $_ENV['SYMFONY_CACHE_DIR'];
-        }
-
-        return parent::getCacheDir();
-    }
-
-    public function getLogDir()
-    {
-        if (isset($_ENV['SYMFONY_LOG_DIR'])) {
-            return $_ENV['SYMFONY_LOG_DIR'];
-        }
-
-        return parent::getLogDir();
-    }
-
     public function getProjectDir()
     {
         return __DIR__ . '/../';

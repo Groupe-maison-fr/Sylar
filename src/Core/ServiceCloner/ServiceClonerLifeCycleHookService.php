@@ -14,20 +14,20 @@ use App\Infrastructure\Docker\ContainerExecServiceInterface;
 use App\Infrastructure\Docker\ContainerParameter\ConfigurationExpressionGeneratorInterface;
 use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
 use App\Infrastructure\Docker\ContainerWaitUntilLogServiceInterface;
-use App\Infrastructure\Process\SshProcess;
+use App\Infrastructure\Process\ProcessInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleHookServiceInterface
 {
     private ContainerWaitUntilLogServiceInterface $dockerWaitUntilLogService;
     private ContainerExecServiceInterface $containerExecService;
-    private SshProcess $process;
+    private ProcessInterface $process;
     private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
 
     public function __construct(
         ContainerWaitUntilLogServiceInterface $dockerWaitUntilLogService,
         ContainerExecServiceInterface $containerExecService,
-        SshProcess $process,
+        ProcessInterface $process,
         ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
     ) {
         $this->dockerWaitUntilLogService = $dockerWaitUntilLogService;
