@@ -39,7 +39,7 @@ install-composer:
 .PHONY: host-dev-up
 host-dev-up:
 	vagrant up --provision --parallel
-	#vagrant ssh slave -c 'cd /app;make install-composer;make vendor-dev;make node_modules'
+	#vagrant ssh sylar -c 'cd /opt/sylar;make docker-up'
 
 .PHONY: host-dev-down
 host-dev-down:
@@ -51,47 +51,39 @@ host-dev-destroy:
 
 .PHONY: host-shell-runner
 host-shell-runner:
-	vagrant ssh slave -c 'cd /opt/sylar;docker-compose exec runner bash'
+	vagrant ssh sylar -c 'cd /opt/sylar;docker-compose exec runner bash'
 
 .PHONY: host-shell-builder
 host-shell-builder:
-	vagrant ssh slave -c 'cd /opt/sylar;docker-compose exec builder sh'
+	vagrant ssh sylar -c 'cd /opt/sylar;docker-compose exec builder sh'
+
+.PHONY: host-shell-monitor
+host-shell-monitor:
+	vagrant ssh sylar -c 'cd /opt/sylar;docker-compose exec monitor sh'
 
 .PHONY: host-tests
 host-tests:
-	vagrant ssh slave -c 'cd /opt/sylar;make tests'
-
-.PHONY: host-mysql-user-master
-host-mysql-user-master:
-	vagrant ssh master -c 'mysql -u root -ptheR00tP455w0rdmaster -h 127.0.0.1  -e "select Host,User from mysql.user;"'
-
-.PHONY: host-mysql-master-replication-status
-host-mysql-master-replication-status:
-	vagrant ssh master -c 'mysql -u root -ptheR00tP455w0rdmaster -h 127.0.0.1  -e "SHOW SLAVE STATUS;"'
+	vagrant ssh sylar -c 'cd /opt/sylar;make tests'
 
 .PHONY: host-mysql-slave-replication-status
 host-mysql-slave-replication-status:
-	vagrant ssh slave -c 'mysql -u root -ptheR00tP455w0rdslave -h 127.0.0.1  -e "SHOW SLAVE STATUS;"'
+	vagrant ssh sylar -c 'mysql -u root -ptheR00tP455w0rdslave -h 127.0.0.1  -e "SHOW SLAVE STATUS;"'
 
-.PHONY: host-shell-master
-host-shell-master:
-	vagrant ssh master
-
-.PHONY: host-shell-slave
-host-shell-slave:
-	vagrant ssh slave -c 'cd /opt/sylar;zsh'
+.PHONY: host-shell
+host-shell:
+	vagrant ssh sylar -c 'cd /opt/sylar;zsh'
 
 .PHONY: shell
 shell:
-	$(MAKE) host-shell-slave
+	$(MAKE) host-shell
 
 .PHONY: host-fsnotify
 host-fsnotify:
-	vagrant fsnotify slave
+	vagrant fsnotify sylar
 
 .PHONY: host-vagrant-init-docker-compose
 host-vagrant-init-docker-compose:
-	vagrant ssh slave -- "\
+	vagrant ssh sylar -- "\
 		sudo chmod 666 /var/run/docker.sock;\
 		rm ~/.ssh/id_rsa ~/.ssh/readable.id_rsa || true;\
 		ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa <<<y 2>&1 >/dev/null;\
@@ -103,7 +95,7 @@ host-vagrant-init-docker-compose:
 
 .PHONY: host-watch-assets
 host-watch-assets:
-	 vagrant ssh slave -- docker-compose -f /opt/sylar/docker-compose.yaml exec builder yarn run watch
+	 vagrant ssh sylar -- docker-compose -f /opt/sylar/docker-compose.yaml exec builder yarn run watch
 
 .PHONY: build-dev
 build-dev: bin/box vendor-dev node_modules
@@ -189,5 +181,5 @@ start-local-docker:
 	sylar --no-debug service:start mysql slave2
 
 host-restart-worker:
-	vagrant ssh slave -c 'cd /opt/sylar;docker-compose exec runner supervisorctl restart php-worker'
+	vagrant ssh sylar -c 'cd /opt/sylar;docker-compose exec runner supervisorctl restart php-worker'
 # stop slave;CHANGE MASTER TO MASTER_HOST='192.168.99.21', MASTER_USER='replication_user', MASTER_PASSWORD='replication_password';start slave;
