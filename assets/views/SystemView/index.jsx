@@ -7,7 +7,6 @@ import {
 import Page from '../../components/Page';
 import Containers from "./Containers";
 import Filesystems from "./Filesystems";
-import DockerStatistics from "./DockerStatistics";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,9 +26,6 @@ const SettingsView = () => {
       >
         <Container maxWidth={false}>
           <Grid container spacing={3}>
-            <Grid item lg={12} md={12} xl={12} xs={12}>
-              <DockerStatistics/>
-            </Grid>
             <Grid item lg={12} md={12} xl={12} xs={12}>
               <Containers/>
             </Grid>

@@ -71,7 +71,7 @@ const Containers = ({className, ...rest}) => {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
+                  <TableCell>{loading ? 'Loading' : 'Name'}</TableCell>
                   <TableCell>Master</TableCell>
                   <TableCell>Instance</TableCell>
                   <TableCell>Index</TableCell>
@@ -86,14 +86,7 @@ const Containers = ({className, ...rest}) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {loading && (
-                    <TableRow
-                        hover
-                    >
-                      <TableCell colSpan={8}>loading</TableCell>
-                    </TableRow>
-                )}
-                {!loading && containers.map((service) => (
+                {containers.map((service) => (
                     <TableRow
                         hover
                         key={service.containerName}

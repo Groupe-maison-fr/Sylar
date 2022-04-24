@@ -1,14 +1,7 @@
 import bodyParser from "body-parser";
-import cors from 'cors';
 import express from 'express';
 import expressWs from 'express-ws';
 import http from 'http';
-import {
-    startDockerCollector,
-    containers,
-    containersStats,
-    containersWebsocket
-} from "./modules/container/index.mjs";
 import {
     vapidKeys,
     subscriptionSet,
@@ -37,7 +30,6 @@ const {getWss} = expressWs(app, server);
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-//app.use(express.static('/app/server/static'));
 app.get('/monitor/subscription/vapidkeys', vapidKeys())
 
 app.post('/monitor/subscription', subscriptionSet())
@@ -46,17 +38,12 @@ app.get('/monitor/subscription', subscriptionGet())
 app.delete('/monitor/subscription', subscriptionDelete())
 app.post('/monitor/notification', sendNotification())
 
-app.get('/monitor/containers', containers())
-app.get('/monitor/containers/stats', containersStats())
 app.get('/monitor/supervisord/:host', supervisorProcessHost());
 app.get('/monitor/supervisord/:host/start/:processName', supervisorStartProcessName());
 app.get('/monitor/supervisord/:host/startGroup/:processGroup', supervisorStartProcessGroup());
 app.get('/monitor/supervisord/:host/stop/:processGroup', supervisorStopProcess());
 app.get('/monitor/supervisord/:host/restart/:processGroup', supervisorRestartProcessGroup());
 app.ws('/monitor/supervisor/', supervisorWebsocket());
-app.ws('/monitor/containers/', containersWebsocket());
-//app.ws('/ssh/', sshWebsocket(sshConfiguration));
-startDockerCollector(getWss);
 startSupervisorCollector(getWss);
 
 server.listen(8080, () => {

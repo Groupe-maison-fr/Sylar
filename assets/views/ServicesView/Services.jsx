@@ -90,7 +90,7 @@ const Services = ({className, ...rest}) => {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
+                  <TableCell>{loading ? 'Loading' : 'Name'}</TableCell>
                   <TableCell>Image</TableCell>
                   <TableCell>Environment</TableCell>
                   <TableCell>Label</TableCell>
@@ -102,14 +102,7 @@ const Services = ({className, ...rest}) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {loading && (
-                    <TableRow
-                        hover
-                    >
-                      <TableCell colSpan={5}>loading</TableCell>
-                    </TableRow>
-                )}
-                {!loading && data.map((service) => (<React.Fragment key={service.name}>
+                {data.map((service) => (<React.Fragment key={service.name}>
                     <TableRow
                         hover
                     >

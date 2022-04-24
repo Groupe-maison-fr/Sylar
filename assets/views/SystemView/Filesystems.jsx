@@ -57,7 +57,7 @@ const Filesystems = ({className, ...rest}) => {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
+                  <TableCell>{loading ? 'Loading' : 'Name'}</TableCell>
                   <TableCell>MountPoint</TableCell>
                   <TableCell>Available</TableCell>
                   <TableCell>Used</TableCell>
@@ -70,14 +70,7 @@ const Filesystems = ({className, ...rest}) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {loading && (
-                    <TableRow
-                        hover
-                    >
-                      <TableCell colSpan={6}>loading</TableCell>
-                    </TableRow>
-                )}
-                {!loading && fileSystems.map((service) => (
+                {fileSystems.map((service) => (
                     <TableRow
                         hover
                         key={service.name}
