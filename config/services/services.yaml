@@ -32,8 +32,6 @@ services:
          - '../../src/**/*DTO.php'
          - '../../src/**/*Exception.php'
          - '../../src/**/*Command.php'
-         - '../../src/Infrastructure/Process/SshProcess.php'
-         - '../../src/Infrastructure/Process/SshBinProcess.php'
          - '../../src/Infrastructure/Docker/Endpoint/ContainerLogsUntil.php'
          - '../../src/Infrastructure/Docker/Stream/DockerRawStreamUntil.php'
 
