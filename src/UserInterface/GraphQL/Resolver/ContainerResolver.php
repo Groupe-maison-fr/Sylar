@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\UserInterface\GraphQL\Resolver;
 
-use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\ServiceClonerStateService;
 use App\Core\ServiceCloner\ServiceClonerStatusDTO;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -13,14 +12,11 @@ use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 final class ContainerResolver implements ResolverInterface
 {
-    private ConfigurationServiceInterface $configurationService;
     private ServiceClonerStateService $serviceClonerStateService;
 
     public function __construct(
-        ConfigurationServiceInterface $configurationService,
         ServiceClonerStateService $serviceClonerStateService
     ) {
-        $this->configurationService = $configurationService;
         $this->serviceClonerStateService = $serviceClonerStateService;
     }
 

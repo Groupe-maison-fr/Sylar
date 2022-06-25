@@ -40,7 +40,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
     private StringParameterFactoryInterface $stringParameterFactory;
 
     public function __construct(
-        Docker $docker,
+        Docker $dockerReadWrite,
         LoggerInterface $logger,
         PortBindingFactoryInterface $portBindingSpecificationFactory,
         MountFactoryInterface $mountSpecificationFactory,
@@ -49,7 +49,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         ContainerImageServiceInterface $dockerPullService,
         StringParameterFactoryInterface $stringParameterFactory
     ) {
-        $this->docker = $docker;
+        $this->docker = $dockerReadWrite;
         $this->logger = $logger;
         $this->bindingSpecificationFactory = $portBindingSpecificationFactory;
         $this->mountSpecificationFactory = $mountSpecificationFactory;

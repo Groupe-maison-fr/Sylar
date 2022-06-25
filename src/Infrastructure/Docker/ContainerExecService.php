@@ -19,11 +19,11 @@ final class ContainerExecService implements ContainerExecServiceInterface
     private ContainerFinderServiceInterface $dockerFinderService;
 
     public function __construct(
-        Docker $docker,
+        Docker $dockerReadWrite,
         LoggerInterface $logger,
         ContainerFinderServiceInterface $dockerFinderService
     ) {
-        $this->docker = $docker;
+        $this->docker = $dockerReadWrite;
         $this->logger = $logger;
         $this->dockerFinderService = $dockerFinderService;
     }

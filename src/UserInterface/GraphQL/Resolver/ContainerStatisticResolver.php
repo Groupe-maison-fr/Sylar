@@ -16,16 +16,15 @@ final class ContainerStatisticResolver implements ResolverInterface
     private Docker $docker;
 
     public function __construct(
-        Docker $docker
+        Docker $dockerReadOnly
     ) {
-        $this->docker = $docker;
+        $this->docker = $dockerReadOnly;
     }
 
     public function __invoke(ResolveInfo $info, ContainerSummaryItem $containerSummaryItem, Argument $args)
     {
         /** @var ContainerStats $stat */
         $stat = $this->docker->containerStats($containerSummaryItem->getId(), ['stream' => false]);
-        dd($stat);
         switch ($info->fieldName) {
             case 'containerName':
                 return implode(',', $containerSummaryItem->getNames());

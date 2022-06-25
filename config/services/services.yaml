@@ -24,6 +24,8 @@ services:
             $configurationFilename: '%sylar_config_filename%'
             $mountedConfigurationPath: '/opt/sylar/data'
             $containerConfigurationPath: '/app/data'
+            $dockerReadOnly: '@docker.readonly'
+            $dockerReadWrite: '@docker.readwrite'
 
     App\:
         resource: '../../src/*'
@@ -39,15 +41,17 @@ services:
         resource: '../../src/UserInterface/Cli/**'
         tags: ['console.command']
 
-#    App\Infrastructure\Filesystem\ZfsFilesystemService:
-#        arguments:
-#            $process : '@App\Infrastructure\Process\Process'
-
-    Docker\Docker:
+    docker.readwrite:
+        class: Docker\Docker
         factory: ['@App\Infrastructure\Docker\DockerFactory', 'create']
-
-    App\Infrastructure\Docker\DockerFactory:
         arguments:
+            $dockerRemoteSocket: 'unix:///var/run/docker.sock'
+
+    docker.readonly:
+        class: Docker\Docker
+        factory: ['@App\Infrastructure\Docker\DockerFactory', 'create']
+        arguments:
+#            $dockerRemoteSocket: 'unix:///var/run/docker.sock'
             $dockerRemoteSocket: 'tcp://docker-socket-proxy:2375'
 
     App\UserInterface\GraphQL\ResolverMap\:
@@ -63,20 +67,6 @@ services:
             $supervisordPassword: '%supervisord_password%'
 
     App\Infrastructure\Process\ProcessInterface: '@App\Infrastructure\Process\Process'
-
-#    App\Infrastructure\Process\SshProcess:
-#        arguments:
-#            $host: '192.168.99.21'
-#            $user: 'vagrant'
-#            $port: 22
-#            $identityFile: '/app/data/id_rsa'
-#
-#    App\Infrastructure\Process\SshBinProcess:
-#        arguments:
-#            $host: '192.168.99.21'
-#            $user: 'vagrant'
-#            $port: 22
-#            $identityFile: '/app/data/id_rsa'
 
     App\Infrastructure\Messenger\FailedMessages\Repository\FailedMessagesRepository:
         arguments:

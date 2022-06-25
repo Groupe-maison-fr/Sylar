@@ -6,21 +6,17 @@ declare(ticks=1);
 namespace App\Infrastructure\Docker;
 
 use Docker\Docker;
-use Psr\Log\LoggerInterface;
 
 final class ContainerStopService implements ContainerStopServiceInterface
 {
-    private LoggerInterface $logger;
     private Docker $docker;
     private ContainerFinderServiceInterface $dockerFinderService;
 
     public function __construct(
-        Docker $docker,
-        LoggerInterface $logger,
+        Docker $dockerReadWrite,
         ContainerFinderServiceInterface $dockerFinderService
     ) {
-        $this->docker = $docker;
-        $this->logger = $logger;
+        $this->docker = $dockerReadWrite;
         $this->dockerFinderService = $dockerFinderService;
     }
 
