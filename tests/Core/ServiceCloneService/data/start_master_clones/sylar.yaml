@@ -1,8 +1,8 @@
 stateRoot: '/app/data'
-zpoolName: 'testpool'
-zpoolRoot: '/testpool'
+zpoolName: 'sylar'
+zpoolRoot: '/sylar'
 services:
-  - name: mysql_start_master_clones
+  - name: unit-test-mysql-start-master-clones
     image: 'library/mariadb:10.5.3'
     labels:
       - name: environment

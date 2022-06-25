@@ -19,16 +19,21 @@ final class ServiceClonerStateServiceIntegrationTest extends AbstractServiceClon
     {
         $this->setConfigurationDependentServices('network');
         $serviceClonerStateService = $this->getService(ServiceClonerStateServiceInterface::class);
-        $this->serviceCloneService->startMaster('go-static-webserver');
-        $this->serviceCloneService->startService('go-static-webserver', 'instance_01', 1);
-        $this->serviceCloneService->startService('go-static-webserver', 'instance_02', 2);
+        $this->serviceCloneService->startMaster('unit-test-go-static-webserver');
+        $this->serviceCloneService->startService('unit-test-go-static-webserver', 'instance_01', 1);
+        $this->serviceCloneService->startService('unit-test-go-static-webserver', 'instance_02', 2);
         self::assertSame(
             [
-                'go-static-webserver',
-                'go-static-webserver_instance-01',
-                'go-static-webserver_instance-02',
+                'unit-test-go-static-webserver',
+                'unit-test-go-static-webserver_instance-01',
+                'unit-test-go-static-webserver_instance-02',
             ],
-            array_map(fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getContainerName(), $serviceClonerStateService->getStates())
+            array_values(array_filter(
+                array_map(fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getContainerName(), $serviceClonerStateService->getStates()),
+                function (string $containerName) {
+                    return preg_match('!^unit-test!', $containerName);
+                }
+            ))
         );
     }
 }

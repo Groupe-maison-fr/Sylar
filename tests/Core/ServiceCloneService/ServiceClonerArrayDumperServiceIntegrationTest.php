@@ -44,11 +44,11 @@ final class ServiceClonerArrayDumperServiceIntegrationTest extends AbstractInteg
             {
             "configurationRoot": "\/opt\/sylar\/tests\/Core\/ServiceCloneService\/data\/start_master",
             "stateRoot": "\/app\/data",
-            "zpoolName": "testpool",
-            "zpoolRoot": "\/testpool",
+            "zpoolName": "sylar",
+            "zpoolRoot": "\/sylar",
             "services": [
                 {
-                    "name": "mysql_start_master",
+                    "name": "unit-test-mysql-start-master",
                     "image": "library\/mariadb:10.5.3",
                     "command": "",
                     "entryPoint": null,
