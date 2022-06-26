@@ -17,6 +17,7 @@ final class FilesystemDTO
     private string $mountPoint;
     private string $origin;
     private string $type;
+    private int $creationTimestamp;
 
     public function __construct(
         string $name,
@@ -29,7 +30,8 @@ final class FilesystemDTO
         int $refer,
         string $mountPoint,
         string $origin,
-        string $type
+        string $type,
+        int $creationTimestamp
     ) {
         $this->name = $name;
         $this->available = $available;
@@ -42,6 +44,7 @@ final class FilesystemDTO
         $this->mountPoint = $mountPoint;
         $this->origin = $origin;
         $this->type = $type;
+        $this->creationTimestamp = $creationTimestamp;
     }
 
     public function getName(): string
@@ -97,5 +100,10 @@ final class FilesystemDTO
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getCreationTimestamp(): int
+    {
+        return $this->creationTimestamp;
     }
 }

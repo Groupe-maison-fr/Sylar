@@ -16,6 +16,7 @@ import {
   TableRow
 } from '@material-ui/core';
 import queryFilesystem from "../../graphQL/ServiceCloner/queryFilesystem";
+import moment from 'moment';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -57,12 +58,13 @@ const Filesystems = ({className, ...rest}) => {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>{loading ? 'Loading' : 'Name'}</TableCell>
-                  <TableCell>MountPoint</TableCell>
-                  <TableCell>Available</TableCell>
-                  <TableCell>Used</TableCell>
-                  <TableCell>Used by Dataset</TableCell>
-                  <TableCell>
+                  <TableCell align="left">{loading ? 'Loading' : 'Name'}</TableCell>
+                  <TableCell align="left">MountPoint</TableCell>
+                  <TableCell align="right">Available</TableCell>
+                  <TableCell align="right">Used</TableCell>
+                  <TableCell align="right">Used by Dataset</TableCell>
+                  <TableCell align="right">Creation time</TableCell>
+                  <TableCell align="right">
                     <Button onClick={loadFilesystem}>
                       <ReplayIcon/>
                     </Button>
@@ -80,6 +82,7 @@ const Filesystems = ({className, ...rest}) => {
                       <TableCell align="right">{numberWithCommas(service.available)}</TableCell>
                       <TableCell align="right">{numberWithCommas(service.used)}</TableCell>
                       <TableCell align="right">{numberWithCommas(service.usedByDataset)}</TableCell>
+                      <TableCell align="right">{moment(service.creationTimestamp * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
                       <TableCell align="right">&nbsp;</TableCell>
                     </TableRow>
                 ))}

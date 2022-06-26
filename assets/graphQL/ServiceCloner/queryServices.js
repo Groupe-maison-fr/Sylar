@@ -39,6 +39,7 @@ export default () => GraphQL.query(`
             usedByDataset
             usedByRefreservation
             usedBySnapshot
+            creationTimestamp
           }
         }
     }

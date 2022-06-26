@@ -25,3 +25,5 @@ Filesystem:
         type: Float!
       usedBySnapshot:
         type: Float!
+      creationTimestamp:
+        type: Int!

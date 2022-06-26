@@ -159,7 +159,7 @@ const Services = ({className, ...rest}) => {
                                       <TableCell align="right">{service.zfsFilesystem && numberWithCommas(service.zfsFilesystem.used)}</TableCell>
                                       <TableCell align="right">{service.zfsFilesystem && numberWithCommas(service.zfsFilesystem.available)}</TableCell>
                                       <TableCell>{service.dockerState}</TableCell>
-                                      <TableCell>moment(service.time * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
+                                      <TableCell>{moment(service.time * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
                                       <TableCell>
                                         {service.instanceName !=="master" && (
                                             <>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Filesystem;
 
 use App\Infrastructure\Process\ProcessInterface;
+use DateTimeImmutable;
 use Exception;
 
 /**
@@ -12,7 +13,7 @@ use Exception;
  */
 final class ZfsFilesystemService implements FilesystemServiceInterface
 {
-    private const headerList = ['name', 'avail', 'used', 'usedsnap', 'usedds', 'usedrefreserv', 'usedchild', 'refer', 'mountpoint', 'origin', 'type'];
+    private const headerList = ['name', 'avail', 'used', 'usedsnap', 'usedds', 'usedrefreserv', 'usedchild', 'refer', 'mountpoint', 'origin', 'type', 'creation'];
 
     private ProcessInterface $process;
     private BytesFormatConvertorInterface $sizeFormatConvertor;
@@ -137,6 +138,10 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
             }
 
             $mappedLine = array_combine(self::headerList, preg_split('/\t+/', $line));
+
+            $strippedCreationString = str_replace('  ', ' ', $mappedLine['creation']);
+            $creationTimestamp = DateTimeImmutable::createFromFormat('D F d G:i Y', $strippedCreationString)->getTimestamp();
+
             $collection->add(new FilesystemDTO(
                 $mappedLine['name'],
                 $this->sizeFormatConvertor->parse($mappedLine['avail']),
@@ -148,7 +153,8 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
                 $this->sizeFormatConvertor->parse($mappedLine['refer']),
                 $mappedLine['mountpoint'],
                 $mappedLine['origin'],
-                $mappedLine['type']
+                $mappedLine['type'],
+                $creationTimestamp
             ));
 
             return $collection;

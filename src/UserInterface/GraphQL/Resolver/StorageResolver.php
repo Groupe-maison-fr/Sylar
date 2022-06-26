@@ -50,6 +50,8 @@ final class StorageResolver implements ResolverInterface
                 return $zfsFilesystem->getUsedByRefreservation();
             case 'usedBySnapshot':
                 return $zfsFilesystem->getUsedBySnapshot();
+            case 'creationTimestamp':
+                return $zfsFilesystem->getCreationTimestamp();
         }
     }
 

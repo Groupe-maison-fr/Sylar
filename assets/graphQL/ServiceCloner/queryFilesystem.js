@@ -14,6 +14,7 @@ export default () => GraphQL.query(`
         usedByDataset
         usedByRefreservation
         usedBySnapshot
+        creationTimestamp
       }
     }`)
     .then((response) => response.json())
