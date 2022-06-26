@@ -8,9 +8,9 @@ use App\Infrastructure\Messenger\FailedMessages\FailedMessageDTO;
 use App\Infrastructure\Messenger\FailedMessages\Repository\FailedMessagesRepositoryInterface;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class MessagesResolver implements ResolverInterface
+final class MessagesResolver implements QueryInterface
 {
     private FailedMessagesRepositoryInterface $failedMessagesRepository;
 

@@ -6,10 +6,10 @@ namespace App\Infrastructure\Messenger\FailedMessages\Graphql\Resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 
-final class FlattenExceptionResolver implements ResolverInterface
+final class FlattenExceptionResolver implements QueryInterface
 {
     public function __invoke(ResolveInfo $info, FlattenException $flattenException, Argument $args)
     {

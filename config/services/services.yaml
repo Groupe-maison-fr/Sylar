@@ -92,12 +92,3 @@ services:
                 curl_options:
                     !php/const CURLOPT_CONNECTTIMEOUT_MS: 500,
                     !php/const CURLOPT_TIMEOUT_MS: 600
-
-overblog_graphql:
-    definitions:
-        mappings:
-            types:
-                - type: yaml
-                  dir: "%kernel.project_dir%/src/Infrastructure/Messenger/FailedMessages/Graphql/Type"
-                  suffix: null
-

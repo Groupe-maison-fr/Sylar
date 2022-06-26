@@ -11,9 +11,9 @@ use App\Core\ServiceCloner\ServiceClonerStatusDTO;
 use Doctrine\Common\Collections\ArrayCollection;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class ServiceResolver implements ResolverInterface
+final class ServiceResolver implements QueryInterface
 {
     private ConfigurationServiceInterface $configurationService;
     private ServiceClonerStateServiceInterface $serviceClonerStateService;

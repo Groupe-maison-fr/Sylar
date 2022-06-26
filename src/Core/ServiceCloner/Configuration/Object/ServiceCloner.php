@@ -69,7 +69,7 @@ final class ServiceCloner
     }
 
     /**
-     * @return Service[] | ArrayCollection
+     * @return Service[]|ArrayCollection
      */
     public function getServices(): ArrayCollection
     {
@@ -95,7 +95,7 @@ final class ServiceCloner
     }
 
     /**
-     * @return Command[] | ArrayCollection
+     * @return Command[]|ArrayCollection
      */
     public function getCommands(): ArrayCollection
     {

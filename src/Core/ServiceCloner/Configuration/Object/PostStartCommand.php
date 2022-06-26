@@ -11,7 +11,7 @@ final class PostStartCommand
     private string $executionEnvironment;
 
     /**
-     * @var string[] | ArrayCollection
+     * @var string[]|ArrayCollection
      */
     private $command;
 
@@ -36,7 +36,7 @@ final class PostStartCommand
     }
 
     /**
-     * @return string[] | ArrayCollection
+     * @return string[]|ArrayCollection
      */
     public function getCommand(): ArrayCollection
     {

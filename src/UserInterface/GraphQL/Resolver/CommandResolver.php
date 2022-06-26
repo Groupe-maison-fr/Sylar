@@ -10,9 +10,9 @@ use App\Core\ServiceCloner\Configuration\Object\Command;
 use Doctrine\Common\Collections\Collection;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class CommandResolver implements ResolverInterface
+final class CommandResolver implements QueryInterface
 {
     private ConfigurationServiceInterface $configurationService;
 

@@ -1,7 +1,7 @@
 FailedMessage:
   type: "object"
   config:
-    resolveField: '@=resolver("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\MessagesResolver", [info, value, args])'
+    resolveField: '@=query("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\MessagesResolver", info, value, args)'
     fields:
       id: ID!
       className: String!
@@ -14,7 +14,7 @@ FailedMessage:
 FlattenException:
   type: "object"
   config:
-    resolveField: '@=resolver("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\FlattenExceptionResolver", [info, value, args])'
+    resolveField: '@=query("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\FlattenExceptionResolver", info, value, args)'
     fields:
       message: String
       code: Int
@@ -32,7 +32,7 @@ FlattenException:
 DebugTraceCall:
   type: "object"
   config:
-    resolveField: '@=resolver("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\DebugTraceCallResolver", [info, value, args])'
+    resolveField: '@=query("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\DebugTraceCallResolver", info, value, args)'
     fields:
       namespace: String
       short_class: String
@@ -47,7 +47,7 @@ DebugTraceCall:
 DebugTraceCallArgument:
   type: "object"
   config:
-    resolveField: '@=resolver("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\DebugTraceCallArgumentResolver", [info, value, args])'
+    resolveField: '@=query("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\DebugTraceCallArgumentResolver", info, value, args)'
     fields:
       type: String
       value: String

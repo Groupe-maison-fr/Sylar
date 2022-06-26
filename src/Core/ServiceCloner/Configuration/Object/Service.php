@@ -113,7 +113,7 @@ final class Service
     }
 
     /**
-     * @return Environment[] | ArrayCollection
+     * @return Environment[]|ArrayCollection
      */
     public function getEnvironments(): ArrayCollection
     {
@@ -161,7 +161,7 @@ final class Service
     }
 
     /**
-     * @return Label[] | ArrayCollection
+     * @return Label[]|ArrayCollection
      */
     public function getLabels(): ArrayCollection
     {

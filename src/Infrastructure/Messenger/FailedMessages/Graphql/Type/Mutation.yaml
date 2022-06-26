@@ -5,13 +5,13 @@ MutationFailedMessage:
     fields:
       rejectFailedMessage:
         type: FailedMessageOutput!
-        resolve: '@=mutation("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Mutation\\MutationRejectMessage", [args["input"]["ids"]] )'
+        resolve: '@=mutation("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Mutation\\MutationRejectMessage", args["input"]["ids"] )'
         args:
           input:
             type: RejectFailedMessageInput!
       retryFailedMessage:
         type: FailedMessageOutput!
-        resolve: '@=mutation("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Mutation\\MutationRetryMessage", [args["input"]["id"]] )'
+        resolve: '@=mutation("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Mutation\\MutationRetryMessage", args["input"]["id"] )'
         args:
           input:
             type: RetryFailedMessageInput!

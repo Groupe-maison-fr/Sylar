@@ -40,3 +40,8 @@ supervisord.pid
 .idea/
 application_php_errors.log
 provisioning/slow_query.log
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

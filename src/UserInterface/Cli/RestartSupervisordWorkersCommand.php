@@ -7,7 +7,7 @@ namespace App\UserInterface\Cli;
 use fXmlRpc\Client as fXmlRpcClient;
 use fXmlRpc\Transport\HttpAdapterTransport;
 use GuzzleHttp\Client as GuzzleHttpClient;
-use Http\Adapter\Guzzle6\Client as HttpAdapterGuzzle6Client;
+use Http\Adapter\Guzzle7\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Supervisor\Supervisor;
 use Symfony\Component\Console\Command\Command;
@@ -30,7 +30,7 @@ final class RestartSupervisordWorkersCommand extends Command
             $supervisordUrl,
             new HttpAdapterTransport(
                 new GuzzleMessageFactory(),
-                new HttpAdapterGuzzle6Client(new GuzzleHttpClient([
+                new Client(new GuzzleHttpClient([
                     'auth' => [$supervisordUser, $supervisordPassword],
                 ]))
             )));

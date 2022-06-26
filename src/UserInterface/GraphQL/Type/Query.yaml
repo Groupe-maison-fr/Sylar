@@ -5,19 +5,19 @@ QueryUserInterface:
     fields:
       services:
         type: "[Service]"
-        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver::resolve")'
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver::resolve")'
       containers:
         type: "[Container]"
-        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\ContainerResolver::resolve")'
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ContainerResolver::resolve")'
       filesystems:
         type: "[Filesystem]"
-        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver::resolve")'
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver::resolve")'
       commands:
         type: "[Command]"
-        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolve")'
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolve")'
       commandByName:
         type: Command
-        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolveByName",[args["commandName"]])'
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolveByName",[args["commandName"]])'
         args:
           commandName: String!
 

@@ -8,9 +8,9 @@ use App\Core\ServiceCloner\ServiceClonerStateService;
 use App\Core\ServiceCloner\ServiceClonerStatusDTO;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class ContainerResolver implements ResolverInterface
+final class ContainerResolver implements QueryInterface
 {
     private ServiceClonerStateService $serviceClonerStateService;
 

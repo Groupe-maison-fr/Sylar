@@ -11,7 +11,7 @@ final class Command
     private string $name;
 
     /**
-     * @var string[] | ArrayCollection
+     * @var string[]|ArrayCollection
      */
     private ArrayCollection $subCommands;
 
@@ -41,7 +41,7 @@ final class Command
     }
 
     /**
-     * @return string[] | ArrayCollection
+     * @return string[]|ArrayCollection
      */
     public function getSubCommands(): ArrayCollection
     {

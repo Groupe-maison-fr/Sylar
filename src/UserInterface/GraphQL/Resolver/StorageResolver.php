@@ -10,9 +10,9 @@ use App\Infrastructure\Filesystem\FilesystemDTO;
 use App\Infrastructure\Filesystem\ZfsFilesystemService;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class StorageResolver implements ResolverInterface
+final class StorageResolver implements QueryInterface
 {
     private ConfigurationServiceInterface $configurationService;
     private ZfsFilesystemService $zfsService;

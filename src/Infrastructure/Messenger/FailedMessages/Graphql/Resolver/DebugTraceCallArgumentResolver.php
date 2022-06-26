@@ -6,9 +6,9 @@ namespace App\Infrastructure\Messenger\FailedMessages\Graphql\Resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class DebugTraceCallArgumentResolver implements ResolverInterface
+final class DebugTraceCallArgumentResolver implements QueryInterface
 {
     public function __invoke(ResolveInfo $info, array $arguments, Argument $args)
     {
