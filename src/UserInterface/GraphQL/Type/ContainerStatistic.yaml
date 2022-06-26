@@ -1,9 +1,0 @@
-ContainerStatistic:
-  type: object
-  config:
-    resolveField: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\ContainerStatisticResolver", [info, value, args])'
-    fields:
-      containerName:
-        type: String!
-      stat:
-        type: String!

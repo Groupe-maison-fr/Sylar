@@ -20,7 +20,4 @@ QueryUserInterface:
         resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolveByName",[args["commandName"]])'
         args:
           commandName: String!
-      containerStatistics:
-        type: "[ContainerStatistic]"
-        resolve: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\ContainerStatisticResolver::resolve")'
 
