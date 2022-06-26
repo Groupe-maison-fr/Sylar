@@ -12,15 +12,10 @@ import {
 import {
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
-  Cpu as CpuIcon,
+  ZapOff as FrammerIcon,
+  BarChart2 as BarChart2Icon,
 } from 'react-feather';
 import NavItem from './NavItem';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
-};
 
 const items = [
   {
@@ -35,17 +30,17 @@ const items = [
   },
   {
     href: '/app/messenger',
-    icon: CpuIcon,
-    title: 'Messenger'
+    icon: FrammerIcon,
+    title: 'Errors'
   },
   {
     href: '/app/graph/docker',
-    icon: CpuIcon,
+    icon: BarChart2Icon,
     title: 'Dockers'
   },
   {
     href: '/app/graph/host',
-    icon: CpuIcon,
+    icon: BarChart2Icon,
     title: 'Host'
   }
 ];

@@ -20,6 +20,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import mutationStopService from "../../graphQL/ServiceCloner/mutationStopService";
 import mutationRestartService from "../../graphQL/ServiceCloner/mutationRestartService";
 import ReplayIcon from "@material-ui/icons/Replay";
+import moment from 'moment';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -64,7 +65,7 @@ const Containers = ({className, ...rest}) => {
           className={clsx(classes.root, className)}
           {...rest}
       >
-        <CardHeader title="Containers"/>
+        <CardHeader title="Containers by services"/>
         <Divider/>
         <PerfectScrollbar>
           <Box minWidth={800}>
@@ -76,8 +77,8 @@ const Containers = ({className, ...rest}) => {
                   <TableCell>Instance</TableCell>
                   <TableCell>Index</TableCell>
                   <TableCell>Filesystem</TableCell>
-                  <TableCell>Status</TableCell>
                   <TableCell>Time</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell>
                       <Button onClick={loadContainers}>
                         <ReplayIcon/>
@@ -95,9 +96,9 @@ const Containers = ({className, ...rest}) => {
                       <TableCell>{service.masterName}</TableCell>
                       <TableCell>{service.instanceName}</TableCell>
                       <TableCell>{service.instanceIndex}</TableCell>
-                      <TableCell>{service.dockerState}</TableCell>
-                      <TableCell>{service.time}</TableCell>
                       <TableCell>{service.zfsFilesystemName}</TableCell>
+                      <TableCell>{moment(service.time * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
+                      <TableCell>{service.dockerState}</TableCell>
                       <TableCell>
                         {service.instanceName !=="master" && (
                             <>
