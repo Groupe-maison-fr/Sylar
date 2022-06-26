@@ -80,6 +80,19 @@ services:
         arguments:
             $receiver: '@messenger.transport.failed'
 
+    Itspire\MonologLoki\Handler\LokiHandler:
+        arguments:
+            $apiConfig:
+                entrypoint: 'http://loki:3100'
+                context:
+                    app: sylar
+                labels:
+                    env: '%env(APP_ENV)%'
+                client_name: runner
+                curl_options:
+                    !php/const CURLOPT_CONNECTTIMEOUT_MS: 500,
+                    !php/const CURLOPT_TIMEOUT_MS: 600
+
 overblog_graphql:
     definitions:
         mappings:

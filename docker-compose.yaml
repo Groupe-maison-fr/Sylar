@@ -5,7 +5,7 @@ volumes:
   node-modules-builder: {}
   node-modules-monitor: {}
   vendor-sylar: {}
-  prometheus_db: {}
+  prometheus-db: {}
   grafana-db: {}
 
 services:
@@ -16,6 +16,8 @@ services:
     restart: unless-stopped
     working_dir: /app
     privileged: true
+    depends_on:
+      - loki
     environment:
       - MERCURE_URL=http://sylar-mercure/.well-known/mercure
       - MERCURE_PUBLIC_URL=http://sylar-mercure/.well-known/mercure
@@ -52,6 +54,8 @@ services:
     entrypoint: ["/app/.docker/builder/entrypoint.sh"]
     restart: unless-stopped
     working_dir: /app
+    environment:
+      NODE_OPTIONS: '--openssl-legacy-provider'
     volumes:
       - ./:/app
       - builder-build:/app/public/build
@@ -140,6 +144,7 @@ services:
       - .docker/grafana/etc/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
     depends_on:
       - prometheus
+      - loki
     ports:
       - '8081:3000'
 
@@ -151,9 +156,9 @@ services:
       - node-exporter
       - cadvisor
     volumes:
-      - prometheus_db:/var/lib/prometheus
-      - prometheus_db:/prometheus
-      - prometheus_db:/etc/prometheus
+      - prometheus-db:/var/lib/prometheus
+      - prometheus-db:/prometheus
+      - prometheus-db:/etc/prometheus
       - .docker/prometheus/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - .docker/prometheus/etc/prometheus/alert.rules:/etc/prometheus/alert.rules
     command:
@@ -191,3 +196,22 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
       - '8084:8080'
+
+  loki:
+    container_name: sylar-loki
+    image: grafana/loki:2.5.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - .docker/loki/etc/loki/local-config.yaml:/etc/loki/local-config.yaml
+
+  promtail:
+    container_name: sylar-promtail
+    image: grafana/promtail:1.4.1
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - .docker/promtail/etc/promtail/config.yaml:/etc/promtail/config.yaml
+    command: -config.file=/etc/promtail/config.yaml
+    depends_on:
+      - loki

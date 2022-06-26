@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ba49630d7ac9b736b09e3b96d297049",
+    "content-hash": "32cb7136cea81db69ee04299b82573d4",
     "packages": [
         {
             "name": "amphp/amp",
@@ -2805,6 +2805,57 @@
                 "source": "https://github.com/hamcrest/hamcrest-php/tree/v2.0.1"
             },
             "time": "2020-07-09T08:09:16+00:00"
+        },
+        {
+            "name": "itspire/monolog-loki",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/itspire/monolog-loki.git",
+                "reference": "b188e3f80a6b746ac8e64effc64075f00c0e19c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/itspire/monolog-loki/zipball/b188e3f80a6b746ac8e64effc64075f00c0e19c1",
+                "reference": "b188e3f80a6b746ac8e64effc64075f00c0e19c1",
+                "shasum": ""
+            },
+            "require": {
+                "monolog/monolog": "~1.25|~2.0",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "pdepend/pdepend": "~2.7",
+                "phploc/phploc": "~6.0",
+                "roave/security-advisories": "dev-master",
+                "sebastian/phpcpd": "~5.0",
+                "squizlabs/php_codesniffer": "~3.5",
+                "symfony/phpunit-bridge": "~5.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Itspire\\MonologLoki\\": "src/main/php"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ryan RAJKOMAR",
+                    "email": "ryan.rajkomar@itspire.fr"
+                }
+            ],
+            "description": "Monolog handler for Grafana Loki",
+            "support": {
+                "issues": "https://github.com/itspire/monolog-loki/issues",
+                "source": "https://github.com/itspire/monolog-loki/tree/1.3.0"
+            },
+            "time": "2021-12-18T14:01:50+00:00"
         },
         {
             "name": "jane-php/json-schema",
@@ -12717,5 +12768,5 @@
         "ext-pcntl": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
