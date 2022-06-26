@@ -7,6 +7,7 @@ volumes:
   vendor-sylar: {}
   prometheus-db: {}
   grafana-db: {}
+  redis-data: {}
 
 services:
   runner:
@@ -18,14 +19,23 @@ services:
     privileged: true
     depends_on:
       - loki
+      - redis
     environment:
-      - MERCURE_URL=http://sylar-mercure/.well-known/mercure
-      - MERCURE_PUBLIC_URL=http://sylar-mercure/.well-known/mercure
+      - APP_ENV=dev
+      - APP_SECRET='secretf0rt3st'
+      - DATABASE_URL=sqlite:///%kernel.project_dir%/var/app.db
+      - KERNEL_CLASS='App\Kernel'
       - MERCURE_JWT_SECRET=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
+      - MERCURE_PUBLIC_URL=http://sylar-mercure/.well-known/mercure
       - MERCURE_SUBSCRIBER_KEY=mercure_subscriber
+      - MERCURE_URL=http://sylar-mercure/.well-known/mercure
+      - MESSENGER_TRANSPORT_DSN=redis://ZVlWWDdFd1ZtbXhLU@redis:6379/messages
+      - SUPERVISORD_PASSWORD=adminpassword
       - SUPERVISORD_URL=http://127.0.0.1:9001/RPC2
       - SUPERVISORD_USER=admin
-      - SUPERVISORD_PASSWORD=adminpassword
+      - SYLAR_CONFIG_FILENAME=/app/data/sylar.yaml
+      - SYLAR_DATA_PATH=/opt/sylar/data
+      - SYMFONY_DEPRECATIONS_HELPER=999999
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./.docker/runner/etc/ssh/ssh_config:/etc/ssh/ssh_config:ro
@@ -126,6 +136,14 @@ services:
       - SUBSCRIBER_JWT_KEY=mercure_subscriber
       - SERVER_NAME=":80"
       - USE_FORWARDED_HEADERS=1
+
+  redis:
+    container_name: sylar-redis
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass ZVlWWDdFd1ZtbXhLU
+    volumes:
+      - redis-data:/data
 
   grafana:
     container_name: sylar-grafana
