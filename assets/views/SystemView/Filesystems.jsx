@@ -1,4 +1,4 @@
-import React, {useEffect,useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
@@ -15,8 +15,12 @@ import {
   TableHead,
   TableRow
 } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import queryFilesystem from "../../graphQL/ServiceCloner/queryFilesystem";
 import moment from 'moment';
+import mutationForceDestroyFilesystem from '../../graphQL/FileSystem/mutationForceDestroyFilesystem';
+import EventBus from '../../components/EventBus';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -32,6 +36,10 @@ const Filesystems = ({className, ...rest}) => {
 
   useEffect(() => {
     loadFilesystem();
+    EventBus.on('filesystem:destroy', loadFilesystem);
+    return () => {
+        EventBus.remove('filesystem:destroy', loadFilesystem);
+    }
   }, []);
 
   const loadFilesystem = () => {
@@ -72,18 +80,24 @@ const Filesystems = ({className, ...rest}) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {fileSystems.map((service) => (
+                {fileSystems.map((filesystem) => (
                     <TableRow
                         hover
-                        key={service.name}
+                        key={filesystem.name}
                     >
-                      <TableCell align="left">{service.name}</TableCell>
-                      <TableCell align="left">{service.mountPoint}</TableCell>
-                      <TableCell align="right">{numberWithCommas(service.available)}</TableCell>
-                      <TableCell align="right">{numberWithCommas(service.used)}</TableCell>
-                      <TableCell align="right">{numberWithCommas(service.usedByDataset)}</TableCell>
-                      <TableCell align="right">{moment(service.creationTimestamp * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
-                      <TableCell align="right">&nbsp;</TableCell>
+                      <TableCell align="left">{filesystem.name}</TableCell>
+                      <TableCell align="left">{filesystem.mountPoint}</TableCell>
+                      <TableCell align="right">{numberWithCommas(filesystem.available)}</TableCell>
+                      <TableCell align="right">{numberWithCommas(filesystem.used)}</TableCell>
+                      <TableCell align="right">{numberWithCommas(filesystem.usedByDataset)}</TableCell>
+                      <TableCell align="right">{moment(filesystem.creationTimestamp * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
+                      <TableCell>
+                        {filesystem.origin !== '-' &&
+                            <Button onClick={() => mutationForceDestroyFilesystem(filesystem.name)}>
+                              <DeleteForeverIcon style={{color: red[500]}}/>
+                            </Button>
+                        }
+                      </TableCell>
                     </TableRow>
                 ))}
               </TableBody>
@@ -97,6 +111,7 @@ const Filesystems = ({className, ...rest}) => {
 Filesystems.propTypes = {
   className: PropTypes.string.isRequired
 };
+
 Filesystems.defaultProps = {
   className: ''
 }

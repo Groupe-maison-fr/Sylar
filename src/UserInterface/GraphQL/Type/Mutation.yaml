@@ -27,3 +27,9 @@ MutationUserInterface:
         args:
           input:
             type: StopServiceInput!
+      forceDestroyFilesystem:
+        type: ForceDestroyFilesystemOutput!
+        resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\ForceDestroyFilesystemMutation", args["input"]["name"])'
+        args:
+          input:
+            type: ForceDestroyFilesystemInput!

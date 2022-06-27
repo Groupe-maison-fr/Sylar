@@ -1,0 +1,11 @@
+ForceDestroyFilesystemInput:
+  type: input-object
+  config:
+    fields:
+      name:
+        type: String!
+
+ForceDestroyFilesystemOutput:
+  type: union
+  config:
+    types: [SuccessOutput, FailedOutput]

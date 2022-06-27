@@ -25,11 +25,13 @@ const AppSnackbars = () => {
         EventBus.on('serviceCloner:start', displayStart);
         EventBus.on('serviceCloner:stop', displayStop);
         EventBus.on('serviceCloner:error', displayError);
+        EventBus.on('filesystem:error', displayError);
         EventBus.on('failedMessage:new', displayFailedMessage);
         return () =>{
             EventBus.remove('serviceCloner:error', displayError);
             EventBus.remove('failedMessage:new', displayFailedMessage);
             EventBus.remove('serviceCloner:start', displayStart);
+            EventBus.remove('filesystem:start', displayStart);
             EventBus.remove('serviceCloner:stop', displayStop);
         }
     }, []);
