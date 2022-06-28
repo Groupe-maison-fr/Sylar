@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
-
 import {
   Box, Button,
   Card,
@@ -16,11 +15,15 @@ import {
   TableRow
 } from '@material-ui/core';
 import queryContainers from "../../graphQL/ServiceCloner/queryContainers";
+import { red } from '@material-ui/core/colors';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import mutationStopService from "../../graphQL/ServiceCloner/mutationStopService";
 import mutationRestartService from "../../graphQL/ServiceCloner/mutationRestartService";
 import ReplayIcon from "@material-ui/icons/Replay";
 import moment from 'moment';
+import EventBus from '../../components/EventBus';
+import mutationForceDestroyContainer from '../../graphQL/Container/mutationForceDestroyContainer';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -36,6 +39,11 @@ const Containers = ({className, ...rest}) => {
 
   useEffect(() => {
     loadContainers();
+    EventBus.on('container:destroy', loadContainers);
+    return () => {
+      EventBus.remove('container:destroy', loadContainers);
+    }
+
   }, []);
 
   const loadContainers = () => {
@@ -104,6 +112,9 @@ const Containers = ({className, ...rest}) => {
                             <>
                               <Button onClick={() => stopService(service.masterName, service.instanceName)}>
                                 <DeleteIcon />
+                              </Button>
+                              <Button onClick={() => mutationForceDestroyContainer(service.containerName)}>
+                                <DeleteForeverIcon style={{ color: red[500] }}/>
                               </Button>
                               <Button onClick={() => restartService(service.masterName, service.instanceName)}>
                                 <ReplayIcon />

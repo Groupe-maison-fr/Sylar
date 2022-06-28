@@ -33,3 +33,9 @@ MutationUserInterface:
         args:
           input:
             type: ForceDestroyFilesystemInput!
+      forceDestroyContainer:
+        type: ForceDestroyContainerOutput!
+        resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\ForceDestroyContainerMutation", args["input"]["name"])'
+        args:
+          input:
+            type: ForceDestroyContainerInput!

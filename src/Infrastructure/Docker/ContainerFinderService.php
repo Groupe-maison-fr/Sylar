@@ -31,6 +31,7 @@ final class ContainerFinderService implements ContainerFinderServiceInterface
                 'filters' => json_encode([
                     'name' => [$dockerName],
                 ]),
+                'all' => true,
             ]);
         } catch (\Exception $exception) {
             $this->logger->error(sprintf('Can not get DockerByName "%s" because "%s"', $dockerName, $exception->getMessage()));
@@ -63,6 +64,7 @@ final class ContainerFinderService implements ContainerFinderServiceInterface
                 'filters' => json_encode([
                     'label' => [sprintf('%s=%s', $labelKey, $labelValue)],
                 ]),
+                'all' => true,
             ]);
         } catch (ContainerListBadRequestException | ContainerListInternalServerErrorException $exception) {
             $this->logger->error(sprintf('Can not get getDockersByLabel "%s:%s" because "%s"', $labelKey, $labelValue, $exception->getErrorResponse()->getMessage()));

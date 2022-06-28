@@ -1,0 +1,11 @@
+ForceDestroyContainerInput:
+  type: input-object
+  config:
+    fields:
+      name:
+        type: String!
+
+ForceDestroyContainerOutput:
+  type: union
+  config:
+    types: [SuccessOutput, FailedOutput]

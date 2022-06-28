@@ -29,6 +29,7 @@ const EventBus = {
         const eventSource = new ReconnectingEventSource(eventSourceUrl);
         eventSource.addEventListener('message', (rawEvent) => {
             const event = JSON.parse(rawEvent.data);
+            console.log('Event', event);
             EventBus.dispatch(`${event.type}:${event.action}`, event.data);
         }, false);
     }

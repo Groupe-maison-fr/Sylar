@@ -33,6 +33,7 @@ final class ContainerLabelService implements ContainerLabelServiceInterface
                     'filters' => json_encode([
                         'name' => [$dockerName],
                     ]),
+                    'all' => true,
                 ]),
                 fn (ContainerSummaryItem $containerSummaryItem) => $containerSummaryItem->getNames()[0] === sprintf('/%s', $dockerName)
             );

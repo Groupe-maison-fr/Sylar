@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\UserInterface\GraphQL\ResolverMap;
 
 use App\UserInterface\GraphQL\Map\FailedOutputDTO;
+use App\UserInterface\GraphQL\Map\ForceDestroyContainerOutputDTO;
 use App\UserInterface\GraphQL\Map\ForceDestroyFilesystemOutputDTO;
 use App\UserInterface\GraphQL\Map\RestartServiceSuccessOutputDTO;
 use App\UserInterface\GraphQL\Map\StartServiceSuccessOutputDTO;
@@ -76,6 +77,19 @@ final class ResolverMap extends ResolverMapParent
                         return $genericType;
                     }
                     if ($value instanceof ForceDestroyFilesystemOutputDTO) {
+                        return 'SuccessOutput';
+                    }
+
+                    return null;
+                },
+            ],
+            'ForceDestroyContainerOutput' => [
+                self::RESOLVE_TYPE => function ($value): ?string {
+                    $genericType = $this->isGenericMap($value);
+                    if ($genericType !== null) {
+                        return $genericType;
+                    }
+                    if ($value instanceof ForceDestroyContainerOutputDTO) {
                         return 'SuccessOutput';
                     }
 
