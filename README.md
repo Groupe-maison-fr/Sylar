@@ -146,7 +146,7 @@ make test
     ```
    this can take a while
 2. Open the app the your browser
-   - http://192.168.99.21:8080/app/system
+   - http://192.168.99.21:80/app/system
 3. If you want to modify assets
    ```
    make host-watch-assets

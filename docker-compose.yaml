@@ -3,7 +3,6 @@ version: "3.5"
 volumes:
   builder-build: {}
   node-modules-builder: {}
-  node-modules-monitor: {}
   vendor-sylar: {}
   prometheus-db: {}
   grafana-db: {}
@@ -47,17 +46,6 @@ services:
       - /dev/zfs:/dev/zfs:rw
       - /sylar:/sylar:shared
 
-  monitor:
-    container_name: sylar-monitor
-    build: .docker/monitor
-    entrypoint: ["/monitor/entrypoint.sh"]
-    restart: unless-stopped
-    working_dir: /monitor
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./.docker/monitor:/monitor
-      - node-modules-monitor:/monitor/node_modules
-
   builder:
     container_name: sylar-builder
     build: .docker/builder
@@ -84,9 +72,8 @@ services:
     depends_on:
       - builder
       - runner
-      - monitor
     ports:
-      - '8080:80'
+      - '80:80'
 
   docker-socket-proxy:
     container_name: sylar-docker-socket-proxy
