@@ -76,7 +76,7 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
         });
     }
 
-    public function isSnapshoted($name): bool
+    public function isSnapshoted(string $name): bool
     {
         try {
             return $this->getSnapshot($name) !== null;

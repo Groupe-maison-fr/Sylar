@@ -4,24 +4,21 @@ declare(strict_types=1);
 
 namespace App\UserInterface\GraphQL\Resolver;
 
-use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Infrastructure\Filesystem\FilesystemCollection;
 use App\Infrastructure\Filesystem\FilesystemDTO;
 use App\Infrastructure\Filesystem\ZfsFilesystemService;
+use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
 final class StorageResolver implements QueryInterface
 {
-    private ConfigurationServiceInterface $configurationService;
     private ZfsFilesystemService $zfsService;
 
     public function __construct(
-        ConfigurationServiceInterface $configurationService,
         ZfsFilesystemService $zfsService
     ) {
-        $this->configurationService = $configurationService;
         $this->zfsService = $zfsService;
     }
 
@@ -53,6 +50,7 @@ final class StorageResolver implements QueryInterface
             case 'creationTimestamp':
                 return $zfsFilesystem->getCreationTimestamp();
         }
+        throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
     public function resolve(): FilesystemCollection

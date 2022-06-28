@@ -15,7 +15,7 @@ use Overblog\GraphQLBundle\Resolver\ResolverMap as ResolverMapParent;
 
 final class ResolverMap extends ResolverMapParent
 {
-    private function isGenericMap($value): ?string
+    private function isGenericMap(mixed $value): ?string
     {
         if ($value instanceof FailedOutputDTO) {
             return 'FailedOutput';
@@ -32,7 +32,7 @@ final class ResolverMap extends ResolverMapParent
     {
         return [
             'StartServiceOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
+                self::RESOLVE_TYPE => function (mixed $value): ?string {
                     $genericType = $this->isGenericMap($value);
                     if ($genericType !== null) {
                         return $genericType;
@@ -45,7 +45,7 @@ final class ResolverMap extends ResolverMapParent
                 },
             ],
             'StopServiceOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
+                self::RESOLVE_TYPE => function (mixed $value): ?string {
                     $genericType = $this->isGenericMap($value);
                     if ($genericType !== null) {
                         return $genericType;
@@ -58,7 +58,7 @@ final class ResolverMap extends ResolverMapParent
                 },
             ],
             'RestartServiceOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
+                self::RESOLVE_TYPE => function (mixed $value): ?string {
                     $genericType = $this->isGenericMap($value);
                     if ($genericType !== null) {
                         return $genericType;
@@ -71,7 +71,7 @@ final class ResolverMap extends ResolverMapParent
                 },
             ],
             'ForceDestroyFilesystemOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
+                self::RESOLVE_TYPE => function (mixed $value): ?string {
                     $genericType = $this->isGenericMap($value);
                     if ($genericType !== null) {
                         return $genericType;
@@ -84,7 +84,7 @@ final class ResolverMap extends ResolverMapParent
                 },
             ],
             'ForceDestroyContainerOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
+                self::RESOLVE_TYPE => function (mixed $value): ?string {
                     $genericType = $this->isGenericMap($value);
                     if ($genericType !== null) {
                         return $genericType;

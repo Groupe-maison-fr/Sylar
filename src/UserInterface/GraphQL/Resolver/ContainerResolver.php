@@ -6,6 +6,7 @@ namespace App\UserInterface\GraphQL\Resolver;
 
 use App\Core\ServiceCloner\ServiceClonerStateService;
 use App\Core\ServiceCloner\ServiceClonerStatusDTO;
+use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
@@ -44,6 +45,7 @@ final class ContainerResolver implements QueryInterface
             case 'time':
                 return $state->getCreatedAt();
         }
+        throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
     public function resolve(): array

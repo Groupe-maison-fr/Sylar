@@ -8,6 +8,7 @@ use App\Core\ServiceCloner\CommandExecutor\CommandExecutorInterface;
 use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\Configuration\Object\Command;
 use Doctrine\Common\Collections\Collection;
+use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
@@ -36,6 +37,7 @@ final class CommandResolver implements QueryInterface
             case 'output':
                 return $this->commandExecutor->run($command);
         }
+        throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
     public function resolveByName(string $commandName): Command

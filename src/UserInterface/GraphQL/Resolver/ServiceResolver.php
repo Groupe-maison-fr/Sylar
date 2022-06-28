@@ -9,6 +9,7 @@ use App\Core\ServiceCloner\Configuration\Object\Service;
 use App\Core\ServiceCloner\ServiceClonerStateServiceInterface;
 use App\Core\ServiceCloner\ServiceClonerStatusDTO;
 use Doctrine\Common\Collections\ArrayCollection;
+use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
@@ -49,6 +50,7 @@ final class ServiceResolver implements QueryInterface
                     }
                 );
         }
+        throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
     public function resolve(): ArrayCollection
