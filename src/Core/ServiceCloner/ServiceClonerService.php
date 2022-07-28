@@ -249,12 +249,6 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
             return;
         }
 
-        if (!$this->zfsService->isSnapshoted($zfsFilesystemName)) {
-            $this->logger->debug(sprintf('Can not stop filesystem, !hasFilesystem %s', $zfsFilesystemPath));
-
-            return;
-        }
-
         if ($instanceName === self::MASTER_NAME && $this->zfsService->isSnapshoted($zfsFilesystemName)) {
             $this->logger->debug(sprintf('Can not stop filesystem, !isSnapshoted %s', $zfsFilesystemName));
 
