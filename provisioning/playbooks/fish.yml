@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Change vagrant shell to zsh
+      become: yes
+      user:
+        name: vagrant
+        shell: /usr/bin/fish
+
+    - name: Ensure fish config exists
+      copy:
+        content: ""
+        dest: /home/vagrant/.config/fish/config.fish
+        force: yes
+        group: vagrant
+        owner: vagrant
+        mode: 0555
+
+    - name: Ensure sylar-docker-compose alias exists
+      ansible.builtin.blockinfile:
+        path: /home/vagrant/.config/fish/config.fish
+        block: |
+          source /opt/sylar/provisioning/files/config-sylar.fish

@@ -6,20 +6,9 @@ namespace App\Core\ServiceCloner\Configuration\Object;
 
 final class PostStartWaiter
 {
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $expression;
-
-    /**
-     * @var int
-     */
-    private $timeout;
+    private string $type;
+    private string $expression;
+    private int $timeout;
 
     public function getType(): string
     {

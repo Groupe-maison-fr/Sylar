@@ -8,15 +8,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class PostDestroyCommand
 {
-    /**
-     * @var string
-     */
-    private $executionEnvironment;
+    private string $executionEnvironment;
 
     /**
-     * @var string[] | ArrayCollection
+     * @var string[]|ArrayCollection
      */
-    private $command;
+    private ArrayCollection $command;
 
     public function __construct()
     {
@@ -35,11 +32,11 @@ final class PostDestroyCommand
 
     public function addCommand(string $command): void
     {
-        $this->command[] = $command;
+        $this->command->add($command);
     }
 
     /**
-     * @return string[] | ArrayCollection
+     * @return string[]|ArrayCollection
      */
     public function getCommand(): ArrayCollection
     {

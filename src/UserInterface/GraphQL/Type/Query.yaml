@@ -1,0 +1,23 @@
+QueryUserInterface:
+  type: object
+  decorator: true
+  config:
+    fields:
+      services:
+        type: "[Service]"
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver::resolve")'
+      containers:
+        type: "[Container]"
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ContainerResolver::resolve")'
+      filesystems:
+        type: "[Filesystem]"
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver::resolve")'
+      commands:
+        type: "[Command]"
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolve")'
+      commandByName:
+        type: Command
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolveByName",[args["commandName"]])'
+        args:
+          commandName: String!
+

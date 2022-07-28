@@ -8,5 +8,5 @@ use Docker\Docker;
 
 interface DockerFactoryInterface
 {
-    public function create(): Docker;
+    public function create(string $dockerRemoteSocket): Docker;
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace tests;
+namespace Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -19,6 +19,13 @@ abstract class AbstractIntegrationTest extends KernelTestCase
         parent::tearDown();
     }
 
+    /**
+     * @template T
+     *
+     * @param T $serviceName
+     *
+     * @return T
+     */
     protected function getService($serviceName)
     {
         return static::$container->get($serviceName);

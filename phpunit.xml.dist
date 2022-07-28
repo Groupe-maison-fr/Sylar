@@ -16,10 +16,16 @@
         <server name="APP_ENV" value="test" force="true"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="KERNEL_CLASS" value="App\Kernel"/>
+        <env name="MOUNTED_CONFIGURATION_PATH" value="/opt/sylar"/>
+        <env name="CONTAINER_CONFIGURATION_PATH" value="/app"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="baselineFile=./tests/allowed.json"/>
     </php>
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+    </listeners>
 </phpunit>

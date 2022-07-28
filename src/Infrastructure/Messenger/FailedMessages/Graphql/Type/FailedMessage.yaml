@@ -1,0 +1,53 @@
+FailedMessage:
+  type: "object"
+  config:
+    resolveField: '@=query("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\MessagesResolver", info, value, args)'
+    fields:
+      id: ID!
+      className: String!
+      message: String!
+      exceptionMessage: String
+      flattenException: FlattenException
+      date: DateTime
+      backtrace: "[DebugTraceCall]"
+
+FlattenException:
+  type: "object"
+  config:
+    resolveField: '@=query("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\FlattenExceptionResolver", info, value, args)'
+    fields:
+      message: String
+      code: Int
+      statusCode: Int
+      previous: FlattenException
+      traceAsString: String
+      class: String
+      statusText: String
+      headers: "[String]"
+      file: String
+      line: String
+      asString: String
+      #trace: "[]"
+
+DebugTraceCall:
+  type: "object"
+  config:
+    resolveField: '@=query("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\DebugTraceCallResolver", info, value, args)'
+    fields:
+      namespace: String
+      short_class: String
+      class: String
+      type: String
+      function: String
+      file: String
+      line: Int
+      arguments: String
+      #"[DebugTraceCallArgument]"
+
+DebugTraceCallArgument:
+  type: "object"
+  config:
+    resolveField: '@=query("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\DebugTraceCallArgumentResolver", info, value, args)'
+    fields:
+      type: String
+      value: String

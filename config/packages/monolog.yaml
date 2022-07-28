@@ -1,0 +1,20 @@
+monolog:
+    handlers:
+        security:
+            type: stream
+            level: INFO
+            handler: loki
+            channels: [php]
+        main:
+            type: fingers_crossed
+            action_level: error
+            handler: loki
+            channels: ["!event", "!doctrine"]
+        console:
+            type: console
+            handler: loki
+            channels: [ "!event", "!doctrine", "!console" ]
+        loki:
+            type: service
+            id: Itspire\MonologLoki\Handler\LokiHandler
+

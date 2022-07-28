@@ -21,23 +21,35 @@ use Symfony\Component\Yaml\Yaml;
 final class ConfigurationService implements ConfigurationServiceInterface
 {
     private string $configurationFilename;
+    private string $mountedConfigurationPath;
+    private string $containerConfigurationPath;
 
     public function __construct(
-        string $configurationFilename
+        string $configurationFilename,
+        string $mountedConfigurationPath,
+        string $containerConfigurationPath
     ) {
         $this->configurationFilename = $configurationFilename;
+        $this->mountedConfigurationPath = $mountedConfigurationPath;
+        $this->containerConfigurationPath = $containerConfigurationPath;
     }
 
     public function getConfiguration(): ServiceCloner
     {
+        chdir($this->containerConfigurationPath);
+
         $processor = new Processor();
 
         return $this->createServiceClonerFromArray(
-            $processor->processConfiguration(
-                new TreeBuilderConfiguration(),
-                [Yaml::parse(
-                    file_get_contents($this->configurationFilename)
-                )]
+            array_merge(
+                $processor->processConfiguration(
+                    new TreeBuilderConfiguration(),
+                    [Yaml::parse(
+                        file_get_contents($this->configurationFilename)
+                    )]
+                ), [
+                'configurationRoot' => $this->mountedConfigurationPath,
+            ],
             )
         );
     }

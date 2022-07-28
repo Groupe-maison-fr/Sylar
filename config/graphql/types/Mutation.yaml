@@ -1,0 +1,3 @@
+Mutations:
+  type: object
+  inherits: [MutationUserInterface, MutationFailedMessage]

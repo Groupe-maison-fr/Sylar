@@ -1,0 +1,6 @@
+SuccessOutput:
+  type: object
+  config:
+    fields:
+      success: Boolean!
+      message: String

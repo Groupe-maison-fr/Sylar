@@ -7,6 +7,4 @@ namespace App\Infrastructure\Docker\ContainerParameter;
 interface ConfigurationExpressionGeneratorInterface
 {
     public function generate(ContainerParameterDTO $containerParameter, string $configurationExpression): string;
-
-
 }

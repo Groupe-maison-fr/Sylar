@@ -12,21 +12,14 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerImageService implements ContainerImageServiceInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Docker
-     */
-    private $docker;
+    private LoggerInterface $logger;
+    private Docker $docker;
 
     public function __construct(
-        Docker $docker,
+        Docker $dockerReadOnly,
         LoggerInterface $logger
     ) {
-        $this->docker = $docker;
+        $this->docker = $dockerReadOnly;
         $this->logger = $logger;
     }
 

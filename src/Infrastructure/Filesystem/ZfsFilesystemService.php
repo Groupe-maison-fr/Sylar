@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Filesystem;
 
 use App\Infrastructure\Process\ProcessInterface;
+use DateTimeImmutable;
 use Exception;
 
 /**
@@ -12,13 +13,9 @@ use Exception;
  */
 final class ZfsFilesystemService implements FilesystemServiceInterface
 {
-    private const headerList = ['name', 'avail', 'used', 'usedsnap', 'usedds', 'usedrefreserv', 'usedchild', 'refer', 'mountpoint', 'origin', 'type'];
+    private const headerList = ['name', 'avail', 'used', 'usedsnap', 'usedds', 'usedrefreserv', 'usedchild', 'refer', 'mountpoint', 'origin', 'type', 'creation'];
 
-    /**
-     * @var ProcessInterface
-     */
-    private $process;
-
+    private ProcessInterface $process;
     private BytesFormatConvertorInterface $sizeFormatConvertor;
 
     public function __construct(ProcessInterface $process, BytesFormatConvertorInterface $sizeFormatConvertor)
@@ -41,18 +38,24 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
     public function getFilesystem(string $name): FilesystemDTO
     {
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList), $name)
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList), $name)->getStdOutput()
         )->first();
     }
 
     public function destroyFilesystem(string $name, bool $force = false): void
     {
-        $this->process->run('/sbin/zfs', 'destroy', $name, ($force ? '-R' : null));
+        $this->process->run('/sbin/zfs', 'destroy', $name, ($force ? '-Rf' : null));
     }
 
     public function createSnapshot(string $name, string $snap): void
     {
         $this->process->run('/sbin/zfs', 'snapshot', sprintf('%s@%s', $name, $snap));
+    }
+
+    public function destroySnapshot(string $name, string $snap, bool $force = false): void
+    {
+        $this->process->run('/sbin/zfs', 'destroy', sprintf('%s-%s', $name, $snap), ($force ? '-Rf' : null));
+        $this->process->run('/sbin/zfs', 'destroy', sprintf('%s@%s', $name, $snap), ($force ? '-Rf' : null));
     }
 
     public function cloneSnapshot(string $name, string $snap, ?string $mountPoint = null): void
@@ -67,35 +70,34 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
     {
         /* @phpstan-ignore-next-line */
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput()
         )->filter(function (FilesystemDTO $filesystem) use ($name, $snap) {
             return $filesystem->getOrigin() === sprintf('%s@%s', $name, $snap);
         });
     }
 
-    public function isSnapshoted($name): bool
+    public function isSnapshoted(string $name): bool
     {
         try {
-            return !$this->getSnapshots($name)->isEmpty();
+            return $this->getSnapshot($name) !== null;
         } catch (Exception $exception) {
             return false;
         }
     }
 
-    public function getSnapshots(string $name): FilesystemCollection
+    public function getSnapshots(): FilesystemCollection
     {
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList), '-t', 'snapshot', '-r', $name)
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList), '-t', 'snapshot')->getStdOutput()
         );
     }
 
-    public function getSnapshot(string $name, string $instance): ?FilesystemDTO
+    public function getSnapshot(string $name, ?string $instance = null): ?FilesystemDTO
     {
+        $snapshotName = $instance === null ? $name : sprintf('%s@%s', $name, $instance);
         $snapshots = $this
-            ->getSnapshots($name)
-            ->filter(function (FilesystemDTO $filesystem) use ($name, $instance) {
-                return $filesystem->getName() === sprintf('%s@%s', $name, $instance);
-            });
+            ->getSnapshots()
+            ->filter(fn (FilesystemDTO $filesystemDTO) => $filesystemDTO->getName() === $snapshotName);
         if ($snapshots->isEmpty()) {
             return null;
         }
@@ -112,19 +114,19 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
         }
     }
 
-    public function hasFilesystem(string $name): bool
+    public function hasFilesystem(string $mountPoint): bool
     {
         return $this
                 ->getFilesystems()
-                ->filter(function (FilesystemDTO $filesystem) use ($name) {
-                    return $filesystem->getName() === $name;
+                ->filter(function (FilesystemDTO $filesystem) use ($mountPoint) {
+                    return $filesystem->getMountPoint() === $mountPoint;
                 })->count() === 1;
     }
 
     public function getFilesystems(): FilesystemCollection
     {
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput()
         );
     }
 
@@ -136,6 +138,10 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
             }
 
             $mappedLine = array_combine(self::headerList, preg_split('/\t+/', $line));
+
+            $strippedCreationString = str_replace('  ', ' ', $mappedLine['creation']);
+            $creationTimestamp = DateTimeImmutable::createFromFormat('D F d G:i Y', $strippedCreationString)->getTimestamp();
+
             $collection->add(new FilesystemDTO(
                 $mappedLine['name'],
                 $this->sizeFormatConvertor->parse($mappedLine['avail']),
@@ -147,7 +153,8 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
                 $this->sizeFormatConvertor->parse($mappedLine['refer']),
                 $mappedLine['mountpoint'],
                 $mappedLine['origin'],
-                $mappedLine['type']
+                $mappedLine['type'],
+                $creationTimestamp
             ));
 
             return $collection;

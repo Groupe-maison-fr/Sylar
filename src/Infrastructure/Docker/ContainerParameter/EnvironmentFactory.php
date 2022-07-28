@@ -8,10 +8,7 @@ use App\Core\ServiceCloner\Configuration\Object\Environment;
 
 final class EnvironmentFactory implements EnvironmentFactoryInterface
 {
-    /**
-     * @var ConfigurationExpressionGeneratorInterface
-     */
-    private $configurationExpressionGenerator;
+    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
 
     public function __construct(
         ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator

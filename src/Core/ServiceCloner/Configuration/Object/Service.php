@@ -8,25 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class Service
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $image;
-
-    /**
-     * @var string|null
-     */
-    private $command;
-
-    /**
-     * @var string|null
-     */
-    private $entryPoint;
+    private string $name = '';
+    private string $image = '';
+    private string $command = '';
+    private ?string $entryPoint = null;
+    private ?string $networkMode = null;
 
     /**
      * @var LifeCycleHooks|null
@@ -34,22 +20,22 @@ final class Service
     private $lifeCycleHooks;
 
     /**
-     * @var Environment[]|ArrayCollection
+     * @var ArrayCollection<Environment>
      */
     private $environments;
 
     /**
-     * @var Mount[]|ArrayCollection
+     * @var ArrayCollection<Mount>
      */
     private $mounts;
 
     /**
-     * @var Port[]|ArrayCollection
+     * @var ArrayCollection<Port>
      */
     private $ports;
 
     /**
-     * @var Label[]|ArrayCollection
+     * @var ArrayCollection<Label>
      */
     private $labels;
 
@@ -111,13 +97,23 @@ final class Service
         $this->entryPoint = $entryPoint;
     }
 
+    public function getNetworkMode(): ?string
+    {
+        return $this->networkMode;
+    }
+
+    public function setNetworkMode(?string $networkMode): void
+    {
+        $this->networkMode = $networkMode;
+    }
+
     public function addEnvironment(Environment $environment): void
     {
         $this->environments[] = $environment;
     }
 
     /**
-     * @return Environment[] | ArrayCollection
+     * @return ArrayCollection<Environment>
      */
     public function getEnvironments(): ArrayCollection
     {
@@ -134,6 +130,9 @@ final class Service
         $this->mounts[] = $mount;
     }
 
+    /**
+     * @return ArrayCollection<Mount>
+     */
     public function getMounts(): ArrayCollection
     {
         return $this->mounts;
@@ -149,6 +148,9 @@ final class Service
         $this->ports[] = $port;
     }
 
+    /**
+     * @return ArrayCollection<Port>
+     */
     public function getPorts(): ArrayCollection
     {
         return $this->ports;
@@ -165,7 +167,7 @@ final class Service
     }
 
     /**
-     * @return Label[] | ArrayCollection
+     * @return ArrayCollection<Label>
      */
     public function getLabels(): ArrayCollection
     {

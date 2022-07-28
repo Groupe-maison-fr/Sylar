@@ -9,5 +9,5 @@ use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
 
 interface ContainerCreationServiceInterface
 {
-    public function createDocker(ContainerParameterDTO $containerParameter, Service $service): void;
+    public function createDocker(ContainerParameterDTO $containerParameter, Service $service, array $labels): void;
 }

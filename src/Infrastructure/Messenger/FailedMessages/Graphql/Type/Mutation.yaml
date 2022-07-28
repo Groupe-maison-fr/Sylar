@@ -1,0 +1,29 @@
+MutationFailedMessage:
+  decorator: true
+  type: object
+  config:
+    fields:
+      rejectFailedMessage:
+        type: FailedMessageOutput!
+        resolve: '@=mutation("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Mutation\\MutationRejectMessage", args["input"]["ids"] )'
+        args:
+          input:
+            type: RejectFailedMessageInput!
+      retryFailedMessage:
+        type: FailedMessageOutput!
+        resolve: '@=mutation("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Mutation\\MutationRetryMessage", args["input"]["id"] )'
+        args:
+          input:
+            type: RetryFailedMessageInput!
+
+RejectFailedMessageInput:
+  type: input-object
+  config:
+    fields:
+      ids: "[ID!]"
+
+RetryFailedMessageInput:
+  type: input-object
+  config:
+    fields:
+      id: ID!

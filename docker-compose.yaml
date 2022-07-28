@@ -1,0 +1,222 @@
+version: "3.5"
+
+volumes:
+  builder-build: {}
+  node-modules-builder: {}
+  vendor-sylar: {}
+  prometheus-db: {}
+  grafana-db: {}
+  redis-data: {}
+
+services:
+  runner:
+    container_name: sylar-runner
+    build: .docker/runner
+    entrypoint: ["/app/.docker/runner/entrypoint.sh"]
+    restart: unless-stopped
+    working_dir: /app
+    privileged: true
+    depends_on:
+      - loki
+      - redis
+    environment:
+      - APP_ENV=dev
+      - APP_SECRET='secretf0rt3st'
+      - DATABASE_URL=sqlite:///%kernel.project_dir%/var/app.db
+      - KERNEL_CLASS='App\Kernel'
+      - MERCURE_JWT_SECRET=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
+      - MERCURE_PUBLIC_URL=http://sylar-mercure/.well-known/mercure
+      - MERCURE_SUBSCRIBER_KEY=mercure_subscriber
+      - MERCURE_URL=http://sylar-mercure/.well-known/mercure
+      - MESSENGER_TRANSPORT_DSN=redis://ZVlWWDdFd1ZtbXhLU@redis:6379/messages
+      - SUPERVISORD_PASSWORD=adminpassword
+      - SUPERVISORD_URL=http://127.0.0.1:9001/RPC2
+      - SUPERVISORD_USER=admin
+      - SYLAR_CONFIG_FILENAME=/app/data/sylar.yaml
+      - SYLAR_DATA_PATH=/opt/sylar/data
+      - SYMFONY_DEPRECATIONS_HELPER=999999
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./.docker/runner/etc/ssh/ssh_config:/etc/ssh/ssh_config:ro
+      - ./.docker/runner/etc/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf:ro
+      - ./.docker/runner/etc/php/7.4/fpm/pool.d/www.conf:/etc/php/7.4/fpm/pool.d/www.conf:ro
+      - ./:/app
+      - builder-build:/app/public/build
+      - vendor-sylar:/app/vendor
+      - /dev/zfs:/dev/zfs:rw
+      - /sylar:/sylar:shared
+
+  builder:
+    container_name: sylar-builder
+    build: .docker/builder
+    entrypoint: ["/app/.docker/builder/entrypoint.sh"]
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      NODE_OPTIONS: '--openssl-legacy-provider'
+    volumes:
+      - ./:/app
+      - builder-build:/app/public/build
+      - node-modules-builder:/app/node_modules
+
+  webserver:
+    container_name: sylar-webserver
+    image: nginx:latest
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./.docker/webserver/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./.docker/webserver/etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - builder-build:/app/public/build
+      - .docker/webserver/app/iframeResizer.contentWindow.min.js:/app/public/iframeResizer.contentWindow.min.js:ro
+    depends_on:
+      - builder
+      - runner
+    ports:
+      - '80:80'
+
+  docker-socket-proxy:
+    container_name: sylar-docker-socket-proxy
+    image: tecnativa/docker-socket-proxy
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - LOG_LEVEL=debug
+      - ALLOW_RESTARTS=1
+      - AUTH=1
+      - BUILD=1
+      - COMMIT=1
+      - CONFIGS=1
+      - CONTAINERS=1
+      - DISTRIBUTION=1
+      - EVENTS=1
+      - EXEC=1
+      - GRPC=1
+      - IMAGES=1
+      - INFO=1
+      - NETWORKS=1
+      - NODES=1
+      - PING=1
+      - PLUGINS=1
+      - POST=1
+      - SECRETS=1
+      - SERVICES=1
+      - SESSION=1
+      - SWARM=1
+      - SYSTEM=1
+      - TASKS=1
+      - VERSION=1
+      - VOLUMES=1
+
+  mercure:
+    container_name: sylar-mercure
+    restart: unless-stopped
+    image: dunglas/mercure:v0.10.4
+    environment:
+      - ALLOW_ANONYMOUS=1
+      - CORS_ALLOWED_ORIGINS=*
+      - MERCURE_EXTRA_DIRECTIVES=cors_allowed_origins *
+      - PUBLISHER_JWT_KEY=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
+      - PUBLISH_ALLOWED_ORIGINS=*
+      - SUBSCRIBER_JWT_KEY=mercure_subscriber
+      - SERVER_NAME=":80"
+      - USE_FORWARDED_HEADERS=1
+
+  redis:
+    container_name: sylar-redis
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass ZVlWWDdFd1ZtbXhLU
+    volumes:
+      - redis-data:/data
+
+  grafana:
+    container_name: sylar-grafana
+    image: grafana/grafana:8.3.3
+    user: "1000"
+    restart: unless-stopped
+    environment:
+      #- GF_SECURITY_ADMIN_PASSWORD=${VARIABLE:-secure_pass}
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - grafana-db:/var/lib/grafana
+      - .docker/grafana/etc/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - .docker/grafana/etc/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - .docker/grafana/etc/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+    depends_on:
+      - prometheus
+      - loki
+    ports:
+      - '8081:3000'
+
+  prometheus:
+    container_name: sylar-prometheus
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    depends_on:
+      - node-exporter
+      - cadvisor
+    volumes:
+      - prometheus-db:/var/lib/prometheus
+      - prometheus-db:/prometheus
+      - prometheus-db:/etc/prometheus
+      - .docker/prometheus/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - .docker/prometheus/etc/prometheus/alert.rules:/etc/prometheus/alert.rules
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.route-prefix=/'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    ports:
+      - '8082:9090'
+
+  node-exporter:
+    container_name: sylar-node-exporter
+    image: prom/node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points'
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    ports:
+      - '8083:9100'
+
+  cadvisor:
+    container_name: sylar-cadvisor
+    image: google/cadvisor:latest
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - '8084:8080'
+
+  loki:
+    container_name: sylar-loki
+    image: grafana/loki:2.5.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - .docker/loki/etc/loki/local-config.yaml:/etc/loki/local-config.yaml
+
+  promtail:
+    container_name: sylar-promtail
+    image: grafana/promtail:1.4.1
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - .docker/promtail/etc/promtail/config.yaml:/etc/promtail/config.yaml
+    command: -config.file=/etc/promtail/config.yaml
+    depends_on:
+      - loki

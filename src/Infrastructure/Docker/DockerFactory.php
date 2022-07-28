@@ -11,10 +11,7 @@ use Http\Client\Common\PluginClient;
 
 final class DockerFactory implements DockerFactoryInterface
 {
-    /**
-     * @var DockerApiLogger
-     */
-    private $dockerApiLogger;
+    private DockerApiLogger $dockerApiLogger;
 
     public function __construct(
         DockerApiLogger $dockerApiLogger
@@ -22,11 +19,14 @@ final class DockerFactory implements DockerFactoryInterface
         $this->dockerApiLogger = $dockerApiLogger;
     }
 
-    public function create(): Docker
+    public function create(string $dockerRemoteSocket): Docker
     {
-        /* @phpstan-ignore-next-line */
-        return Docker::create(new PluginClient(DockerClientFactory::createFromEnv(), [
+        $httpClient = new PluginClient(DockerClientFactory::create([
+            'remote_socket' => $dockerRemoteSocket,
+        ]), [
             new LoggerPlugin($this->dockerApiLogger),
-        ]));
+        ]);
+        /* @phpstan-ignore-next-line */
+        return Docker::create($httpClient);
     }
 }

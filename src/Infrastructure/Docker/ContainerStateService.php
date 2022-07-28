@@ -5,33 +5,15 @@ declare(ticks=1);
 
 namespace App\Infrastructure\Docker;
 
-use Docker\Docker;
-use Psr\Log\LoggerInterface;
+use Docker\API\Model\Port;
 
 final class ContainerStateService implements ContainerStateServiceInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Docker
-     */
-    private $docker;
-
-    /**
-     * @var ContainerFinderService
-     */
-    private $dockerFinderService;
+    private ContainerFinderService $dockerFinderService;
 
     public function __construct(
-        Docker $docker,
-        LoggerInterface $logger,
         ContainerFinderService $dockerFinderService
     ) {
-        $this->docker = $docker;
-        $this->logger = $logger;
         $this->dockerFinderService = $dockerFinderService;
     }
 
@@ -40,5 +22,12 @@ final class ContainerStateService implements ContainerStateServiceInterface
         $container = $this->dockerFinderService->getDockerByName($dockerName);
 
         return $container ? $container->getState() : null;
+    }
+
+    public function dockerExposedPorts(string $dockerName): ?array
+    {
+        $container = $this->dockerFinderService->getDockerByName($dockerName);
+
+        return $container ? array_map(fn (Port $port) => $port->getPublicPort(), $container->getPorts()) : [];
     }
 }

@@ -13,27 +13,16 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerWaitUntilLogService implements ContainerWaitUntilLogServiceInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Docker
-     */
-    private $docker;
-
-    /**
-     * @var ContainerFinderServiceInterface
-     */
-    private $containerFinderService;
+    private LoggerInterface $logger;
+    private Docker $docker;
+    private ContainerFinderServiceInterface $containerFinderService;
 
     public function __construct(
-        Docker $docker,
+        Docker $dockerReadWrite,
         LoggerInterface $logger,
         ContainerFinderServiceInterface $containerFinderService
     ) {
-        $this->docker = $docker;
+        $this->docker = $dockerReadWrite;
         $this->logger = $logger;
         $this->containerFinderService = $containerFinderService;
     }
@@ -60,18 +49,18 @@ final class ContainerWaitUntilLogService implements ContainerWaitUntilLogService
 
     private function initTimeoutAlarm(int $timeout, DockerRawStreamUntil $logsStream, ContainerParameterDTO $containerParameter): void
     {
-        pcntl_signal(SIGALRM, function (int $signo) use ($logsStream, $containerParameter): void {
+        \pcntl_signal(SIGALRM, function (int $signo) use ($logsStream, $containerParameter): void {
             $this->logger->debug(sprintf('SIGALRM (%d) DockerWaitUntilLogService for %s', $signo, $containerParameter->getName()));
             $logsStream->exitWait();
         }, true);
-        pcntl_alarm($timeout);
+        \pcntl_alarm($timeout);
     }
 
     private function getStreamMatcherCallback(string $type, string $expression, DockerRawStreamUntil $logsStream, ContainerParameterDTO $containerParameter)
     {
         return function ($buffer) use ($type, $expression, $logsStream, $containerParameter): void {
             if (preg_match($expression, $buffer)) {
-                pcntl_alarm(0);
+                \pcntl_alarm(0);
                 $logsStream->exitWait();
             }
             $this->logger->debug(sprintf('%s on "%s": %s', strtoupper($type), $containerParameter->getName(), $buffer));

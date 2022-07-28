@@ -42,7 +42,7 @@ final class LifeCycleHooks
     }
 
     /**
-     * @return PreStartCommand[] | ArrayCollection
+     * @return PreStartCommand[]|ArrayCollection
      */
     public function getPreStartCommands(): ArrayCollection
     {
@@ -60,7 +60,7 @@ final class LifeCycleHooks
     }
 
     /**
-     * @return PostStartWaiter[] | ArrayCollection
+     * @return PostStartWaiter[]|ArrayCollection
      */
     public function getPostStartWaiters(): ArrayCollection
     {
@@ -78,7 +78,7 @@ final class LifeCycleHooks
     }
 
     /**
-     * @return PostStartCommand[] | ArrayCollection
+     * @return PostStartCommand[]|ArrayCollection
      */
     public function getPostStartCommands(): ArrayCollection
     {
@@ -96,7 +96,7 @@ final class LifeCycleHooks
     }
 
     /**
-     * @return PostDestroyCommand[] | ArrayCollection
+     * @return PostDestroyCommand[]|ArrayCollection
      */
     public function getPostDestroyCommands(): ArrayCollection
     {

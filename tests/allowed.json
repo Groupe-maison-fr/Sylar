@@ -1,0 +1,537 @@
+[
+    {
+        "location": "Symfony\\Component\\Dotenv\\Dotenv::__construct",
+        "message": "Since symfony/dotenv 5.1: Passing a boolean to the constructor of \"Symfony\\Component\\Dotenv\\Dotenv\" is deprecated, use \"Dotenv::usePutenv()\".",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::setUp",
+        "message": "Method \"Monolog\\Handler\\AbstractProcessingHandler::reset()\" might add \"void\" as a native return type declaration in the future. Do the same in child class \"App\\Common\\Tests\\BufferedLoggerHandler\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::__toString()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::getScheme()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::getAuthority()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::getUserInfo()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::getHost()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::getPort()\" might add \"?int\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::getPath()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::getQuery()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::getFragment()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::withScheme()\" might add \"static\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::withUserInfo()\" might add \"static\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::withHost()\" might add \"static\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::withPort()\" might add \"static\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::withPath()\" might add \"static\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::withQuery()\" might add \"static\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Psr\\Http\\Message\\UriInterface::withFragment()\" might add \"static\" as a native return type declaration in the future. Do the same in implementation \"GuzzleHttp\\Psr7\\Uri\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "The \"Docker\\API\\Normalizer\\JaneObjectNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\JaneObjectNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\JaneObjectNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_specific_path",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\JaneObjectNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::__toString()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::close()\" might add \"void\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::getSize()\" might add \"?int\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::tell()\" might add \"int\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::eof()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::isSeekable()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::isWritable()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::write()\" might add \"int\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::isReadable()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::read()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::getContents()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::getMetadata()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Http\\Client\\Socket\\Stream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "The \"Docker\\API\\Normalizer\\ImageSummaryNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ImageSummaryNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ImageSummaryNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ImageSummaryNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "The \"Docker\\API\\Normalizer\\ContainersCreatePostBodyNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainersCreatePostBodyNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainersCreatePostBodyNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainersCreatePostBodyNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "The \"Docker\\API\\Normalizer\\HostConfigNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\HostConfigNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\HostConfigNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\HostConfigNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "The \"Docker\\API\\Normalizer\\ContainersCreatePostResponse201Normalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainersCreatePostResponse201Normalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainersCreatePostResponse201Normalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_load_configuration_service_with_network",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainersCreatePostResponse201Normalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "The \"Docker\\API\\Normalizer\\ContainerSummaryItemNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainerSummaryItemNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainerSummaryItemNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainerSummaryItemNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "The \"Docker\\API\\Normalizer\\ContainerSummaryItemHostConfigNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainerSummaryItemHostConfigNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainerSummaryItemHostConfigNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainerSummaryItemHostConfigNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "The \"Docker\\API\\Normalizer\\ContainerSummaryItemNetworkSettingsNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainerSummaryItemNetworkSettingsNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainerSummaryItemNetworkSettingsNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainerSummaryItemNetworkSettingsNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "The \"Docker\\API\\Normalizer\\EndpointSettingsNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\EndpointSettingsNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\EndpointSettingsNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\EndpointSettingsNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::read()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::eof()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::getContents()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::getSize()\" might add \"?int\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::__toString()\" might add \"string\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::isSeekable()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::close()\" might add \"void\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::tell()\" might add \"int\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::isWritable()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::write()\" might add \"int\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::isReadable()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Psr\\Http\\Message\\StreamInterface::getMetadata()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Http\\Message\\Encoding\\FilteredStream\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"php_user_filter::filter()\" might add \"int\" as a native return type declaration in the future. Do the same in child class \"Http\\Message\\Encoding\\Filter\\Chunk\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "The \"Docker\\API\\Normalizer\\PortNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\PortNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\PortNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\PortNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "The \"Docker\\API\\Normalizer\\MountNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\MountNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\MountNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceIntegrationTest::it_should_create_a_container_and_run_lifecycles_hooks",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\MountNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "The \"Docker\\API\\Normalizer\\CreateImageInfoNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\CreateImageInfoNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\CreateImageInfoNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\CreateImageInfoNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "The \"Docker\\API\\Normalizer\\PortBindingNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\PortBindingNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\PortBindingNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\PortBindingNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "The \"Docker\\API\\Normalizer\\ContainersIdExecPostBodyNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainersIdExecPostBodyNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainersIdExecPostBodyNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ContainersIdExecPostBodyNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "The \"Docker\\API\\Normalizer\\IdResponseNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\IdResponseNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\IdResponseNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\IdResponseNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "The \"Docker\\API\\Normalizer\\ExecIdStartPostBodyNormalizer\" class uses \"Jane\\JsonSchemaRuntime\\Normalizer\\CheckArray\" that is deprecated Deprecated since v6.2.0, will removed in v7.0.0 and is already replaced by generated Runtime.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::supportsDenormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ExecIdStartPostBodyNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface::supportsNormalization()\" might add \"bool\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ExecIdStartPostBodyNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    },
+    {
+        "location": "Tests\\Core\\ServiceCloneService\\ServiceCloneServiceScenarioIntegrationTest::it_should_start_mysql_master_and_can_query_on_it",
+        "message": "Method \"Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface::denormalize()\" might add \"mixed\" as a native return type declaration in the future. Do the same in implementation \"Docker\\API\\Normalizer\\ExecIdStartPostBodyNormalizer\" now to avoid errors or add an explicit @return annotation to suppress this message.",
+        "count": 1
+    }
+]

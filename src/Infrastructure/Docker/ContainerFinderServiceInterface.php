@@ -9,4 +9,6 @@ use Docker\API\Model\ContainerSummaryItem;
 interface ContainerFinderServiceInterface
 {
     public function getDockerByName(string $dockerName): ?ContainerSummaryItem;
+
+    public function getDockersByLabel(string $labelKey, string $labelValue): array;
 }

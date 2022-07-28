@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App;
 
 use App\Infrastructure\CompilerPass\ConsoleCommandFilterCompilerPass;
+use App\Infrastructure\PostContainerDumpActions\PostContainerDumpServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
@@ -29,6 +31,12 @@ class Kernel extends BaseKernel
         }
     }
 
+    protected function dumpContainer(ConfigCache $cache, ContainerBuilder $container, string $class, string $baseClass): void
+    {
+        parent::dumpContainer($cache, $container, $class, $baseClass);
+        $this->postDumpContainerAction($container);
+    }
+
     public function build(ContainerBuilder $container): void
     {
         if ($this->environment === 'prod') {
@@ -38,7 +46,7 @@ class Kernel extends BaseKernel
 
     public function getProjectDir(): string
     {
-        return \dirname(__DIR__);
+        return __DIR__ . '/../';
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
@@ -61,5 +69,12 @@ class Kernel extends BaseKernel
         $routes->import($confDir . '/{routes}/*' . self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir . '/{routes}/' . $this->environment . '/**/*' . self::CONFIG_EXTS, '/', 'glob');
         //$routes->import($confDir . '/{routes}' . self::CONFIG_EXTS, '/', 'glob');
+    }
+
+    private function postDumpContainerAction(ContainerBuilder $container): void
+    {
+        /** @var PostContainerDumpServiceInterface $postContainerDumpAction */
+        $postContainerDumpAction = $container->get(PostContainerDumpServiceInterface::class);
+        $postContainerDumpAction->execute();
     }
 }

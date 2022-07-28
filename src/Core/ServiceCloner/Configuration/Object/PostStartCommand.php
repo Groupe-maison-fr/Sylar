@@ -8,13 +8,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class PostStartCommand
 {
-    /**
-     * @var string
-     */
-    private $executionEnvironment;
+    private string $executionEnvironment;
 
     /**
-     * @var string[] | ArrayCollection
+     * @var string[]|ArrayCollection
      */
     private $command;
 
@@ -39,7 +36,7 @@ final class PostStartCommand
     }
 
     /**
-     * @return string[] | ArrayCollection
+     * @return string[]|ArrayCollection
      */
     public function getCommand(): ArrayCollection
     {

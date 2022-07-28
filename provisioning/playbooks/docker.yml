@@ -2,7 +2,6 @@
 - hosts: all
   become: true
   vars:
-    - NODEJS_VERSION: "11"
     - ansible_distribution_release: "bionic"
 
   tasks:
@@ -22,7 +21,13 @@
         state: latest
         update_cache: yes
 
-    - name: adding existing user 'vagrant' to group docker
+    - name: Update apt and install docker-compose
+      apt:
+        name: docker-compose
+        state: latest
+        update_cache: yes
+
+    - name: Adding existing user 'vagrant' to group docker
       user:
         name: 'vagrant'
         groups:

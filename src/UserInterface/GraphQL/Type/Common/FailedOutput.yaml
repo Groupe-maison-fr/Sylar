@@ -1,0 +1,7 @@
+FailedOutput:
+  type: object
+  config:
+    interfaces: [ErrorInterface]
+    fields:
+      code: String!
+      message: String!

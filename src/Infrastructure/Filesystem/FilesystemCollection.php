@@ -8,6 +8,4 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class FilesystemCollection extends ArrayCollection
 {
-
-
 }

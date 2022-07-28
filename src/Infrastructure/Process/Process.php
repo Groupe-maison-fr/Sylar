@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Process;
 
+use App\Infrastructure\Process\Exception\ProcessFailedException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process as SymfonyProcess;
 
 final class Process implements ProcessInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(
         LoggerInterface $logger
@@ -20,32 +18,44 @@ final class Process implements ProcessInterface
         $this->logger = $logger;
     }
 
-    private function exec(bool $must, ...$arguments): string
+    public function exec(CommandDTO $command): ExecutionResultDTO
     {
-        $argumentList = $this->flattenArguments(...$arguments);
+        $argumentList = $this->flattenArguments(...$command->getArguments());
+        if ($command->sudo()) {
+            array_unshift($argumentList, 'sudo');
+        }
         $this->logger->debug(sprintf('Process launched "%s"', implode(' ', $argumentList)));
 
         $process = new SymfonyProcess($argumentList);
-        if ($must) {
-            $process->mustRun();
-        } else {
-            $process->run();
-        }
+        $process->run();
         $output = $process->getOutput();
+        $errorOutput = $process->getErrorOutput();
 
         $this->logger->debug(sprintf('Process result "%s"', $output));
+        if ($errorOutput) {
+            $this->logger->debug(sprintf('Process error output "%s"', $errorOutput));
+        }
 
-        return $output;
+        if ($command->mustRun() && $process->getExitCode() !== 0) {
+            throw new ProcessFailedException(sprintf(
+                '"%s" failed with exitCode "%d", %s',
+                implode(' ', $command->getArguments()),
+                $process->getExitCode(),
+                $errorOutput
+            ));
+        }
+
+        return new ExecutionResultDTO($output, $errorOutput, $process->getExitCode());
     }
 
-    public function run(...$arguments): string
+    public function run(?string ...$arguments): ExecutionResultDTO
     {
-        return $this->exec(true, ...$arguments);
+        return $this->exec(new CommandDTO($arguments, true, true));
     }
 
-    public function mayRun(...$arguments): string
+    public function mayRun(?string ...$arguments): ExecutionResultDTO
     {
-        return $this->exec(false, ...$arguments);
+        return $this->exec(new CommandDTO($arguments, false, true));
     }
 
     private function flattenArguments(...$argumentList): array

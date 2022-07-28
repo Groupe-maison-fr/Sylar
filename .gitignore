@@ -6,11 +6,13 @@
 /public/bundles/
 /var/
 /vendor/
+bin/box
 /build
 !/build/.gitignore
 .vagrant
 .vboxhdd/
 /node_modules
+provisioning/roles/namiops.fish_shell/
 ###< symfony/framework-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###
@@ -30,3 +32,16 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+supervisord.pid
+.docker/monitor/node_modules/
+.DS_Store
+.env
+.idea/
+application_php_errors.log
+provisioning/slow_query.log
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

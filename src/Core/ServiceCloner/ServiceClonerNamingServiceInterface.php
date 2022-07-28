@@ -12,5 +12,7 @@ interface ServiceClonerNamingServiceInterface
 
     public function getFullName(string $masterName, string $instanceName, string $separator): string;
 
+    public function getDockerName(string $masterName, string $instanceName): string;
+
     public function isMasterName(string $instanceName): bool;
 }

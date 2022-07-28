@@ -8,29 +8,24 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class ServiceCloner
 {
-    /**
-     * @var string
-     */
-    private $stateRoot;
-
-    /**
-     * @var string
-     */
-    private $zpoolName;
-
-    /**
-     * @var string
-     */
-    private $zpoolRoot;
+    private string $stateRoot;
+    private string $zpoolName;
+    private string $zpoolRoot;
+    private string $configurationRoot;
 
     /**
      * @var Service[]|ArrayCollection
      */
     private $services;
+    /**
+     * @var Command[]|ArrayCollection
+     */
+    private $commands;
 
     public function __construct()
     {
         $this->services = new ArrayCollection();
+        $this->commands = new ArrayCollection();
     }
 
     public function getstateRoot()
@@ -68,8 +63,13 @@ final class ServiceCloner
         $this->services[] = $service;
     }
 
+    public function addCommand(Command $command): void
+    {
+        $this->commands[] = $command;
+    }
+
     /**
-     * @return Service[] | ArrayCollection
+     * @return Service[]|ArrayCollection
      */
     public function getServices(): ArrayCollection
     {
@@ -92,5 +92,39 @@ final class ServiceCloner
     public function removeService(Service $service): void
     {
         $this->services->removeElement($service);
+    }
+
+    /**
+     * @return Command[]|ArrayCollection
+     */
+    public function getCommands(): ArrayCollection
+    {
+        return $this->commands;
+    }
+
+    public function removeCommand(Command $command): void
+    {
+        $this->commands->removeElement($command);
+    }
+
+    public function getCommandByName(string $name): ?Command
+    {
+        $commands = $this->commands->filter(fn (Command $command) => $command->getName() === $name);
+
+        if ($commands->isEmpty()) {
+            return null;
+        }
+
+        return $commands->first();
+    }
+
+    public function setConfigurationRoot(string $configurationRoot): void
+    {
+        $this->configurationRoot = $configurationRoot;
+    }
+
+    public function getConfigurationRoot(): string
+    {
+        return $this->configurationRoot;
     }
 }

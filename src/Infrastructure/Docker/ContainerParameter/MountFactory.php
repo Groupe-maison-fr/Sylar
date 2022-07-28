@@ -9,10 +9,7 @@ use Docker\API\Model\Mount as DockerApiModelMount;
 
 final class MountFactory implements MountFactoryInterface
 {
-    /**
-     * @var ConfigurationExpressionGeneratorInterface
-     */
-    private $configurationExpressionGenerator;
+    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
 
     public function __construct(
         ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator

@@ -33,7 +33,13 @@ if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 
     if (class_exists(Debug::class)) {
-        Debug::enable();
+        if (class_exists(Debug::class)) {
+            // use custom debug error handler instead of default one
+            // https://github.com/symfony/symfony/issues/35575
+            $showDeprecations = $_ENV['APP_CONSOLE_DEPRECATIONS'] ?? $_SERVER['APP_CONSOLE_DEPRECATIONS'] ?? false;
+            $showDeprecations = filter_var($showDeprecations, \FILTER_VALIDATE_BOOLEAN);
+            \App\Infrastructure\Logging\DebugErrorHandler::enable($showDeprecations);
+        }
     }
 }
 
