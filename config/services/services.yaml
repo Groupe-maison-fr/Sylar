@@ -14,6 +14,8 @@ parameters:
     supervisord_url: '%env(default:default_supervisord_url:SUPERVISORD_URL)%'
     supervisord_user: '%env(default:default_supervisord_user:SUPERVISORD_USER)%'
     supervisord_password: '%env(default:default_supervisord_password:SUPERVISORD_PASSWORD)%'
+    mounted_configuration_path_default: /opt/sylar/data
+    mounted_configuration_path: '%env(default:mounted_configuration_path_default:SYLAR_MOUNTED_CONFIGURATION_PATH)%'
 
 services:
     _defaults:
@@ -22,7 +24,7 @@ services:
         public: '%service_are_public%'
         bind:
             $configurationFilename: '%sylar_config_filename%'
-            $mountedConfigurationPath: '/opt/sylar/data'
+            $mountedConfigurationPath: '%mounted_configuration_path%'
             $containerConfigurationPath: '/app/data'
             $dockerReadOnly: '@docker.readonly'
             $dockerReadWrite: '@docker.readwrite'
