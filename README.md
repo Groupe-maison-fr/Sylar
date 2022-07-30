@@ -2,94 +2,10 @@
 
 Service cloner for development purpose
 
-```plantuml
-@startuml
-   allowmixing
-   frame server1{
-      database MysqlMaster {
-      }
-   }
-   frame server2{
-      node dockerSlave {
-         database MysqlSlave [
-            port: 13306
-            /sylar/mysql:/var/lib/mysql
-         ]
-      }
-      node dockerMysqlReplica1 {
-         database MysqlReplica1 [
-            port: 13307 (index 1)
-            1st snapshot
-            /sylar/mysql/slave1:/var/lib/mysql
-         ]
-      }
-      node dockerMysqlReplica2 {
-         database MysqlReplica2 [
-            port: 13307 (index 2)
-            2nd snapshot
-            /sylar/mysql/slave1:/var/lib/mysql
-         ]
-      }
-      node dockerMysqlReplicaN {
-         database MysqlReplicaN [
-            port: 13306+N (index N)
-            3rd snapshot
-            /sylar/mysql/slave1:/var/lib/mysql
-         ]
-      }
-   }
-   MysqlMaster --> MysqlSlave : replication
-   MysqlSlave --> MysqlReplica1 : zfs snapshot
-   MysqlSlave --> MysqlReplica2 : zfs snapshot
-   MysqlSlave --> MysqlReplicaN : zfs snapshot
-@enduml
-```
+![general](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Groupe-maison-fr/Sylar/master/docs/general.iuml)
 
 # Stack
-```plantuml
-@startuml
-    allowmixing
-
-    queue "/var/run/docker.sock" as dockerSock
-    rectangle Stack {
-       node runner {
-         node worker
-         node "php-fpm" as phpFpm
-       }
-       node builder
-       node "docker-socket-proxy" as dockerSocketProxy
-       node webserver #yellow
-       node mercure
-       node redis
-       node grafana
-       node prometheus
-       node nodeExporter
-       node cadvisor
-       node loki
-       cloud system{
-       }
-    }
-    webserver <-- phpFpm #orange
-    phpFpm --> redis #green
-    worker <--> redis #green
-    phpFpm --> mercure #orange
-    mercure --> webserver #orange
-    nodeExporter --> prometheus  #orange
-    cadvisor --> prometheus #orange
-    prometheus --> grafana #orange
-    webserver <-- builder #orange
-    webserver <-- grafana #orange
-    webserver <-- loki #orange
-    phpFpm --> loki #blue
-    worker --> loki #blue
-    phpFpm --> dockerSocketProxy
-    dockerSock --> dockerSocketProxy
-    dockerSock --> cadvisor
-    worker <--> dockerSocketProxy
-    system --> loki
-    system --> nodeExporter
-@enduml
-```
+![general](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Groupe-maison-fr/Sylar/master/docs/stack.iuml)
 
 ## Development setup
 ```
