@@ -1,0 +1,42 @@
+@startuml
+    allowmixing
+
+    queue "/var/run/docker.sock" as dockerSock
+    rectangle Stack {
+       node runner {
+         node worker
+         node "php-fpm" as phpFpm
+       }
+       node builder
+       node "docker-socket-proxy" as dockerSocketProxy
+       node webserver #yellow
+       node mercure
+       node redis
+       node grafana
+       node prometheus
+       node nodeExporter
+       node cadvisor
+       node loki
+       cloud system{
+       }
+    }
+    webserver <-- phpFpm #orange
+    phpFpm --> redis #green
+    worker <--> redis #green
+    phpFpm --> mercure #orange
+    mercure --> webserver #orange
+    nodeExporter --> prometheus  #orange
+    cadvisor --> prometheus #orange
+    prometheus --> grafana #orange
+    webserver <-- builder #orange
+    webserver <-- grafana #orange
+    webserver <-- loki #orange
+    phpFpm --> loki #blue
+    worker --> loki #blue
+    phpFpm --> dockerSocketProxy
+    dockerSock --> dockerSocketProxy
+    dockerSock --> cadvisor
+    worker <--> dockerSocketProxy
+    system --> loki
+    system --> nodeExporter
+@enduml

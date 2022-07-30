@@ -1,0 +1,40 @@
+@startuml
+   allowmixing
+   frame server1{
+      database MysqlMaster {
+      }
+   }
+   frame server2{
+      node dockerSlave {
+         database MysqlSlave [
+            port: 13306
+            /sylar/mysql:/var/lib/mysql
+         ]
+      }
+      node dockerMysqlReplica1 {
+         database MysqlReplica1 [
+            port: 13307 (index 1)
+            1st snapshot
+            /sylar/mysql/slave1:/var/lib/mysql
+         ]
+      }
+      node dockerMysqlReplica2 {
+         database MysqlReplica2 [
+            port: 13307 (index 2)
+            2nd snapshot
+            /sylar/mysql/slave1:/var/lib/mysql
+         ]
+      }
+      node dockerMysqlReplicaN {
+         database MysqlReplicaN [
+            port: 13306+N (index N)
+            3rd snapshot
+            /sylar/mysql/slave1:/var/lib/mysql
+         ]
+      }
+   }
+   MysqlMaster --> MysqlSlave : replication
+   MysqlSlave --> MysqlReplica1 : zfs snapshot
+   MysqlSlave --> MysqlReplica2 : zfs snapshot
+   MysqlSlave --> MysqlReplicaN : zfs snapshot
+@enduml
