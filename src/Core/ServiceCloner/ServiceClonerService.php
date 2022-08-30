@@ -237,11 +237,13 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
     private function stopFilesystem(string $masterName, string $instanceName): void
     {
         $zfsFilesystemName = $this->dockerConfiguration->getConfiguration()->getZpoolName() . '/' . $masterName;
+        /*
         if (!$this->zfsService->hasSnapshot($zfsFilesystemName, $instanceName)) {
             $this->logger->debug(sprintf('Can not stop filesystem, !hasSnapshot %s', $instanceName));
 
             return;
         }
+        */
         $zfsFilesystemPath = $this->serviceClonerNamingService->getZfsFilesystempath($masterName, $instanceName);
         if (!$this->zfsService->hasFilesystem($zfsFilesystemPath)) {
             $this->logger->debug(sprintf('Can not stop filesystem, !hasFilesystem %s', $zfsFilesystemPath));
