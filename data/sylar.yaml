@@ -3,7 +3,7 @@ zpoolName: 'sylar'
 zpoolRoot: '/sylar'
 services:
   - name: mysql
-    image: 'library/mariadb:10.5.3'
+    image: 'library/mariadb:10.5.13'
     labels:
       - name: labelName
         value: labelValue
@@ -42,7 +42,7 @@ services:
         - executionEnvironment: host
           command: ['ls','/']
     mounts:
-      - source: '=containerParameter.getReplicatedFilesystem()'
+      - source: '=containerParameter.getReplicatedFilesystem()~"/data"'
         target: /var/lib/mysql
       - source: '=(configurationRoot)~"/"~((containerParameter.getIndex() === 0)?"mysql-master/etc/mysql/conf.d":"mysql-replicate/etc/mysql/conf.d")'
         target: /etc/mysql/conf.d
