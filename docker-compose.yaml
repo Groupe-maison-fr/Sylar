@@ -112,17 +112,21 @@ services:
 
   mercure:
     container_name: sylar-mercure
+    build: .docker/mercure
+    entrypoint: ["/entrypoint.sh"]
     restart: unless-stopped
-    image: dunglas/mercure:v0.10.4
     environment:
-      - ALLOW_ANONYMOUS=1
-      - CORS_ALLOWED_ORIGINS=*
-      - MERCURE_EXTRA_DIRECTIVES=cors_allowed_origins *
-      - PUBLISHER_JWT_KEY=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
-      - PUBLISH_ALLOWED_ORIGINS=*
-      - SUBSCRIBER_JWT_KEY=mercure_subscriber
-      - SERVER_NAME=":80"
-      - USE_FORWARDED_HEADERS=1
+      - APP_ENV=prod
+      - APP_SECRET='secretf0rt3st'
+      - KERNEL_CLASS='App\Kernel'
+      - MERCURE_PUBLIC_URL=http://sylar-mercure/.well-known/mercure
+      - MERCURE_SUBSCRIBER_KEY=mercure_subscriber
+      - MERCURE_URL=http://sylar-mercure/.well-known/mercure
+      - X_LISTEN=0.0.0.0:80
+      - JWT_SECRET_KEY=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
+      - JWT_ALGORITHM=HS256
+    volumes:
+      - ./.docker/mercure/entrypoint.sh:/entrypoint.sh
 
   redis:
     container_name: sylar-redis

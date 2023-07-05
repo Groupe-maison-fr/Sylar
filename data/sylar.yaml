@@ -14,8 +14,6 @@ services:
       value: sylar_user
     - name: MYSQL_PASSWORD
       value: sylar_password
-#    - name: MYSQL_DATABASE
-#      value: roketto
     - name: MYSQL_INITDB_SKIP_TZINFO
       value: '1'
     - name: CLONE_NAME
