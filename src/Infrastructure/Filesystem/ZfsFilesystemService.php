@@ -69,10 +69,8 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
     public function getClones(string $name, string $snap): FilesystemCollection
     {
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput()
-        )->filter(function (FilesystemDTO $filesystem) use ($name, $snap) {
-            return $filesystem->getOrigin() === sprintf('%s@%s', $name, $snap);
-        });
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput(),
+        )->filter(fn (FilesystemDTO $filesystem) => $filesystem->getOrigin() === sprintf('%s@%s', $name, $snap));
     }
 
     public function isSnapshoted(string $name): bool
@@ -117,15 +115,13 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
     {
         return $this
                 ->getFilesystems()
-                ->filter(function (FilesystemDTO $filesystem) use ($mountPoint) {
-                    return $filesystem->getMountPoint() === $mountPoint;
-                })->count() === 1;
+                ->filter(fn (FilesystemDTO $filesystem) => $filesystem->getMountPoint() === $mountPoint)->count() === 1;
     }
 
     public function getFilesystems(): FilesystemCollection
     {
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput()
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput(),
         );
     }
 
@@ -153,7 +149,7 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
                 $mappedLine['mountpoint'],
                 $mappedLine['origin'],
                 $mappedLine['type'],
-                $creationTimestamp
+                $creationTimestamp,
             ));
 
             return $collection;

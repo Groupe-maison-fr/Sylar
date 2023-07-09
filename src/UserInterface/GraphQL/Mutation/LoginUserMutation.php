@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\UserInterface\GraphQL\Mutation;
 
+use Exception;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 
 final class LoginUserMutation implements MutationInterface
@@ -15,9 +16,9 @@ final class LoginUserMutation implements MutationInterface
     public function __invoke(string $username, string $password): void
     {
         try {
-            //return new AuthenticationMutationSuccessOutput($tokenDTO);
-        } catch (\Exception $exception) {
-            //return new AuthenticationMutationFailedOutput();
+            // return new AuthenticationMutationSuccessOutput($tokenDTO);
+        } catch (Exception $exception) {
+            // return new AuthenticationMutationFailedOutput();
         }
     }
 }

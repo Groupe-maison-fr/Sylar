@@ -13,7 +13,7 @@ final class CommandDTO
     public function __construct(
         array $arguments,
         bool $mustRun,
-        bool $sudo
+        bool $sudo,
     ) {
         $this->arguments = $arguments;
         $this->sudo = $sudo;

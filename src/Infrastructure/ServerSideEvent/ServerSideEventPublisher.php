@@ -12,7 +12,7 @@ final class ServerSideEventPublisher implements ServerSideEventPublisherInterfac
     private HubInterface $hub;
 
     public function __construct(
-        HubInterface $hub
+        HubInterface $hub,
     ) {
         $this->hub = $hub;
     }

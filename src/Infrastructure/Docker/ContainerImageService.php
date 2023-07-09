@@ -17,7 +17,7 @@ final class ContainerImageService implements ContainerImageServiceInterface
 
     public function __construct(
         Docker $dockerReadOnly,
-        LoggerInterface $logger
+        LoggerInterface $logger,
     ) {
         $this->docker = $dockerReadOnly;
         $this->logger = $logger;
@@ -66,7 +66,7 @@ final class ContainerImageService implements ContainerImageServiceInterface
                 $frame->getStatus(),
                 $frame->getProgress(),
                 $frame->getProgressDetail() ? $frame->getProgressDetail()->getCurrent() : '',
-                $frame->getProgressDetail() ? $frame->getProgressDetail()->getTotal() : ''
+                $frame->getProgressDetail() ? $frame->getProgressDetail()->getTotal() : '',
             ));
 
             if ($frame->getError()) {

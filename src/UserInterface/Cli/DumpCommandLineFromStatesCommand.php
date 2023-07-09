@@ -30,7 +30,7 @@ final class DumpCommandLineFromStatesCommand extends Command
         ServiceClonerStateServiceInterface $serviceClonerStateService,
         ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService,
         ConfigurationServiceInterface $configurationService,
-        ServiceClonerNamingServiceInterface $serviceClonerNamingService
+        ServiceClonerNamingServiceInterface $serviceClonerNamingService,
     ) {
         parent::__construct();
         $this->serviceClonerStateService = $serviceClonerStateService;
@@ -65,7 +65,7 @@ final class DumpCommandLineFromStatesCommand extends Command
             $a,
             2,
             2,
-            Yaml::DUMP_OBJECT_AS_MAP | Yaml::DUMP_NULL_AS_TILDE | Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK
+            Yaml::DUMP_OBJECT_AS_MAP | Yaml::DUMP_NULL_AS_TILDE | Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK,
         ));
     }
 }

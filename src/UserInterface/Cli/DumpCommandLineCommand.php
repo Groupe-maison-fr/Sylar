@@ -23,7 +23,7 @@ final class DumpCommandLineCommand extends Command
     private ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService;
 
     public function __construct(
-        ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService
+        ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService,
     ) {
         parent::__construct();
         $this->serviceClonerCommandLineDumperService = $serviceClonerCommandLineDumperService;
@@ -74,7 +74,7 @@ final class DumpCommandLineCommand extends Command
             $a,
             2,
             2,
-            Yaml::DUMP_OBJECT_AS_MAP | Yaml::DUMP_NULL_AS_TILDE | Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK
+            Yaml::DUMP_OBJECT_AS_MAP | Yaml::DUMP_NULL_AS_TILDE | Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK,
         ));
     }
 }

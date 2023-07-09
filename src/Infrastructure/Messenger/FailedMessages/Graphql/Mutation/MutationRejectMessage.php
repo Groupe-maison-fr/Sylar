@@ -20,7 +20,7 @@ final class MutationRejectMessage implements MutationInterface
     }
 
     public function __invoke(
-        array $messageIds
+        array $messageIds,
     ) {
         array_map(function (string $messageId): void {
             $envelop = $this->receiver->find($messageId);

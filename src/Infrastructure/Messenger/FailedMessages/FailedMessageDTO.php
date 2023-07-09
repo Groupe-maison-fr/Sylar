@@ -22,7 +22,7 @@ final class FailedMessageDTO
         string $message,
         ?DateTimeInterface $dateTime,
         ?string $exceptionMessage,
-        ?FlattenException $flattenException
+        ?FlattenException $flattenException,
     ) {
         $this->id = $id;
         $this->className = $className;

@@ -14,7 +14,7 @@ final class DockerFactory implements DockerFactoryInterface
     private DockerApiLogger $dockerApiLogger;
 
     public function __construct(
-        DockerApiLogger $dockerApiLogger
+        DockerApiLogger $dockerApiLogger,
     ) {
         $this->dockerApiLogger = $dockerApiLogger;
     }

@@ -48,13 +48,9 @@ final class DebugTraceCallResolver implements QueryInterface
         }
 
         if (count($arguments) === 2 && $arguments[0] === 'array') {
-            return array_map(function (array $argument) {
-                return $this->createArgumentsTree($argument);
-            }, $arguments[1]);
+            return array_map(fn (array $argument) => $this->createArgumentsTree($argument), $arguments[1]);
         }
 
-        return array_map(function ($argument) {
-            return $this->createArgumentsTree($argument);
-        }, $arguments);
+        return array_map(fn ($argument) => $this->createArgumentsTree($argument), $arguments);
     }
 }

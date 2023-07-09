@@ -12,7 +12,7 @@ final class PortBindingFactory implements PortBindingFactoryInterface
     private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
 
     public function __construct(
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
         $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }
@@ -22,12 +22,12 @@ final class PortBindingFactory implements PortBindingFactoryInterface
         $portBinding = new PortBinding();
         if ($port->getHostIp() !== null) {
             $portBinding->setHostIp(
-                $this->configurationExpressionGenerator->generate($containerParameter, $port->getHostIp())
+                $this->configurationExpressionGenerator->generate($containerParameter, $port->getHostIp()),
             );
         }
         if ($port->getHostPort() !== null) {
             $portBinding->setHostPort(
-                $this->configurationExpressionGenerator->generate($containerParameter, $port->getHostPort())
+                $this->configurationExpressionGenerator->generate($containerParameter, $port->getHostPort()),
             );
         }
 

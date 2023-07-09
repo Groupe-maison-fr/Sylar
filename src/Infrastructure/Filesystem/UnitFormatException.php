@@ -9,7 +9,7 @@ use DomainException;
 final class UnitFormatException extends DomainException
 {
     public function __construct(
-        string $formattedSize
+        string $formattedSize,
     ) {
         parent::__construct(sprintf('Size "%s" could not be parsed', $formattedSize));
     }

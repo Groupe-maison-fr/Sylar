@@ -57,7 +57,7 @@ abstract class AbstractServiceCloneServiceIntegrationTest extends AbstractIntegr
         $this->configurationService = new ConfigurationService(
             sprintf('%s/data/%s/sylar.yaml', __DIR__, $testConfigurationName),
             sprintf('%s/tests/%s/data/%s', getenv('MOUNTED_CONFIGURATION_PATH'), $matches[1], $testConfigurationName),
-            sprintf('%s/tests/%s/data/%s', getenv('CONTAINER_CONFIGURATION_PATH'), $matches[1], $testConfigurationName)
+            sprintf('%s/tests/%s/data/%s', getenv('CONTAINER_CONFIGURATION_PATH'), $matches[1], $testConfigurationName),
         );
 
         $this->setService(ConfigurationServiceInterface::class, $this->configurationService);

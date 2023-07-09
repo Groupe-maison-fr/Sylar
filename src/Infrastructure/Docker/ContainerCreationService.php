@@ -47,7 +47,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         EnvironmentFactoryInterface $environmentSpecificationFactory,
         LabelFactoryInterface $labelSpecificationFactory,
         ContainerImageServiceInterface $dockerPullService,
-        StringParameterFactoryInterface $stringParameterFactory
+        StringParameterFactoryInterface $stringParameterFactory,
     ) {
         $this->docker = $dockerReadWrite;
         $this->logger = $logger;
@@ -62,7 +62,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
     public function createDocker(
         ContainerParameterDTO $containerParameter,
         Service $service,
-        array $labels
+        array $labels,
     ): void {
         if (!$this->dockerPullService->imageExists($service->getImage())) {
             $this->dockerPullService->pullImage($service->getImage());
@@ -100,9 +100,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         if ($service->getMounts()->isEmpty()) {
             return;
         }
-        $hostConfig->setMounts($service->getMounts()->map(function (Mount $mount) use ($containerParameter) {
-            return $this->mountSpecificationFactory->createFromConfiguration($containerParameter, $mount);
-        })->toArray());
+        $hostConfig->setMounts($service->getMounts()->map(fn (Mount $mount) => $this->mountSpecificationFactory->createFromConfiguration($containerParameter, $mount))->toArray());
     }
 
     private function setPortBindings(ContainerParameterDTO $containerParameter, HostConfig $hostConfig, service $service): void
@@ -121,7 +119,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
 
                 return $previous;
             },
-            []
+            [],
         )));
     }
 
@@ -138,9 +136,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         if ($service->getEnvironments()->isEmpty()) {
             return;
         }
-        $container->setEnv($service->getEnvironments()->map(function (Environment $environment) use ($containerParameter) {
-            return $this->environmentSpecificationFactory->createFromConfiguration($containerParameter, $environment);
-        })->toArray());
+        $container->setEnv($service->getEnvironments()->map(fn (Environment $environment) => $this->environmentSpecificationFactory->createFromConfiguration($containerParameter, $environment))->toArray());
     }
 
     private function setLabel(ContainerParameterDTO $containerParameter, ContainersCreatePostBody $container, Service $service, array $labels): void
@@ -148,13 +144,15 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         if ($service->getLabels()->isEmpty() && empty($labels)) {
             return;
         }
-        $containerLabels = new ArrayObject(array_reduce($service->getLabels()->toArray(),
+        $containerLabels = new ArrayObject(array_reduce(
+            $service->getLabels()->toArray(),
             function (array $labels, Label $label) use ($containerParameter) {
                 [$key, $value] = $this->labelSpecificationFactory->createFromConfiguration($containerParameter, $label);
                 $labels[$key] = $value;
 
                 return $labels;
-            }, $labels
+            },
+            $labels,
         ));
         $container->setLabels($containerLabels);
     }

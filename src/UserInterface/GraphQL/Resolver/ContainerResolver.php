@@ -16,7 +16,7 @@ final class ContainerResolver implements QueryInterface
     private ServiceClonerStateService $serviceClonerStateService;
 
     public function __construct(
-        ServiceClonerStateService $serviceClonerStateService
+        ServiceClonerStateService $serviceClonerStateService,
     ) {
         $this->serviceClonerStateService = $serviceClonerStateService;
     }

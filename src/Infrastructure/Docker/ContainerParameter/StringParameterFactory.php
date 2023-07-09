@@ -9,7 +9,7 @@ final class StringParameterFactory implements StringParameterFactoryInterface
     private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
 
     public function __construct(
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
         $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }

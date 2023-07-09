@@ -25,7 +25,7 @@ final class SystemIntegrityCheckerCommand extends Command
         MessageBusInterface $messageBus,
         StartServiceHandler $startServiceHandler,
         ProcessInterface $process,
-        Process $localProcess
+        Process $localProcess,
     ) {
         parent::__construct();
         $this->messageBus = $messageBus;

@@ -17,7 +17,7 @@ final class StorageResolver implements QueryInterface
     private ZfsFilesystemService $zfsService;
 
     public function __construct(
-        ZfsFilesystemService $zfsService
+        ZfsFilesystemService $zfsService,
     ) {
         $this->zfsService = $zfsService;
     }

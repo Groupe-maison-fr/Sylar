@@ -13,7 +13,7 @@ final class ConfigurationExpressionGenerator implements ConfigurationExpressionG
     private ConfigurationServiceInterface $configurationService;
 
     public function __construct(
-        ConfigurationServiceInterface $configurationService
+        ConfigurationServiceInterface $configurationService,
     ) {
         $this->expressionLanguage = new ExpressionLanguage();
         $this->configurationService = $configurationService;

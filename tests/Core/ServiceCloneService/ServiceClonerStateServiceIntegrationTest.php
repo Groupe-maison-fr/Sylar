@@ -30,10 +30,8 @@ final class ServiceClonerStateServiceIntegrationTest extends AbstractServiceClon
             ],
             array_values(array_filter(
                 array_map(fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getContainerName(), $serviceClonerStateService->getStates()),
-                function (string $containerName) {
-                    return preg_match('!^unit-test!', $containerName);
-                }
-            ))
+                fn (string $containerName) => preg_match('!^unit-test!', $containerName),
+            )),
         );
     }
 }

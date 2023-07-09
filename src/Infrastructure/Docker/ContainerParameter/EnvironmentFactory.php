@@ -11,16 +11,17 @@ final class EnvironmentFactory implements EnvironmentFactoryInterface
     private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
 
     public function __construct(
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
         $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }
 
     public function createFromConfiguration(ContainerParameterDTO $containerParameter, Environment $environment): string
     {
-        return sprintf('%s=%s',
+        return sprintf(
+            '%s=%s',
             $this->configurationExpressionGenerator->generate($containerParameter, $environment->getName()),
-            $this->configurationExpressionGenerator->generate($containerParameter, $environment->getValue())
+            $this->configurationExpressionGenerator->generate($containerParameter, $environment->getValue()),
         );
     }
 }

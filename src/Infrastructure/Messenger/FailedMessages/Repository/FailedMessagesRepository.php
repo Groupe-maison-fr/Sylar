@@ -18,7 +18,7 @@ final class FailedMessagesRepository implements FailedMessagesRepositoryInterfac
 
     public function __construct(
         ListableReceiverInterface $receiver,
-        FailedMessageDTOFactoryInterface $failedMessageDTOFactory
+        FailedMessageDTOFactoryInterface $failedMessageDTOFactory,
     ) {
         $this->receiver = $receiver;
         $this->failedMessageDTOFactory = $failedMessageDTOFactory;

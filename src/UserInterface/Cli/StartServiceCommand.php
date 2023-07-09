@@ -23,7 +23,7 @@ final class StartServiceCommand extends Command
     private MessageBusInterface $messageBus;
 
     public function __construct(
-        MessageBusInterface $messageBus
+        MessageBusInterface $messageBus,
     ) {
         parent::__construct();
         $this->messageBus = $messageBus;
@@ -59,7 +59,7 @@ final class StartServiceCommand extends Command
             $this->messageBus->dispatch(new StartServiceBusCommand(
                 $serviceName,
                 $instanceName,
-                $instanceIndex === null ? null : (int) $instanceIndex
+                $instanceIndex === null ? null : (int) $instanceIndex,
             ));
         } catch (StartServiceException $exception) {
             $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));

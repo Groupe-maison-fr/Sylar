@@ -23,7 +23,7 @@ final class RestartSupervisordWorkersCommand extends Command
     public function __construct(
         string $supervisordUrl,
         string $supervisordUser,
-        string $supervisordPassword
+        string $supervisordPassword,
     ) {
         parent::__construct();
         $this->supervisor = new Supervisor(new fXmlRpcClient(

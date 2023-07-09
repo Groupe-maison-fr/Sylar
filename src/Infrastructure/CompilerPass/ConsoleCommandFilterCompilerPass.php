@@ -23,8 +23,8 @@ final class ConsoleCommandFilterCompilerPass implements CompilerPassInterface
     {
         foreach ($container->findTaggedServiceIds('console.command') as $id => $attributes) {
             $class = $container->getDefinition($id)->getClass();
-            if ($this->pregMatchPatternArray($this->excluded, $class) &&
-                !$this->pregMatchPatternArray($this->whitelisted, $class)) {
+            if ($this->pregMatchPatternArray($this->excluded, $class)
+                && !$this->pregMatchPatternArray($this->whitelisted, $class)) {
                 $this->removeCommand($container, $id);
             }
         }

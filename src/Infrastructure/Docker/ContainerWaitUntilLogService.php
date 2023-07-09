@@ -20,7 +20,7 @@ final class ContainerWaitUntilLogService implements ContainerWaitUntilLogService
     public function __construct(
         Docker $dockerReadWrite,
         LoggerInterface $logger,
-        ContainerFinderServiceInterface $containerFinderService
+        ContainerFinderServiceInterface $containerFinderService,
     ) {
         $this->docker = $dockerReadWrite;
         $this->logger = $logger;

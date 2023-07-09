@@ -15,7 +15,7 @@ final class MessagesResolver implements QueryInterface
     private FailedMessagesRepositoryInterface $failedMessagesRepository;
 
     public function __construct(
-        FailedMessagesRepositoryInterface $failedMessagesRepository
+        FailedMessagesRepositoryInterface $failedMessagesRepository,
     ) {
         $this->failedMessagesRepository = $failedMessagesRepository;
     }

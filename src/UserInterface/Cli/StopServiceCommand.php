@@ -22,7 +22,7 @@ final class StopServiceCommand extends Command
     private MessageBusInterface $messageBus;
 
     public function __construct(
-        MessageBusInterface $messageBus
+        MessageBusInterface $messageBus,
     ) {
         parent::__construct();
         $this->messageBus = $messageBus;
@@ -51,7 +51,7 @@ final class StopServiceCommand extends Command
         try {
             $this->messageBus->dispatch(new StopServiceBusCommand(
                 $serviceName,
-                $instanceName
+                $instanceName,
             ));
         } catch (StopServiceException $exception) {
             $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));

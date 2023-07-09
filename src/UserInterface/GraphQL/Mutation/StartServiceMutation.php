@@ -7,6 +7,7 @@ namespace App\UserInterface\GraphQL\Mutation;
 use App\Core\ServiceCloner\UseCase\StartServiceCommand;
 use App\UserInterface\GraphQL\Map\FailedOutputDTO;
 use App\UserInterface\GraphQL\Map\StartServiceSuccessOutputDTO;
+use Exception;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -15,7 +16,7 @@ final class StartServiceMutation implements MutationInterface
     private MessageBusInterface $messageBus;
 
     public function __construct(
-        MessageBusInterface $messageBus
+        MessageBusInterface $messageBus,
     ) {
         $this->messageBus = $messageBus;
     }
@@ -26,11 +27,11 @@ final class StartServiceMutation implements MutationInterface
             $this->messageBus->dispatch(new StartServiceCommand(
                 $masterName,
                 $instanceName,
-                $index === null ? null : (int) $index
+                $index === null ? null : (int) $index,
             ));
 
             return new StartServiceSuccessOutputDTO(true);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return new FailedOutputDTO(1, $exception->getMessage());
         }
     }

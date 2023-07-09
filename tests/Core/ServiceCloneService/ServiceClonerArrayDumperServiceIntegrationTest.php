@@ -25,14 +25,14 @@ final class ServiceClonerArrayDumperServiceIntegrationTest extends AbstractInteg
         $configurationService = new ConfigurationService(
             sprintf('%s/data/%s/sylar.yaml', __DIR__, $testConfigurationName),
             sprintf('%s/tests/%s/data/%s', getenv('MOUNTED_CONFIGURATION_PATH'), $matches[1], $testConfigurationName),
-            sprintf('%s/tests/%s/data/%s', getenv('CONTAINER_CONFIGURATION_PATH'), $matches[1], $testConfigurationName)
+            sprintf('%s/tests/%s/data/%s', getenv('CONTAINER_CONFIGURATION_PATH'), $matches[1], $testConfigurationName),
         );
         $configurationExpressionGenerator = new ConfigurationExpressionGenerator($configurationService);
         $serviceClonerCommandLineDumperService = new ServiceClonerArrayDumperService($configurationService, $configurationExpressionGenerator);
         $containerParameter = new ContainerParameterDTO(
             'mysql-test',
             0,
-            'toto/tata'
+            'toto/tata',
         );
 
         self::assertSame($this->getExpectedLifecycleHooksArray(), $serviceClonerCommandLineDumperService->dump($containerParameter));

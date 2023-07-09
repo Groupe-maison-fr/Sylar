@@ -9,6 +9,7 @@ use Docker\API\Exception\ContainerListBadRequestException;
 use Docker\API\Exception\ContainerListInternalServerErrorException;
 use Docker\API\Model\ContainerSummaryItem;
 use Docker\Docker;
+use Exception;
 use Psr\Log\LoggerInterface;
 
 final class ContainerLabelService implements ContainerLabelServiceInterface
@@ -18,7 +19,7 @@ final class ContainerLabelService implements ContainerLabelServiceInterface
 
     public function __construct(
         Docker $dockerReadOnly,
-        LoggerInterface $logger
+        LoggerInterface $logger,
     ) {
         $this->docker = $dockerReadOnly;
         $this->logger = $logger;
@@ -35,13 +36,13 @@ final class ContainerLabelService implements ContainerLabelServiceInterface
                     ]),
                     'all' => true,
                 ]),
-                fn (ContainerSummaryItem $containerSummaryItem) => $containerSummaryItem->getNames()[0] === sprintf('/%s', $dockerName)
+                fn (ContainerSummaryItem $containerSummaryItem) => $containerSummaryItem->getNames()[0] === sprintf('/%s', $dockerName),
             );
-        } catch (ContainerListBadRequestException | ContainerListInternalServerErrorException $exception) {
+        } catch (ContainerListBadRequestException|ContainerListInternalServerErrorException $exception) {
             $this->logger->error(sprintf('Can not get DockerLabelsByName "%s" because "%s"', $dockerName, $exception->getErrorResponse()->getMessage()));
 
             return [];
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->logger->error(sprintf('Can not get DockerLabelsByName "%s" because "%s"', $dockerName, $exception->getMessage()));
 
             return [];

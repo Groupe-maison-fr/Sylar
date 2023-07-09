@@ -16,14 +16,14 @@ final class ContainerDeleteService implements ContainerDeleteServiceInterface
 
     public function __construct(
         Docker $dockerReadWrite,
-        LoggerInterface $logger
+        LoggerInterface $logger,
     ) {
         $this->docker = $dockerReadWrite;
         $this->logger = $logger;
     }
 
     public function delete(
-        string $containerName
+        string $containerName,
     ): void {
         try {
             $this->docker->containerDelete($containerName);

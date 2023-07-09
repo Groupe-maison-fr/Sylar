@@ -21,7 +21,7 @@ final class ServiceResolver implements QueryInterface
 
     public function __construct(
         ConfigurationServiceInterface $configurationService,
-        ServiceClonerStateServiceInterface $serviceClonerStateService
+        ServiceClonerStateServiceInterface $serviceClonerStateService,
     ) {
         $this->configurationService = $configurationService;
         $this->serviceClonerStateService = $serviceClonerStateService;
@@ -45,9 +45,7 @@ final class ServiceResolver implements QueryInterface
             case 'containers':
                 return array_filter(
                     $this->serviceClonerStateService->getStates(),
-                    function (ServiceClonerStatusDTO $serviceClonerStatusDTO) use ($service) {
-                        return $serviceClonerStatusDTO->getMasterName() === $service->getName();
-                    }
+                    fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getMasterName() === $service->getName(),
                 );
         }
         throw new DomainException(sprintf('No field %s found', $info->fieldName));

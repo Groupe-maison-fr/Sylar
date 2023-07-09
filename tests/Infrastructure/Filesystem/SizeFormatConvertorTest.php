@@ -28,6 +28,7 @@ final class SizeFormatConvertorTest extends AbstractIntegrationTest
 
     /**
      * @test
+     *
      * @dataProvider valid_bytes_data
      */
     public function it_should_parse_valid_string(string $formattedString, int $size): void
@@ -37,6 +38,7 @@ final class SizeFormatConvertorTest extends AbstractIntegrationTest
 
     /**
      * @test
+     *
      * @dataProvider valid_bytes_data
      */
     public function it_should_format_bytes(string $formattedString, int $size): void
@@ -71,6 +73,7 @@ final class SizeFormatConvertorTest extends AbstractIntegrationTest
 
     /**
      * @test
+     *
      * @dataProvider it_should_not_parse_unformatted_string_data
      */
     public function it_should_not_parse_unformatted_string(string $badString): void

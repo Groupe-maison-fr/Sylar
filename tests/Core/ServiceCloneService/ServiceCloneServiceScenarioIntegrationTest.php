@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Core\ServiceCloneService;
 
+use App\Core\ServiceCloner\ServiceClonerNamingServiceInterface;
+
 /**
  * @internal
  */
@@ -36,34 +38,34 @@ final class ServiceCloneServiceScenarioIntegrationTest extends AbstractServiceCl
         $this->serviceCloneService->startMaster('unit-test-mysql-start-master-clones');
         $this->containerExecMysql('unit-test-mysql-start-master-clones', 'create database testdb;');
         $this->containerExecMysql('unit-test-mysql-start-master-clones', <<<EOS
-            create table testdb.test (
-                idx INT(11) NOT NULL AUTO_INCREMENT, 
-                val VARCHAR(30) NOT NULL,
-                UNIQUE KEY ix_idx (idx) USING BTREE
-            );
-EOS);
+                        create table testdb.test (
+                            idx INT(11) NOT NULL AUTO_INCREMENT, 
+                            val VARCHAR(30) NOT NULL,
+                            UNIQUE KEY ix_idx (idx) USING BTREE
+                        );
+            EOS);
         $this->containerExecMysql('unit-test-mysql-start-master-clones', <<<EOS
-            insert into testdb.test values 
-            (1,'value_1'),
-            (2,'value_2');
-EOS);
+                        insert into testdb.test values 
+                        (1,'value_1'),
+                        (2,'value_2');
+            EOS);
 
         $this->serviceCloneService->startService('unit-test-mysql-start-master-clones', '01', 1);
         $this->containerExecMysql('unit-test-mysql-start-master-clones_01', <<<EOS
-            insert into testdb.test values 
-            (3,'value_3'),
-            (4,'value_4');
-EOS);
+                        insert into testdb.test values 
+                        (3,'value_3'),
+                        (4,'value_4');
+            EOS);
         $this->serviceCloneService->startService('unit-test-mysql-start-master-clones', '02', 2);
 
         $this->containerExecMysql('unit-test-mysql-start-master-clones', <<<EOS
-            insert into testdb.test values 
-            (3,'value_3');
-EOS);
+                        insert into testdb.test values 
+                        (3,'value_3');
+            EOS);
         $this->containerExecMysql('unit-test-mysql-start-master-clones_02', <<<EOS
-            insert into testdb.test values 
-            (5,'value_5');
-EOS);
+                        insert into testdb.test values 
+                        (5,'value_5');
+            EOS);
 
         self::assertSame([
             "idx\tval",

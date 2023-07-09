@@ -31,7 +31,7 @@ final class FilesystemDTO
         string $mountPoint,
         string $origin,
         string $type,
-        int $creationTimestamp
+        int $creationTimestamp,
     ) {
         $this->name = $name;
         $this->available = $available;

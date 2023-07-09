@@ -22,7 +22,7 @@ final class MutationRetryMessage implements MutationInterface
     /** @param ReceiverInterface&ListableReceiverInterface $receiver */
     public function __construct(
         ReceiverInterface $receiver,
-        KernelInterface $kernel
+        KernelInterface $kernel,
     ) {
         $this->receiver = $receiver;
         $this->kernel = $kernel;

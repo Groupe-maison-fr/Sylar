@@ -14,7 +14,7 @@ final class ContainerStopService implements ContainerStopServiceInterface
 
     public function __construct(
         Docker $dockerReadWrite,
-        ContainerFinderServiceInterface $dockerFinderService
+        ContainerFinderServiceInterface $dockerFinderService,
     ) {
         $this->docker = $dockerReadWrite;
         $this->dockerFinderService = $dockerFinderService;

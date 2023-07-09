@@ -21,7 +21,7 @@ final class CommandResolver implements QueryInterface
 
     public function __construct(
         ConfigurationServiceInterface $configurationService,
-        CommandExecutorInterface $commandExecutor
+        CommandExecutorInterface $commandExecutor,
     ) {
         $this->configurationService = $configurationService;
         $this->commandExecutor = $commandExecutor;

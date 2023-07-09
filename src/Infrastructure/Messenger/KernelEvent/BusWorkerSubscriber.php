@@ -15,7 +15,7 @@ final class BusWorkerSubscriber implements EventSubscriberInterface
     private ServerSideEventPublisherInterface $serverSideEventPublisher;
 
     public function __construct(
-        ServerSideEventPublisherInterface $serverSideEventPublisher
+        ServerSideEventPublisherInterface $serverSideEventPublisher,
     ) {
         $this->serverSideEventPublisher = $serverSideEventPublisher;
     }

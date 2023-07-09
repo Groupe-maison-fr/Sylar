@@ -13,7 +13,7 @@ final class ExecutionResultDTO
     public function __construct(
         string $stdOutput,
         string $stdError,
-        int $exitCode
+        int $exitCode,
     ) {
         $this->stdOutput = $stdOutput;
         $this->stdError = $stdError;

@@ -13,7 +13,7 @@ final class Process implements ProcessInterface
     private LoggerInterface $logger;
 
     public function __construct(
-        LoggerInterface $logger
+        LoggerInterface $logger,
     ) {
         $this->logger = $logger;
     }
@@ -41,7 +41,7 @@ final class Process implements ProcessInterface
                 '"%s" failed with exitCode "%d", %s',
                 implode(' ', $command->getArguments()),
                 $process->getExitCode(),
-                $errorOutput
+                $errorOutput,
             ));
         }
 

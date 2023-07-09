@@ -11,7 +11,7 @@ final class LabelFactory implements LabelFactoryInterface
     private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
 
     public function __construct(
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
         $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }

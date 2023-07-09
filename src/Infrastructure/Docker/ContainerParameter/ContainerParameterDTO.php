@@ -13,7 +13,7 @@ final class ContainerParameterDTO
     public function __construct(
         string $name,
         int $index,
-        string $replicatedFilesystem
+        string $replicatedFilesystem,
     ) {
         $this->index = $index;
         $this->name = $name;
