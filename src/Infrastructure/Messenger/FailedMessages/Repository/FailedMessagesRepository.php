@@ -13,15 +13,10 @@ use Traversable;
 
 final class FailedMessagesRepository implements FailedMessagesRepositoryInterface
 {
-    private ListableReceiverInterface $receiver;
-    private FailedMessageDTOFactoryInterface $failedMessageDTOFactory;
-
     public function __construct(
-        ListableReceiverInterface $receiver,
-        FailedMessageDTOFactoryInterface $failedMessageDTOFactory,
+        private ListableReceiverInterface $receiver,
+        private FailedMessageDTOFactoryInterface $failedMessageDTOFactory,
     ) {
-        $this->receiver = $receiver;
-        $this->failedMessageDTOFactory = $failedMessageDTOFactory;
     }
 
     public function findAll(int $max): array

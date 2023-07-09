@@ -8,12 +8,9 @@ use App\Core\ServiceCloner\Configuration\Object\Environment;
 
 final class EnvironmentFactory implements EnvironmentFactoryInterface
 {
-    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
-
     public function __construct(
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
+        private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
-        $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }
 
     public function createFromConfiguration(ContainerParameterDTO $containerParameter, Environment $environment): string

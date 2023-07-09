@@ -8,16 +8,10 @@ use App\Infrastructure\Messenger\AsyncCommandInterface;
 
 final class StopServiceCommand implements AsyncCommandInterface
 {
-    private string $masterName;
-
-    private string $instanceName;
-
     public function __construct(
-        string $masterName,
-        string $instanceName,
+        private string $masterName,
+        private string $instanceName,
     ) {
-        $this->masterName = $masterName;
-        $this->instanceName = $instanceName;
     }
 
     public function getMasterName(): string

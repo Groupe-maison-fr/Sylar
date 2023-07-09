@@ -10,12 +10,9 @@ use Symfony\Component\Process\Process as SymfonyProcess;
 
 final class Process implements ProcessInterface
 {
-    private LoggerInterface $logger;
-
     public function __construct(
-        LoggerInterface $logger,
+        private LoggerInterface $logger,
     ) {
-        $this->logger = $logger;
     }
 
     public function exec(CommandDTO $command): ExecutionResultDTO

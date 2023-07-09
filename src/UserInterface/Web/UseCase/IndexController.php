@@ -24,11 +24,9 @@ use Twig\Environment;
 )]
 final class IndexController extends AbstractController
 {
-    private Environment $environment;
-
-    public function __construct(Environment $environment)
-    {
-        $this->environment = $environment;
+    public function __construct(
+        private Environment $environment,
+    ) {
     }
 
     public function __invoke(

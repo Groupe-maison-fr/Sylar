@@ -6,45 +6,20 @@ namespace App\Infrastructure\Filesystem;
 
 final class FilesystemDTO
 {
-    private string $name;
-    private int $available;
-    private int $used;
-    private int $usedBySnapshot;
-    private int $usedByDataset;
-    private int $usedByRefReservation;
-    private int $usedByChild;
-    private int $refer;
-    private string $mountPoint;
-    private string $origin;
-    private string $type;
-    private int $creationTimestamp;
-
     public function __construct(
-        string $name,
-        int $available,
-        int $used,
-        int $usedBySnapshot,
-        int $usedByDataset,
-        int $usedByRefReservation,
-        int $usedByChild,
-        int $refer,
-        string $mountPoint,
-        string $origin,
-        string $type,
-        int $creationTimestamp,
+        private string $name,
+        private int $available,
+        private int $used,
+        private int $usedBySnapshot,
+        private int $usedByDataset,
+        private int $usedByRefReservation,
+        private int $usedByChild,
+        private int $refer,
+        private string $mountPoint,
+        private string $origin,
+        private string $type,
+        private int $creationTimestamp,
     ) {
-        $this->name = $name;
-        $this->available = $available;
-        $this->used = $used;
-        $this->usedBySnapshot = $usedBySnapshot;
-        $this->usedByDataset = $usedByDataset;
-        $this->usedByRefReservation = $usedByRefReservation;
-        $this->usedByChild = $usedByChild;
-        $this->refer = $refer;
-        $this->mountPoint = $mountPoint;
-        $this->origin = $origin;
-        $this->type = $type;
-        $this->creationTimestamp = $creationTimestamp;
     }
 
     public function getName(): string

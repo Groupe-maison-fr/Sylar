@@ -13,12 +13,9 @@ use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
 final class ContainerResolver implements QueryInterface
 {
-    private ServiceClonerStateService $serviceClonerStateService;
-
     public function __construct(
-        ServiceClonerStateService $serviceClonerStateService,
+        private ServiceClonerStateService $serviceClonerStateService,
     ) {
-        $this->serviceClonerStateService = $serviceClonerStateService;
     }
 
     public function __invoke(ResolveInfo $info, ServiceClonerStatusDTO $state, Argument $args)

@@ -20,18 +20,11 @@ use Symfony\Component\Yaml\Yaml;
 
 final class ConfigurationService implements ConfigurationServiceInterface
 {
-    private string $configurationFilename;
-    private string $mountedConfigurationPath;
-    private string $containerConfigurationPath;
-
     public function __construct(
-        string $configurationFilename,
-        string $mountedConfigurationPath,
-        string $containerConfigurationPath,
+        private string $configurationFilename,
+        private string $mountedConfigurationPath,
+        private string $containerConfigurationPath,
     ) {
-        $this->configurationFilename = $configurationFilename;
-        $this->mountedConfigurationPath = $mountedConfigurationPath;
-        $this->containerConfigurationPath = $containerConfigurationPath;
     }
 
     public function getConfiguration(): ServiceCloner

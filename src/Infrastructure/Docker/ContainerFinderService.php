@@ -14,21 +14,16 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerFinderService implements ContainerFinderServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-
     public function __construct(
-        Docker $dockerReadOnly,
-        LoggerInterface $logger,
+        private Docker $dockerReadWrite,
+        private LoggerInterface $logger,
     ) {
-        $this->docker = $dockerReadOnly;
-        $this->logger = $logger;
     }
 
     public function getDockerByName(string $dockerName): ?ContainerSummaryItem
     {
         try {
-            $containers = $this->docker->containerList([
+            $containers = $this->dockerReadWrite->containerList([
                 'filters' => json_encode([
                     'name' => [$dockerName],
                 ]),
@@ -59,7 +54,7 @@ final class ContainerFinderService implements ContainerFinderServiceInterface
     public function getDockersByLabel(string $labelKey, string $labelValue): array
     {
         try {
-            $containers = $this->docker->containerList([
+            $containers = $this->dockerReadWrite->containerList([
                 'filters' => json_encode([
                     'label' => [sprintf('%s=%s', $labelKey, $labelValue)],
                 ]),

@@ -6,18 +6,11 @@ namespace App\Infrastructure\Process;
 
 final class ExecutionResultDTO
 {
-    private string $stdOutput;
-    private string $stdError;
-    private int $exitCode;
-
     public function __construct(
-        string $stdOutput,
-        string $stdError,
-        int $exitCode,
+        private string $stdOutput,
+        private string $stdError,
+        private int $exitCode,
     ) {
-        $this->stdOutput = $stdOutput;
-        $this->stdError = $stdError;
-        $this->exitCode = $exitCode;
     }
 
     public function __toString(): string

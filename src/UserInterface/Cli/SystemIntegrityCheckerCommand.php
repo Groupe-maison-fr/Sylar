@@ -16,22 +16,13 @@ use Symfony\Component\Messenger\MessageBusInterface;
 #[AsCommand('system:checker', description: 'System integrity checker')]
 final class SystemIntegrityCheckerCommand extends Command
 {
-    private MessageBusInterface $messageBus;
-    private StartServiceHandler $startServiceHandler;
-    private ProcessInterface $process;
-    private Process $localProcess;
-
     public function __construct(
-        MessageBusInterface $messageBus,
-        StartServiceHandler $startServiceHandler,
-        ProcessInterface $process,
-        Process $localProcess,
+        private MessageBusInterface $messageBus,
+        private StartServiceHandler $startServiceHandler,
+        private ProcessInterface $process,
+        private Process $localProcess,
     ) {
         parent::__construct();
-        $this->messageBus = $messageBus;
-        $this->startServiceHandler = $startServiceHandler;
-        $this->process = $process;
-        $this->localProcess = $localProcess;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

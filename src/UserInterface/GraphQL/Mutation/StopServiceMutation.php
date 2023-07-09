@@ -13,12 +13,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 final class StopServiceMutation implements MutationInterface
 {
-    private MessageBusInterface $messageBus;
-
     public function __construct(
-        MessageBusInterface $messageBus,
+        private MessageBusInterface $messageBus,
     ) {
-        $this->messageBus = $messageBus;
     }
 
     public function __invoke(string $masterName, string $instanceName)

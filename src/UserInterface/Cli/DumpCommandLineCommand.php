@@ -20,13 +20,10 @@ final class DumpCommandLineCommand extends Command
     private const ARGUMENT_REPLICA_FILESYSTEM_PATH = 'instanceName';
     private const ARGUMENT_INSTANCE_INDEX = 'instanceIndex';
 
-    private ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService;
-
     public function __construct(
-        ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService,
+        private ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService,
     ) {
         parent::__construct();
-        $this->serviceClonerCommandLineDumperService = $serviceClonerCommandLineDumperService;
     }
 
     protected function configure(): void

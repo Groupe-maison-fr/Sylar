@@ -10,12 +10,9 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 final class StartServiceHandler
 {
-    private ServiceClonerServiceInterface $serviceClonerService;
-
     public function __construct(
-        ServiceClonerServiceInterface $serviceClonerService,
+        private ServiceClonerServiceInterface $serviceClonerService,
     ) {
-        $this->serviceClonerService = $serviceClonerService;
     }
 
     public function __invoke(StartServiceCommand $startServiceCommand): void

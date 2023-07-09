@@ -13,18 +13,11 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 final class ForceDestroyContainerHandler
 {
-    private ContainerStopServiceInterface $containerStopService;
-    private ServerSideEventPublisherInterface $serverSideEventPublisher;
-    private ContainerDeleteServiceInterface $containerDeleteService;
-
     public function __construct(
-        ContainerStopServiceInterface $containerStopService,
-        ContainerDeleteServiceInterface $containerDeleteService,
-        ServerSideEventPublisherInterface $serverSideEventPublisher,
+        private ContainerStopServiceInterface $containerStopService,
+        private ContainerDeleteServiceInterface $containerDeleteService,
+        private ServerSideEventPublisherInterface $serverSideEventPublisher,
     ) {
-        $this->containerStopService = $containerStopService;
-        $this->containerDeleteService = $containerDeleteService;
-        $this->serverSideEventPublisher = $serverSideEventPublisher;
     }
 
     public function __invoke(ForceDestroyContainerCommand $forceDestroyContainerCommand): void

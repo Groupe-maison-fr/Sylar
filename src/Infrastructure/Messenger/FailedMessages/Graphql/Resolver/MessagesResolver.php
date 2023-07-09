@@ -12,12 +12,9 @@ use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
 final class MessagesResolver implements QueryInterface
 {
-    private FailedMessagesRepositoryInterface $failedMessagesRepository;
-
     public function __construct(
-        FailedMessagesRepositoryInterface $failedMessagesRepository,
+        private FailedMessagesRepositoryInterface $failedMessagesRepository,
     ) {
-        $this->failedMessagesRepository = $failedMessagesRepository;
     }
 
     public function __invoke(ResolveInfo $info, FailedMessageDTO $failedMessage, Argument $args)

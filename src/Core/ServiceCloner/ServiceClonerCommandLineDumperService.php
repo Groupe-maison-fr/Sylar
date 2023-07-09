@@ -23,16 +23,10 @@ use DomainException;
 
 final class ServiceClonerCommandLineDumperService
 {
-    private ConfigurationServiceInterface $dockerConfiguration;
-
-    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
-
     public function __construct(
-        ConfigurationServiceInterface $dockerConfiguration,
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
+        private ConfigurationServiceInterface $dockerConfiguration,
+        private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
-        $this->dockerConfiguration = $dockerConfiguration;
-        $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }
 
     public function dump(ContainerParameterDTO $container): string

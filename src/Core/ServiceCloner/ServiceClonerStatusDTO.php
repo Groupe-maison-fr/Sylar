@@ -8,34 +8,20 @@ use App\Infrastructure\Filesystem\FilesystemDTO;
 
 final class ServiceClonerStatusDTO
 {
-    private string $masterName;
-    private string $instanceName;
-    private int $index;
-    private string $containerName;
-    private string $zfsFilesystemName;
-    private string $zfsFilesystemPath;
-    private ?int $createdAt;
     private bool $isMaster;
     private array $exposedPorts;
     private ?FilesystemDTO $zfsFilesystem;
     private ?string $dockerState;
 
     public function __construct(
-        string $masterName,
-        string $instanceName,
-        int $index,
-        string $containerName,
-        string $zfsFilesystemName,
-        string $zfsFilesystemPath,
-        int $createdAt,
+        private string $masterName,
+        private string $instanceName,
+        private int $index,
+        private string $containerName,
+        private string $zfsFilesystemName,
+        private string $zfsFilesystemPath,
+        private ?int $createdAt,
     ) {
-        $this->masterName = $masterName;
-        $this->instanceName = $instanceName;
-        $this->index = $index;
-        $this->containerName = $containerName;
-        $this->zfsFilesystemName = $zfsFilesystemName;
-        $this->zfsFilesystemPath = $zfsFilesystemPath;
-        $this->createdAt = $createdAt;
         $this->isMaster = $instanceName == ServiceClonerNamingServiceInterface::MASTER_NAME;
         $this->zfsFilesystem = null;
         $this->dockerState = null;

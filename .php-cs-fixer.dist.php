@@ -40,6 +40,9 @@ return (new PhpCsFixer\Config())
         'class_definition' => [
             'multi_line_extends_each_single_line' => true,
         ],
+        'method_argument_space' => [
+            'on_multiline' => 'ensure_fully_multiline',
+        ],
         'single_line_throw' => false,
         'compact_nullable_typehint' => true,
     ])

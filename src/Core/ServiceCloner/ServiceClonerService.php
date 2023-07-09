@@ -26,50 +26,24 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class ServiceClonerService implements ServiceClonerServiceInterface
 {
-    private ConfigurationServiceInterface $dockerConfiguration;
-    private LoggerInterface $logger;
-    private FilesystemServiceInterface $zfsService;
-    private SluggerInterface $slugger;
-    private ContainerCreationServiceInterface $containerCreationService;
     private ServiceCloner $configuration;
-    private ContainerStateServiceInterface $dockerStateService;
-    private ServiceClonerLifeCycleHookServiceInterface $serviceClonerLifeCycleHookService;
-    private ServiceClonerNamingServiceInterface $serviceClonerNamingService;
-    private ServiceClonerStateService $serviceClonerStateService;
-    private ContainerStopServiceInterface $containerStopService;
-    private ContainerDeleteServiceInterface $containerDestroyService;
-    private IndexManagerServiceInterface $indexManagerService;
-    private ServerSideEventPublisherInterface $serverSideEventPublisher;
 
     public function __construct(
-        ConfigurationServiceInterface $dockerConfiguration,
-        LoggerInterface $logger,
-        FilesystemServiceInterface $filesystemService,
-        ContainerCreationServiceInterface $containerCreationService,
-        ContainerStopServiceInterface $containerStopService,
-        ContainerDeleteServiceInterface $containerDestroyService,
-        ServiceClonerLifeCycleHookServiceInterface $serviceClonerLifeCycleHookService,
-        ServiceClonerNamingServiceInterface $serviceClonerNamingService,
-        ServiceClonerStateService $serviceClonerStateService,
-        ContainerStateServiceInterface $containerStateService,
-        IndexManagerServiceInterface $indexManagerService,
-        SluggerInterface $slugger,
-        ServerSideEventPublisherInterface $serverSideEventPublisher,
+        private ConfigurationServiceInterface $dockerConfiguration,
+        private LoggerInterface $logger,
+        private FilesystemServiceInterface $zfsService,
+        private ContainerCreationServiceInterface $containerCreationService,
+        private ContainerStopServiceInterface $containerStopService,
+        private ContainerDeleteServiceInterface $containerDestroyService,
+        private ServiceClonerLifeCycleHookServiceInterface $serviceClonerLifeCycleHookService,
+        private ServiceClonerNamingServiceInterface $serviceClonerNamingService,
+        private ServiceClonerStateService $serviceClonerStateService,
+        private ContainerStateServiceInterface $dockerStateService,
+        private IndexManagerServiceInterface $indexManagerService,
+        private SluggerInterface $slugger,
+        private ServerSideEventPublisherInterface $serverSideEventPublisher,
     ) {
-        $this->dockerConfiguration = $dockerConfiguration;
         $this->configuration = $this->dockerConfiguration->getConfiguration();
-        $this->logger = $logger;
-        $this->zfsService = $filesystemService;
-        $this->slugger = $slugger;
-        $this->containerCreationService = $containerCreationService;
-        $this->containerStopService = $containerStopService;
-        $this->containerDestroyService = $containerDestroyService;
-        $this->dockerStateService = $containerStateService;
-        $this->serviceClonerLifeCycleHookService = $serviceClonerLifeCycleHookService;
-        $this->serviceClonerNamingService = $serviceClonerNamingService;
-        $this->indexManagerService = $indexManagerService;
-        $this->serviceClonerStateService = $serviceClonerStateService;
-        $this->serverSideEventPublisher = $serverSideEventPublisher;
     }
 
     public function startMaster(string $masterName): void

@@ -9,11 +9,9 @@ use App\Infrastructure\Process\Process;
 
 final class CommandExecutor implements CommandExecutorInterface
 {
-    private Process $process;
-
-    public function __construct(Process $process)
-    {
-        $this->process = $process;
+    public function __construct(
+        private Process $process,
+    ) {
     }
 
     /**

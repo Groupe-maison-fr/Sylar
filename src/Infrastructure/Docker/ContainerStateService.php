@@ -9,12 +9,9 @@ use Docker\API\Model\Port;
 
 final class ContainerStateService implements ContainerStateServiceInterface
 {
-    private ContainerFinderService $dockerFinderService;
-
     public function __construct(
-        ContainerFinderService $dockerFinderService,
+        private ContainerFinderService $dockerFinderService,
     ) {
-        $this->dockerFinderService = $dockerFinderService;
     }
 
     public function dockerState(string $dockerName): ?string

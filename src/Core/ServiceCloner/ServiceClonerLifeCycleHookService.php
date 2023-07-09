@@ -19,21 +19,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleHookServiceInterface
 {
-    private ContainerWaitUntilLogServiceInterface $dockerWaitUntilLogService;
-    private ContainerExecServiceInterface $containerExecService;
-    private ProcessInterface $process;
-    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
-
     public function __construct(
-        ContainerWaitUntilLogServiceInterface $dockerWaitUntilLogService,
-        ContainerExecServiceInterface $containerExecService,
-        ProcessInterface $process,
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
+        private ContainerWaitUntilLogServiceInterface $dockerWaitUntilLogService,
+        private ContainerExecServiceInterface $containerExecService,
+        private ProcessInterface $process,
+        private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
-        $this->dockerWaitUntilLogService = $dockerWaitUntilLogService;
-        $this->containerExecService = $containerExecService;
-        $this->process = $process;
-        $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }
 
     private function processArray(ContainerParameterDTO $containerParameter, ArrayCollection $arguments): array

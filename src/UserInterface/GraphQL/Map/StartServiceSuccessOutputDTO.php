@@ -6,11 +6,9 @@ namespace App\UserInterface\GraphQL\Map;
 
 final class StartServiceSuccessOutputDTO
 {
-    private bool $success;
-
-    public function __construct(bool $success)
-    {
-        $this->success = $success;
+    public function __construct(
+        private bool $success,
+    ) {
     }
 
     public function isSuccess(): bool

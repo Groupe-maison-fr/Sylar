@@ -18,13 +18,10 @@ final class StartMasterServiceCommand extends Command
 {
     private const ARGUMENT_SERVICE_NAME = 'serviceName';
 
-    private MessageBusInterface $messageBus;
-
     public function __construct(
-        MessageBusInterface $messageBus,
+        private MessageBusInterface $messageBus,
     ) {
         parent::__construct();
-        $this->messageBus = $messageBus;
     }
 
     protected function configure(): void

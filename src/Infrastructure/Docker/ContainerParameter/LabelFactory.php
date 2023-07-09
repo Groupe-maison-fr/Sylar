@@ -8,12 +8,9 @@ use App\Core\ServiceCloner\Configuration\Object\Label;
 
 final class LabelFactory implements LabelFactoryInterface
 {
-    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
-
     public function __construct(
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
+        private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
-        $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }
 
     public function createFromConfiguration(ContainerParameterDTO $containerParameter, Label $label): array

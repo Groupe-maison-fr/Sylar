@@ -8,20 +8,11 @@ use App\Infrastructure\Messenger\AsyncCommandInterface;
 
 final class RestartServiceCommand implements AsyncCommandInterface
 {
-    private string $masterName;
-
-    private string $instanceName;
-
-    private ?int $index;
-
     public function __construct(
-        string $masterName,
-        string $instanceName,
-        ?int $index,
+        private string $masterName,
+        private string $instanceName,
+        private ?int $index,
     ) {
-        $this->masterName = $masterName;
-        $this->instanceName = $instanceName;
-        $this->index = $index;
     }
 
     public function getMasterName(): string

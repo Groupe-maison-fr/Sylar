@@ -16,15 +16,10 @@ use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
 final class ServiceResolver implements QueryInterface
 {
-    private ConfigurationServiceInterface $configurationService;
-    private ServiceClonerStateServiceInterface $serviceClonerStateService;
-
     public function __construct(
-        ConfigurationServiceInterface $configurationService,
-        ServiceClonerStateServiceInterface $serviceClonerStateService,
+        private ConfigurationServiceInterface $configurationService,
+        private ServiceClonerStateServiceInterface $serviceClonerStateService,
     ) {
-        $this->configurationService = $configurationService;
-        $this->serviceClonerStateService = $serviceClonerStateService;
     }
 
     public function __invoke(ResolveInfo $info, Service $service, Argument $args)

@@ -11,12 +11,9 @@ use Http\Client\Common\Plugin\LoggerPlugin;
 
 final class DockerFactory implements DockerFactoryInterface
 {
-    private DockerApiLogger $dockerApiLogger;
-
     public function __construct(
-        DockerApiLogger $dockerApiLogger,
+        private DockerApiLogger $dockerApiLogger,
     ) {
-        $this->dockerApiLogger = $dockerApiLogger;
     }
 
     public function create(string $dockerRemoteSocket = null): Client

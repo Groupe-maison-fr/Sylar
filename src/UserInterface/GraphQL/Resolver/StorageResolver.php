@@ -14,12 +14,9 @@ use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
 final class StorageResolver implements QueryInterface
 {
-    private ZfsFilesystemService $zfsService;
-
     public function __construct(
-        ZfsFilesystemService $zfsService,
+        private ZfsFilesystemService $zfsService,
     ) {
-        $this->zfsService = $zfsService;
     }
 
     public function __invoke(ResolveInfo $info, FilesystemDTO $zfsFilesystem, Argument $args)

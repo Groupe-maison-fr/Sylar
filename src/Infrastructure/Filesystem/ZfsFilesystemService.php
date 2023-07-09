@@ -15,13 +15,10 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
 {
     private const headerList = ['name', 'avail', 'used', 'usedsnap', 'usedds', 'usedrefreserv', 'usedchild', 'refer', 'mountpoint', 'origin', 'type', 'creation'];
 
-    private ProcessInterface $process;
-    private BytesFormatConvertorInterface $sizeFormatConvertor;
-
-    public function __construct(ProcessInterface $process, BytesFormatConvertorInterface $sizeFormatConvertor)
-    {
-        $this->process = $process;
-        $this->sizeFormatConvertor = $sizeFormatConvertor;
+    public function __construct(
+        private ProcessInterface $process,
+        private BytesFormatConvertorInterface $sizeFormatConvertor,
+    ) {
     }
 
     public function createFilesystem(string $name): void

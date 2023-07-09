@@ -13,18 +13,11 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerWaitUntilLogService implements ContainerWaitUntilLogServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-    private ContainerFinderServiceInterface $containerFinderService;
-
     public function __construct(
-        Docker $dockerReadWrite,
-        LoggerInterface $logger,
-        ContainerFinderServiceInterface $containerFinderService,
+        private Docker $dockerReadWrite,
+        private LoggerInterface $logger,
+        private ContainerFinderServiceInterface $containerFinderService,
     ) {
-        $this->docker = $dockerReadWrite;
-        $this->logger = $logger;
-        $this->containerFinderService = $containerFinderService;
     }
 
     public function wait(ContainerParameterDTO $containerParameter, string $expression, int $timeout): void
@@ -34,7 +27,7 @@ final class ContainerWaitUntilLogService implements ContainerWaitUntilLogService
             return;
         }
         /** @var DockerRawStreamUntil $logsStream */
-        $logsStream = $this->docker->executeEndpoint(new ContainerLogsUntil($container->getId(), [
+        $logsStream = $this->dockerReadWrite->executeEndpoint(new ContainerLogsUntil($container->getId(), [
             'stdout' => true,
             'stderr' => true,
             'follow' => true,

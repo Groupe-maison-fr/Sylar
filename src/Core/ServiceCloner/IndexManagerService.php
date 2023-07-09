@@ -6,12 +6,9 @@ namespace App\Core\ServiceCloner;
 
 final class IndexManagerService implements IndexManagerServiceInterface
 {
-    private ServiceClonerStateServiceInterface $serviceClonerStateService;
-
     public function __construct(
-        ServiceClonerStateServiceInterface $serviceClonerStateService,
+        private ServiceClonerStateServiceInterface $serviceClonerStateService,
     ) {
-        $this->serviceClonerStateService = $serviceClonerStateService;
     }
 
     public function getNextAvailable(): int

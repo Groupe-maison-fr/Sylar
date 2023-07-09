@@ -14,18 +14,11 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerExecService implements ContainerExecServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-    private ContainerFinderServiceInterface $dockerFinderService;
-
     public function __construct(
-        Docker $dockerReadWrite,
-        LoggerInterface $logger,
-        ContainerFinderServiceInterface $dockerFinderService,
+        private Docker $dockerReadWrite,
+        private LoggerInterface $logger,
+        private ContainerFinderServiceInterface $dockerFinderService,
     ) {
-        $this->docker = $dockerReadWrite;
-        $this->logger = $logger;
-        $this->dockerFinderService = $dockerFinderService;
     }
 
     public function exec(string $dockerName, string ...$arguments): string
@@ -40,14 +33,14 @@ final class ContainerExecService implements ContainerExecServiceInterface
             ->setAttachStderr(true)
             ->setCmd($arguments);
 
-        $execCreateResult = $this->docker->containerExec($container->getId(), $execConfig);
+        $execCreateResult = $this->dockerReadWrite->containerExec($container->getId(), $execConfig);
 
         $execStartConfig = new ExecIdStartPostBody();
         $execStartConfig->setDetach(false);
         $execStartConfig->setTty(false);
 
         /** @var DockerRawStream $stream */
-        $stream = $this->docker->execStart($execCreateResult->getId(), $execStartConfig);
+        $stream = $this->dockerReadWrite->execStart($execCreateResult->getId(), $execStartConfig);
         $stdoutFull = '';
         $stream->onStdout(function ($stdout) use (&$stdoutFull): void {
             $stdoutFull .= $stdout;

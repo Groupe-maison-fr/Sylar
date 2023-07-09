@@ -15,16 +15,10 @@ use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
 final class CommandResolver implements QueryInterface
 {
-    private ConfigurationServiceInterface $configurationService;
-
-    private CommandExecutorInterface $commandExecutor;
-
     public function __construct(
-        ConfigurationServiceInterface $configurationService,
-        CommandExecutorInterface $commandExecutor,
+        private ConfigurationServiceInterface $configurationService,
+        private CommandExecutorInterface $commandExecutor,
     ) {
-        $this->configurationService = $configurationService;
-        $this->commandExecutor = $commandExecutor;
     }
 
     public function __invoke(ResolveInfo $info, Command $command, Argument $args)

@@ -29,34 +29,16 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerCreationService implements ContainerCreationServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-    private PortBindingFactoryInterface $bindingSpecificationFactory;
-    private MountFactoryInterface $mountSpecificationFactory;
-    private EnvironmentFactoryInterface $environmentSpecificationFactory;
-    private LabelFactoryInterface $labelSpecificationFactory;
-    private ContainerImageServiceInterface $dockerPullService;
-
-    private StringParameterFactoryInterface $stringParameterFactory;
-
     public function __construct(
-        Docker $dockerReadWrite,
-        LoggerInterface $logger,
-        PortBindingFactoryInterface $portBindingSpecificationFactory,
-        MountFactoryInterface $mountSpecificationFactory,
-        EnvironmentFactoryInterface $environmentSpecificationFactory,
-        LabelFactoryInterface $labelSpecificationFactory,
-        ContainerImageServiceInterface $dockerPullService,
-        StringParameterFactoryInterface $stringParameterFactory,
+        private Docker $dockerReadWrite,
+        private LoggerInterface $logger,
+        private PortBindingFactoryInterface $bindingSpecificationFactory,
+        private MountFactoryInterface $mountSpecificationFactory,
+        private EnvironmentFactoryInterface $environmentSpecificationFactory,
+        private LabelFactoryInterface $labelSpecificationFactory,
+        private ContainerImageServiceInterface $dockerPullService,
+        private StringParameterFactoryInterface $stringParameterFactory,
     ) {
-        $this->docker = $dockerReadWrite;
-        $this->logger = $logger;
-        $this->bindingSpecificationFactory = $portBindingSpecificationFactory;
-        $this->mountSpecificationFactory = $mountSpecificationFactory;
-        $this->environmentSpecificationFactory = $environmentSpecificationFactory;
-        $this->labelSpecificationFactory = $labelSpecificationFactory;
-        $this->dockerPullService = $dockerPullService;
-        $this->stringParameterFactory = $stringParameterFactory;
     }
 
     public function createDocker(
@@ -81,8 +63,8 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
 
         try {
             /** @var ContainersCreatePostResponse201 $containerCreate */
-            $containerCreate = $this->docker->containerCreate($container, ['name' => $containerParameter->getName()]);
-            $this->docker->containerStart($containerCreate->getId());
+            $containerCreate = $this->dockerReadWrite->containerCreate($container, ['name' => $containerParameter->getName()]);
+            $this->dockerReadWrite->containerStart($containerCreate->getId());
         } catch (ContainerCreateBadRequestException $exception) {
             $this->logger->error(sprintf('createDocker: %s %s', $exception->getMessage(), $exception->getErrorResponse()->getMessage()));
         } catch (ContainerStartNotFoundException $exception) {

@@ -8,12 +8,9 @@ use App\Infrastructure\Messenger\AsyncCommandInterface;
 
 final class ForceDestroyFilesystemCommand implements AsyncCommandInterface
 {
-    private string $name;
-
     public function __construct(
-        string $name,
+        private string $name,
     ) {
-        $this->name = $name;
     }
 
     public function getName(): string

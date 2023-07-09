@@ -13,12 +13,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 final class ForceDestroyContainerMutation implements MutationInterface
 {
-    private MessageBusInterface $messageBus;
-
     public function __construct(
-        MessageBusInterface $messageBus,
+        private MessageBusInterface $messageBus,
     ) {
-        $this->messageBus = $messageBus;
     }
 
     public function __invoke(string $name)

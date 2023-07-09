@@ -18,25 +18,13 @@ use Symfony\Component\Yaml\Yaml;
 #[AsCommand('service:dump:command-line-from-state')]
 final class DumpCommandLineFromStatesCommand extends Command
 {
-    private ServiceClonerStateServiceInterface $serviceClonerStateService;
-
-    private ConfigurationServiceInterface $configurationService;
-
-    private ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService;
-
-    private ServiceClonerNamingServiceInterface $serviceClonerNamingService;
-
     public function __construct(
-        ServiceClonerStateServiceInterface $serviceClonerStateService,
-        ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService,
-        ConfigurationServiceInterface $configurationService,
-        ServiceClonerNamingServiceInterface $serviceClonerNamingService,
+        private ServiceClonerStateServiceInterface $serviceClonerStateService,
+        private ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService,
+        private ConfigurationServiceInterface $configurationService,
+        private ServiceClonerNamingServiceInterface $serviceClonerNamingService,
     ) {
         parent::__construct();
-        $this->serviceClonerStateService = $serviceClonerStateService;
-        $this->configurationService = $configurationService;
-        $this->serviceClonerCommandLineDumperService = $serviceClonerCommandLineDumperService;
-        $this->serviceClonerNamingService = $serviceClonerNamingService;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

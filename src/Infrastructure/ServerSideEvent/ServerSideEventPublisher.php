@@ -9,12 +9,9 @@ use Symfony\Component\Mercure\Update;
 
 final class ServerSideEventPublisher implements ServerSideEventPublisherInterface
 {
-    private HubInterface $hub;
-
     public function __construct(
-        HubInterface $hub,
+        private HubInterface $hub,
     ) {
-        $this->hub = $hub;
     }
 
     public function publish(string $topic, $data): string

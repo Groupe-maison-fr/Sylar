@@ -15,17 +15,11 @@ use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;
 
 final class MutationRetryMessage implements MutationInterface
 {
-    /** @var ReceiverInterface&ListableReceiverInterface */
-    private ReceiverInterface $receiver;
-    private KernelInterface $kernel;
-
     /** @param ReceiverInterface&ListableReceiverInterface $receiver */
     public function __construct(
-        ReceiverInterface $receiver,
-        KernelInterface $kernel,
+        private ReceiverInterface $receiver,
+        private KernelInterface $kernel,
     ) {
-        $this->receiver = $receiver;
-        $this->kernel = $kernel;
     }
 
     public function __invoke(string $messageId)

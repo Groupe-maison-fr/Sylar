@@ -12,15 +12,10 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 final class ForceDestroyFilesystemHandler
 {
-    private FilesystemServiceInterface $filesystemService;
-    private ServerSideEventPublisherInterface $serverSideEventPublisher;
-
     public function __construct(
-        FilesystemServiceInterface $filesystemService,
-        ServerSideEventPublisherInterface $serverSideEventPublisher,
+        private FilesystemServiceInterface $filesystemService,
+        private ServerSideEventPublisherInterface $serverSideEventPublisher,
     ) {
-        $this->filesystemService = $filesystemService;
-        $this->serverSideEventPublisher = $serverSideEventPublisher;
     }
 
     public function __invoke(ForceDestroyFilesystemCommand $forceDestroyFilesystemCommand): void

@@ -15,30 +15,15 @@ use Psr\Log\LoggerInterface;
 
 final class ServiceClonerStateService implements ServiceClonerStateServiceInterface
 {
-    private FilesystemServiceInterface $zfsService;
-    private ServiceClonerNamingServiceInterface $serviceClonerNamingService;
-    private ConfigurationServiceInterface $configurationService;
-    private LoggerInterface $logger;
-    private ContainerStateServiceInterface $dockerStateService;
-    private ContainerFinderServiceInterface $containerFinderService;
-    private ContainerLabelServiceInterface $containerLabelService;
-
     public function __construct(
-        FilesystemServiceInterface $zfs,
-        LoggerInterface $logger,
-        ContainerStateServiceInterface $dockerStateService,
-        ConfigurationServiceInterface $configurationService,
-        ServiceClonerNamingServiceInterface $serviceClonerNamingService,
-        ContainerFinderServiceInterface $containerFinderService,
-        ContainerLabelServiceInterface $containerLabelService,
+        private FilesystemServiceInterface $zfsService,
+        private LoggerInterface $logger,
+        private ContainerStateServiceInterface $dockerStateService,
+        private ConfigurationServiceInterface $configurationService,
+        private ServiceClonerNamingServiceInterface $serviceClonerNamingService,
+        private ContainerFinderServiceInterface $containerFinderService,
+        private ContainerLabelServiceInterface $containerLabelService,
     ) {
-        $this->zfsService = $zfs;
-        $this->logger = $logger;
-        $this->serviceClonerNamingService = $serviceClonerNamingService;
-        $this->configurationService = $configurationService;
-        $this->dockerStateService = $dockerStateService;
-        $this->containerFinderService = $containerFinderService;
-        $this->containerLabelService = $containerLabelService;
     }
 
     public function loadState(string $masterName, string $instanceName): ?ServiceClonerStatusDTO

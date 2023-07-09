@@ -12,20 +12,15 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerImageService implements ContainerImageServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-
     public function __construct(
-        Docker $dockerReadOnly,
-        LoggerInterface $logger,
+        private Docker $dockerReadWrite,
+        private LoggerInterface $logger,
     ) {
-        $this->docker = $dockerReadOnly;
-        $this->logger = $logger;
     }
 
     public function imageExists(string $imageName): bool
     {
-        $existingImages = $this->docker->imageList([
+        $existingImages = $this->dockerReadWrite->imageList([
             'filters' => json_encode([
                 'reference' => [$imageName],
             ]),
@@ -52,7 +47,7 @@ final class ContainerImageService implements ContainerImageServiceInterface
     public function pullImage(string $imageName): bool
     {
         /** @var CreateImageStream $buildStream */
-        $buildStream = $this->docker->imageCreate($imageName, ['fromImage' => $imageName]);
+        $buildStream = $this->dockerReadWrite->imageCreate($imageName, ['fromImage' => $imageName]);
         if ($buildStream == null) {
             $this->logger->error(sprintf('Error on imageCreate %s', $imageName));
 

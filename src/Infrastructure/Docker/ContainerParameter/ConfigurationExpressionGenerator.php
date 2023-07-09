@@ -10,13 +10,11 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 final class ConfigurationExpressionGenerator implements ConfigurationExpressionGeneratorInterface
 {
     private ExpressionLanguage $expressionLanguage;
-    private ConfigurationServiceInterface $configurationService;
 
     public function __construct(
-        ConfigurationServiceInterface $configurationService,
+        private ConfigurationServiceInterface $configurationService,
     ) {
         $this->expressionLanguage = new ExpressionLanguage();
-        $this->configurationService = $configurationService;
     }
 
     public function generate(ContainerParameterDTO $containerParameter, string $configurationExpression): string
