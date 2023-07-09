@@ -14,18 +14,20 @@ final class Mount
         return $this->source;
     }
 
-    public function setSource(string $source): void
-    {
-        $this->source = $source;
-    }
-
     public function getTarget(): string
     {
         return $this->target;
     }
 
+    /** @internal */
     public function setTarget(string $target): void
     {
         $this->target = $target;
+    }
+
+    /** @internal */
+    public function setSource(string $source): void
+    {
+        $this->source = $source;
     }
 }

@@ -17,7 +17,7 @@ final class RestartServiceCommand implements AsyncCommandInterface
     public function __construct(
         string $masterName,
         string $instanceName,
-        ?int $index
+        ?int $index,
     ) {
         $this->masterName = $masterName;
         $this->instanceName = $instanceName;

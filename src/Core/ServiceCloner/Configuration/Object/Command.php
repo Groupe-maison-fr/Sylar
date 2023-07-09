@@ -11,13 +11,12 @@ final class Command
     private string $name;
 
     /**
-     * @var string[]|ArrayCollection
+     * @var string[]
      */
-    private ArrayCollection $subCommands;
+    private array $subCommands = [];
 
     public function __construct()
     {
-        $this->subCommands = new ArrayCollection();
     }
 
     public function getName(): string
@@ -25,26 +24,28 @@ final class Command
         return $this->name;
     }
 
+    public function addSubCommand(string $command): void
+    {
+        $this->subCommands[] = $command;
+    }
+
+    /**
+     * @return ArrayCollection<string>
+     */
+    public function getSubCommands(): ArrayCollection
+    {
+        return new ArrayCollection($this->subCommands);
+    }
+
+    /** @internal */
     public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    public function addSubCommand(string $command): void
+    /** @internal */
+    public function setSubCommands(array $subCommands): void
     {
-        $this->subCommands->add($command);
-    }
-
-    public function removeSubCommand(string $command): void
-    {
-        $this->subCommands->remove($command);
-    }
-
-    /**
-     * @return string[]|ArrayCollection
-     */
-    public function getSubCommands(): ArrayCollection
-    {
-        return $this->subCommands;
+        $this->subCommands = $subCommands;
     }
 }

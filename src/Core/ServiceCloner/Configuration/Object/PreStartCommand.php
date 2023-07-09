@@ -11,13 +11,12 @@ final class PreStartCommand
     private string $executionEnvironment;
 
     /**
-     * @var string[]|ArrayCollection
+     * @var string[]
      */
-    private $command;
+    private array $command = [];
 
     public function __construct()
     {
-        $this->command = new ArrayCollection();
     }
 
     public function getExecutionEnvironment(): string
@@ -25,26 +24,23 @@ final class PreStartCommand
         return $this->executionEnvironment;
     }
 
+    /**
+     * @return ArrayCollection<string>
+     */
+    public function getCommand(): ArrayCollection
+    {
+        return new ArrayCollection($this->command);
+    }
+
+    /** @internal */
     public function setExecutionEnvironment(string $executionEnvironment): void
     {
         $this->executionEnvironment = $executionEnvironment;
     }
 
-    public function addCommand(string $command): void
+    /** @internal */
+    public function setCommand(array $command): void
     {
-        $this->command[] = $command;
-    }
-
-    /**
-     * @return string[]|ArrayCollection
-     */
-    public function getCommand(): ArrayCollection
-    {
-        return $this->command;
-    }
-
-    public function removeCommand(string $command): void
-    {
-        $this->command->removeElement($command);
+        $this->command = $command;
     }
 }

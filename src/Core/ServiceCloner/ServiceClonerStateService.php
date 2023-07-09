@@ -30,7 +30,7 @@ final class ServiceClonerStateService implements ServiceClonerStateServiceInterf
         ConfigurationServiceInterface $configurationService,
         ServiceClonerNamingServiceInterface $serviceClonerNamingService,
         ContainerFinderServiceInterface $containerFinderService,
-        ContainerLabelServiceInterface $containerLabelService
+        ContainerLabelServiceInterface $containerLabelService,
     ) {
         $this->zfsService = $zfs;
         $this->logger = $logger;
@@ -65,27 +65,27 @@ final class ServiceClonerStateService implements ServiceClonerStateServiceInterf
             $this->serviceClonerNamingService->getFullName(
                 $serviceClonerStatusDTO->getMasterName(),
                 $serviceClonerStatusDTO->getInstanceName(),
-                '-'
-            )
+                '-',
+            ),
         );
 
         if ($this->zfsService->hasFilesystem($zfsFilesystemPath)) {
             $serviceClonerStatusDTO->setZfsFilesystem(
-                $this->zfsService->getFilesystem($zfsFilesystemPath)
+                $this->zfsService->getFilesystem($zfsFilesystemPath),
             );
         }
 
         $dockerName = $this->serviceClonerNamingService->getDockerName(
             $serviceClonerStatusDTO->getMasterName(),
-            $serviceClonerStatusDTO->getInstanceName()
+            $serviceClonerStatusDTO->getInstanceName(),
         );
 
         $serviceClonerStatusDTO->setDockerState(
-            $this->dockerStateService->dockerState($dockerName)
+            $this->dockerStateService->dockerState($dockerName),
         );
 
         $serviceClonerStatusDTO->setExposedPorts(
-            $this->dockerStateService->dockerExposedPorts($dockerName)
+            $this->dockerStateService->dockerExposedPorts($dockerName),
         );
 
         return $serviceClonerStatusDTO;
@@ -97,11 +97,11 @@ final class ServiceClonerStateService implements ServiceClonerStateServiceInterf
             array_values(
                 array_map(
                     fn (string $dockerName) => $this->refreshState(ServiceClonerStatusDTO::createFromArray(
-                        $this->containerLabelService->getDockerLabelsByName($dockerName)
+                        $this->containerLabelService->getDockerLabelsByName($dockerName),
                     )),
-                    $this->containerFinderService->getDockersByLabel('launcher', 'sylar')
-                )
-            )
+                    $this->containerFinderService->getDockersByLabel('launcher', 'sylar'),
+                ),
+            ),
         );
         usort($states, function (ServiceClonerStatusDTO $stateA, ServiceClonerStatusDTO $stateB) {
             if ($stateA->getContainerName() === $stateB->getContainerName()) {
@@ -123,7 +123,7 @@ final class ServiceClonerStateService implements ServiceClonerStateServiceInterf
             $this->serviceClonerNamingService->getDockerName($masterName, $instanceName),
             $this->serviceClonerNamingService->getZfsFilesystemName($masterName, $instanceName),
             $this->serviceClonerNamingService->getZfsFilesystemPath($masterName, $instanceName),
-            time()
+            time(),
         );
     }
 

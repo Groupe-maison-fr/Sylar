@@ -20,31 +20,27 @@ final class Service
     private $lifeCycleHooks;
 
     /**
-     * @var ArrayCollection<Environment>
+     * @var Environment[]
      */
-    private $environments;
+    private array $environments = [];
 
     /**
-     * @var ArrayCollection<Mount>
+     * @var Mount[]
      */
-    private $mounts;
+    private array $mounts = [];
 
     /**
-     * @var ArrayCollection<Port>
+     * @var Port[]
      */
-    private $ports;
+    private array $ports = [];
 
     /**
-     * @var ArrayCollection<Label>
+     * @var Label[]
      */
-    private $labels;
+    private array $labels = [];
 
     public function __construct()
     {
-        $this->environments = new ArrayCollection();
-        $this->mounts = new ArrayCollection();
-        $this->ports = new ArrayCollection();
-        $this->labels = new ArrayCollection();
     }
 
     public function getLifeCycleHooks(): ?LifeCycleHooks
@@ -52,19 +48,9 @@ final class Service
         return $this->lifeCycleHooks;
     }
 
-    public function setLifeCycleHooks(?LifeCycleHooks $lifeCycleHooks): void
-    {
-        $this->lifeCycleHooks = $lifeCycleHooks;
-    }
-
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
     }
 
     public function getImage(): string
@@ -72,19 +58,9 @@ final class Service
         return $this->image;
     }
 
-    public function setImage(string $image): void
-    {
-        $this->image = $image;
-    }
-
     public function getCommand(): ?string
     {
         return $this->command;
-    }
-
-    public function setCommand(?string $command): void
-    {
-        $this->command = $command;
     }
 
     public function getEntryPoint(): ?string
@@ -92,24 +68,9 @@ final class Service
         return $this->entryPoint;
     }
 
-    public function setEntryPoint(?string $entryPoint): void
-    {
-        $this->entryPoint = $entryPoint;
-    }
-
     public function getNetworkMode(): ?string
     {
         return $this->networkMode;
-    }
-
-    public function setNetworkMode(?string $networkMode): void
-    {
-        $this->networkMode = $networkMode;
-    }
-
-    public function addEnvironment(Environment $environment): void
-    {
-        $this->environments[] = $environment;
     }
 
     /**
@@ -117,17 +78,7 @@ final class Service
      */
     public function getEnvironments(): ArrayCollection
     {
-        return $this->environments;
-    }
-
-    public function removeEnvironment(Environment $environment): void
-    {
-        $this->environments->removeElement($environment);
-    }
-
-    public function addMount(Mount $mount): void
-    {
-        $this->mounts[] = $mount;
+        return new ArrayCollection($this->environments);
     }
 
     /**
@@ -135,17 +86,7 @@ final class Service
      */
     public function getMounts(): ArrayCollection
     {
-        return $this->mounts;
-    }
-
-    public function removeMount(Mount $mount): void
-    {
-        $this->mounts->removeElement($mount);
-    }
-
-    public function addPort(Port $port): void
-    {
-        $this->ports[] = $port;
+        return new ArrayCollection($this->mounts);
     }
 
     /**
@@ -153,12 +94,7 @@ final class Service
      */
     public function getPorts(): ArrayCollection
     {
-        return $this->ports;
-    }
-
-    public function removePort(Port $port): void
-    {
-        $this->ports->removeElement($port);
+        return new ArrayCollection($this->ports);
     }
 
     public function addLabel(Label $Label): void
@@ -171,11 +107,66 @@ final class Service
      */
     public function getLabels(): ArrayCollection
     {
-        return $this->labels;
+        return new ArrayCollection($this->labels);
     }
 
-    public function removeLabel(Label $Label): void
+    /** @internal */
+    public function setLifeCycleHooks(?LifeCycleHooks $lifeCycleHooks): void
     {
-        $this->labels->removeElement($Label);
+        $this->lifeCycleHooks = $lifeCycleHooks;
+    }
+
+    /** @internal */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /** @internal */
+    public function setImage(string $image): void
+    {
+        $this->image = $image;
+    }
+
+    /** @internal */
+    public function setCommand(?string $command): void
+    {
+        $this->command = $command;
+    }
+
+    /** @internal */
+    public function setEntryPoint(?string $entryPoint): void
+    {
+        $this->entryPoint = $entryPoint;
+    }
+
+    /** @internal */
+    public function setNetworkMode(?string $networkMode): void
+    {
+        $this->networkMode = $networkMode;
+    }
+
+    /** @internal */
+    public function setEnvironments(array $environments): void
+    {
+        $this->environments = $environments;
+    }
+
+    /** @internal */
+    public function setMounts(array $mounts): void
+    {
+        $this->mounts = $mounts;
+    }
+
+    /** @internal */
+    public function setPorts(array $ports): void
+    {
+        $this->ports = $ports;
+    }
+
+    /** @internal */
+    public function setLabels(array $labels): void
+    {
+        $this->labels = $labels;
     }
 }

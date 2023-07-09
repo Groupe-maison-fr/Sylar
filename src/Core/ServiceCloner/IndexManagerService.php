@@ -9,7 +9,7 @@ final class IndexManagerService implements IndexManagerServiceInterface
     private ServiceClonerStateServiceInterface $serviceClonerStateService;
 
     public function __construct(
-        ServiceClonerStateServiceInterface $serviceClonerStateService
+        ServiceClonerStateServiceInterface $serviceClonerStateService,
     ) {
         $this->serviceClonerStateService = $serviceClonerStateService;
     }

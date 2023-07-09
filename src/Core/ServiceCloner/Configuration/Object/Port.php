@@ -15,19 +15,9 @@ final class Port
         return $this->containerPort;
     }
 
-    public function setContainerPort(string $containerPort): void
-    {
-        $this->containerPort = $containerPort;
-    }
-
     public function getHostPort(): string
     {
         return $this->hostPort;
-    }
-
-    public function setHostPort(string $hostPort): void
-    {
-        $this->hostPort = $hostPort;
     }
 
     public function getHostIp(): ?string
@@ -35,6 +25,19 @@ final class Port
         return $this->hostIp;
     }
 
+    /** @internal */
+    public function setContainerPort(string $containerPort): void
+    {
+        $this->containerPort = $containerPort;
+    }
+
+    /** @internal */
+    public function setHostPort(string $hostPort): void
+    {
+        $this->hostPort = $hostPort;
+    }
+
+    /** @internal */
     public function setHostIp(?string $hostIp): void
     {
         $this->hostIp = $hostIp;

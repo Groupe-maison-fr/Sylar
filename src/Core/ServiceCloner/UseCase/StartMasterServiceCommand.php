@@ -11,7 +11,7 @@ final class StartMasterServiceCommand implements AsyncCommandInterface
     private string $masterName;
 
     public function __construct(
-        string $masterName
+        string $masterName,
     ) {
         $this->masterName = $masterName;
     }

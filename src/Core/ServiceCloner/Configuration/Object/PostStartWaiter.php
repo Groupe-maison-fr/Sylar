@@ -15,19 +15,9 @@ final class PostStartWaiter
         return $this->type;
     }
 
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
     public function getExpression(): string
     {
         return $this->expression;
-    }
-
-    public function setExpression(string $expression): void
-    {
-        $this->expression = $expression;
     }
 
     public function getTimeout(): int
@@ -35,6 +25,19 @@ final class PostStartWaiter
         return $this->timeout;
     }
 
+    /** @internal */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /** @internal */
+    public function setExpression(string $expression): void
+    {
+        $this->expression = $expression;
+    }
+
+    /** @internal */
     public function setTimeout(int $timeout): void
     {
         $this->timeout = $timeout;

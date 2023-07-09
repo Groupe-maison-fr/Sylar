@@ -28,7 +28,7 @@ final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleH
         ContainerWaitUntilLogServiceInterface $dockerWaitUntilLogService,
         ContainerExecServiceInterface $containerExecService,
         ProcessInterface $process,
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
         $this->dockerWaitUntilLogService = $dockerWaitUntilLogService;
         $this->containerExecService = $containerExecService;
@@ -38,9 +38,7 @@ final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleH
 
     private function processArray(ContainerParameterDTO $containerParameter, ArrayCollection $arguments): array
     {
-        return $arguments->map(function (string $argument) use ($containerParameter) {
-            return $this->configurationExpressionGenerator->generate($containerParameter, $argument);
-        })->toArray();
+        return $arguments->map(fn (string $argument) => $this->configurationExpressionGenerator->generate($containerParameter, $argument))->toArray();
     }
 
     public function preStart(Service $dockerConfiguration, ContainerParameterDTO $containerParameter): void

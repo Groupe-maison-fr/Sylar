@@ -14,18 +14,16 @@ final class ServiceCloner
     private string $configurationRoot;
 
     /**
-     * @var Service[]|ArrayCollection
+     * @var Service[]
      */
-    private $services;
+    private array $services = [];
     /**
-     * @var Command[]|ArrayCollection
+     * @var Command[]
      */
-    private $commands;
+    private array $commands = [];
 
     public function __construct()
     {
-        $this->services = new ArrayCollection();
-        $this->commands = new ArrayCollection();
     }
 
     public function getstateRoot()
@@ -33,19 +31,9 @@ final class ServiceCloner
         return $this->stateRoot;
     }
 
-    public function setstateRoot(string $stateRoot): void
-    {
-        $this->stateRoot = $stateRoot;
-    }
-
     public function getZpoolName()
     {
         return $this->zpoolName;
-    }
-
-    public function setZpoolName(string $zpoolName): void
-    {
-        $this->zpoolName = $zpoolName;
     }
 
     public function getZpoolRoot()
@@ -53,34 +41,17 @@ final class ServiceCloner
         return $this->zpoolRoot;
     }
 
-    public function setZpoolRoot(string $zpoolRoot): void
-    {
-        $this->zpoolRoot = $zpoolRoot;
-    }
-
-    public function addService(Service $service): void
-    {
-        $this->services[] = $service;
-    }
-
-    public function addCommand(Command $command): void
-    {
-        $this->commands[] = $command;
-    }
-
     /**
-     * @return Service[]|ArrayCollection
+     * @return ArrayCollection<Service>
      */
     public function getServices(): ArrayCollection
     {
-        return $this->services;
+        return new ArrayCollection($this->services);
     }
 
     public function getServiceByName(string $name): ?Service
     {
-        $services = $this->services->filter(function (Service $service) use ($name) {
-            return $service->getName() === $name;
-        });
+        $services = $this->getServices()->filter(fn (Service $service) => $service->getName() === $name);
 
         if ($services->isEmpty()) {
             return null;
@@ -89,27 +60,17 @@ final class ServiceCloner
         return $services->first();
     }
 
-    public function removeService(Service $service): void
-    {
-        $this->services->removeElement($service);
-    }
-
     /**
-     * @return Command[]|ArrayCollection
+     * @return ArrayCollection<Command>
      */
     public function getCommands(): ArrayCollection
     {
-        return $this->commands;
-    }
-
-    public function removeCommand(Command $command): void
-    {
-        $this->commands->removeElement($command);
+        return new ArrayCollection($this->commands);
     }
 
     public function getCommandByName(string $name): ?Command
     {
-        $commands = $this->commands->filter(fn (Command $command) => $command->getName() === $name);
+        $commands = $this->getCommands()->filter(fn (Command $command) => $command->getName() === $name);
 
         if ($commands->isEmpty()) {
             return null;
@@ -118,13 +79,44 @@ final class ServiceCloner
         return $commands->first();
     }
 
+    public function getConfigurationRoot(): string
+    {
+        return $this->configurationRoot;
+    }
+
+    /** @internal */
+    public function setstateRoot(string $stateRoot): void
+    {
+        $this->stateRoot = $stateRoot;
+    }
+
+    /** @internal */
+    public function setZpoolName(string $zpoolName): void
+    {
+        $this->zpoolName = $zpoolName;
+    }
+
+    /** @internal */
+    public function setZpoolRoot(string $zpoolRoot): void
+    {
+        $this->zpoolRoot = $zpoolRoot;
+    }
+
+    /** @internal */
     public function setConfigurationRoot(string $configurationRoot): void
     {
         $this->configurationRoot = $configurationRoot;
     }
 
-    public function getConfigurationRoot(): string
+    /** @internal */
+    public function setServices(array $services): void
     {
-        return $this->configurationRoot;
+        $this->services = $services;
+    }
+
+    /** @internal */
+    public function setCommands(array $commands): void
+    {
+        $this->commands = $commands;
     }
 }

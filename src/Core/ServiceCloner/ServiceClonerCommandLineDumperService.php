@@ -29,7 +29,7 @@ final class ServiceClonerCommandLineDumperService
 
     public function __construct(
         ConfigurationServiceInterface $dockerConfiguration,
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
         $this->dockerConfiguration = $dockerConfiguration;
         $this->configurationExpressionGenerator = $configurationExpressionGenerator;
@@ -62,19 +62,19 @@ final class ServiceClonerCommandLineDumperService
                 return sprintf(
                     '--env %s=%s',
                     $this->evaluate($container, $node->getName()),
-                    $this->evaluate($container, $this->evaluate($container, $node->getValue()))
+                    $this->evaluate($container, $this->evaluate($container, $node->getValue())),
                 );
             case $node instanceof Label:
                 return sprintf(
                     '--label %s=%s',
                     $this->evaluate($container, $node->getName()),
-                    $this->evaluate($container, $node->getValue())
+                    $this->evaluate($container, $node->getValue()),
                 );
             case $node instanceof Mount:
                 return sprintf(
                     '--mount type=bind,target=%s,source=%s',
                     $this->evaluate($container, $node->getTarget()),
-                    $this->evaluate($container, $node->getSource())
+                    $this->evaluate($container, $node->getSource()),
                 );
             case $node instanceof Port:
                 return sprintf(

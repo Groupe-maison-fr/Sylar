@@ -27,7 +27,7 @@ final class ServiceClonerStatusDTO
         string $containerName,
         string $zfsFilesystemName,
         string $zfsFilesystemPath,
-        int $createdAt
+        int $createdAt,
     ) {
         $this->masterName = $masterName;
         $this->instanceName = $instanceName;
@@ -36,7 +36,7 @@ final class ServiceClonerStatusDTO
         $this->zfsFilesystemName = $zfsFilesystemName;
         $this->zfsFilesystemPath = $zfsFilesystemPath;
         $this->createdAt = $createdAt;
-        $this->isMaster = $instanceName == 'master';
+        $this->isMaster = $instanceName == ServiceClonerNamingServiceInterface::MASTER_NAME;
         $this->zfsFilesystem = null;
         $this->dockerState = null;
         $this->exposedPorts = [];
@@ -64,7 +64,7 @@ final class ServiceClonerStatusDTO
             $data['sylar-containerName'],
             $data['sylar-zfsFilesystemName'],
             $data['sylar-zfsFilesystemPath'],
-            (int) $data['sylar-createdAt']
+            (int) $data['sylar-createdAt'],
         );
     }
 

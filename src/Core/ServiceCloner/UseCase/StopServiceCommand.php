@@ -14,7 +14,7 @@ final class StopServiceCommand implements AsyncCommandInterface
 
     public function __construct(
         string $masterName,
-        string $instanceName
+        string $instanceName,
     ) {
         $this->masterName = $masterName;
         $this->instanceName = $instanceName;

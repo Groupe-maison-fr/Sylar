@@ -9,102 +9,82 @@ use Doctrine\Common\Collections\ArrayCollection;
 final class LifeCycleHooks
 {
     /**
-     * @var PreStartCommand[]|ArrayCollection
+     * @var PreStartCommand[]
      */
-    private $preStartCommands;
+    private array $preStartCommands = [];
 
     /**
-     * @var PostStartWaiter[]|ArrayCollection
+     * @var PostStartWaiter[]
      */
-    private $postStartWaiters;
+    private array $postStartWaiters = [];
 
     /**
-     * @var PostStartCommand[]|ArrayCollection
+     * @var PostStartCommand[]
      */
-    private $postStartCommands;
+    private array $postStartCommands = [];
 
     /**
-     * @var PostDestroyCommand[]|ArrayCollection
+     * @var PostDestroyCommand[]
      */
-    private $postDestroyCommands;
+    private array $postDestroyCommands = [];
 
     public function __construct()
     {
-        $this->preStartCommands = new ArrayCollection();
-        $this->postStartWaiters = new ArrayCollection();
-        $this->postStartCommands = new ArrayCollection();
-        $this->postDestroyCommands = new ArrayCollection();
-    }
-
-    public function addPreStartCommand(PreStartCommand $preStartCommand): void
-    {
-        $this->preStartCommands[] = $preStartCommand;
     }
 
     /**
-     * @return PreStartCommand[]|ArrayCollection
+     * @return ArrayCollection<PreStartCommand>
      */
     public function getPreStartCommands(): ArrayCollection
     {
-        return $this->preStartCommands;
-    }
-
-    public function removePreStartCommand(PreStartCommand $preStartCommand): void
-    {
-        $this->preStartCommands->removeElement($preStartCommand);
-    }
-
-    public function addPostStartWaiter(PostStartWaiter $postStartWaiter): void
-    {
-        $this->postStartWaiters[] = $postStartWaiter;
+        return new ArrayCollection($this->preStartCommands);
     }
 
     /**
-     * @return PostStartWaiter[]|ArrayCollection
+     * @return ArrayCollection<PostStartWaiter>
      */
     public function getPostStartWaiters(): ArrayCollection
     {
-        return $this->postStartWaiters;
-    }
-
-    public function removePostStartWaiter(PostStartWaiter $postStartWaiter): void
-    {
-        $this->postStartWaiters->removeElement($postStartWaiter);
-    }
-
-    public function addPostStartCommand(PostStartCommand $postStartCommand): void
-    {
-        $this->postStartCommands[] = $postStartCommand;
+        return new ArrayCollection($this->postStartWaiters);
     }
 
     /**
-     * @return PostStartCommand[]|ArrayCollection
+     * @return ArrayCollection<PostStartCommand>
      */
     public function getPostStartCommands(): ArrayCollection
     {
-        return $this->postStartCommands;
-    }
-
-    public function removePostStartCommand(PostStartCommand $postStartCommand): void
-    {
-        $this->postStartCommands->removeElement($postStartCommand);
-    }
-
-    public function addPostDestroyCommand(PostDestroyCommand $postDestroyCommand): void
-    {
-        $this->postDestroyCommands[] = $postDestroyCommand;
+        return new ArrayCollection($this->postStartCommands);
     }
 
     /**
-     * @return PostDestroyCommand[]|ArrayCollection
+     * @return ArrayCollection<PostDestroyCommand>
      */
     public function getPostDestroyCommands(): ArrayCollection
     {
-        return $this->postDestroyCommands;
+        return new ArrayCollection($this->postDestroyCommands);
     }
 
-    public function removePostDestroyCommand(PostDestroyCommand $postDestroyCommand): void
+    /** @internal */
+    public function setPreStartCommands(array $preStartCommands): void
     {
-        $this->postDestroyCommands->removeElement($postDestroyCommand);
+        $this->preStartCommands = $preStartCommands;
+    }
+
+    /** @internal */
+    public function setPostStartWaiters(array $postStartWaiters): void
+    {
+        $this->postStartWaiters = $postStartWaiters;
+    }
+
+    /** @internal */
+    public function setPostStartCommands(array $postStartCommands): void
+    {
+        $this->postStartCommands = $postStartCommands;
+    }
+
+    /** @internal */
+    public function setPostDestroyCommands(array $postDestroyCommands): void
+    {
+        $this->postDestroyCommands = $postDestroyCommands;
     }
 }

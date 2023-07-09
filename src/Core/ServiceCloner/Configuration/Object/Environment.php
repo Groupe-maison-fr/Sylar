@@ -14,16 +14,18 @@ final class Environment
         return $this->name;
     }
 
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
     public function getValue(): string
     {
         return $this->value;
     }
 
+    /** @internal */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /** @internal */
     public function setValue(string $value): void
     {
         $this->value = $value;

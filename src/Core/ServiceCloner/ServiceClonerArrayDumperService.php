@@ -29,7 +29,7 @@ final class ServiceClonerArrayDumperService
 
     public function __construct(
         ConfigurationServiceInterface $dockerConfiguration,
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
         $this->dockerConfiguration = $dockerConfiguration;
         $this->configurationExpressionGenerator = $configurationExpressionGenerator;
@@ -49,12 +49,10 @@ final class ServiceClonerArrayDumperService
         return $this->dumpNode($containerParameter, $this->dockerConfiguration->getConfiguration());
     }
 
-    /**
-     * @return string|array
-     */
-    private function dumpNode(ContainerParameterDTO $containerParameter, $node)
+    private function dumpNode(ContainerParameterDTO $containerParameter, mixed $node): array|string|bool
     {
         switch (true) {
+            case is_bool($node):
             case is_array($node):
             case is_string($node):
                 return $node;
@@ -132,6 +130,6 @@ final class ServiceClonerArrayDumperService
                 ];
         }
 
-        throw new DomainException('Unknown type to map ' . json_encode($node));
+        throw new DomainException(sprintf('Unknown type to map %s', json_encode($node)));
     }
 }

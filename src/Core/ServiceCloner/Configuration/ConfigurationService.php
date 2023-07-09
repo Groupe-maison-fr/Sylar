@@ -27,7 +27,7 @@ final class ConfigurationService implements ConfigurationServiceInterface
     public function __construct(
         string $configurationFilename,
         string $mountedConfigurationPath,
-        string $containerConfigurationPath
+        string $containerConfigurationPath,
     ) {
         $this->configurationFilename = $configurationFilename;
         $this->mountedConfigurationPath = $mountedConfigurationPath;
@@ -45,16 +45,17 @@ final class ConfigurationService implements ConfigurationServiceInterface
                 $processor->processConfiguration(
                     new TreeBuilderConfiguration(),
                     [Yaml::parse(
-                        file_get_contents($this->configurationFilename)
-                    )]
-                ), [
+                        file_get_contents($this->configurationFilename),
+                    )],
+                ),
+                [
                 'configurationRoot' => $this->mountedConfigurationPath,
             ],
-            )
+            ),
         );
     }
 
-    private function getSerializer()
+    private function getSerializer(): Serializer
     {
         return new Serializer([
             new ArrayDenormalizer(),
@@ -62,12 +63,12 @@ final class ConfigurationService implements ConfigurationServiceInterface
             new ObjectNormalizer(
                 new ClassMetadataFactory(
                     new AnnotationLoader(
-                        new AnnotationReader()
-                    )
+                        new AnnotationReader(),
+                    ),
                 ),
                 null,
                 null,
-                new PhpDocExtractor()
+                new PhpDocExtractor(),
             ),
         ], [
             new JsonEncoder(),
@@ -76,17 +77,13 @@ final class ConfigurationService implements ConfigurationServiceInterface
 
     public function createServiceClonerFromArray(array $data): ServiceCloner
     {
-        /** @var ServiceCloner $serviceCloner */
-        $serviceCloner = $this->getSerializer()->denormalize($data, ServiceCloner::class, 'array');
-
-        return $serviceCloner;
+        /** @var ServiceCloner */
+        return $this->getSerializer()->denormalize($data, ServiceCloner::class, 'array');
     }
 
     public function createServiceFromArray(array $data): Service
     {
-        /** @var Service $service */
-        $service = $this->getSerializer()->denormalize($data, Service::class, 'array');
-
-        return $service;
+        /** @var Service */
+        return $this->getSerializer()->denormalize($data, Service::class, 'array');
     }
 }

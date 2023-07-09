@@ -11,7 +11,7 @@ final class ForceDestroyContainerCommand implements AsyncCommandInterface
     private string $name;
 
     public function __construct(
-        string $name
+        string $name,
     ) {
         $this->name = $name;
     }

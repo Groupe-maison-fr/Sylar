@@ -6,6 +6,8 @@ namespace App\Core\ServiceCloner;
 
 interface ServiceClonerNamingServiceInterface
 {
+    public const MASTER_NAME = 'master';
+
     public function getZfsFilesystemName(string $masterName, string $instanceName): string;
 
     public function getZfsFilesystemPath(string $masterName, string $instanceName): string;
