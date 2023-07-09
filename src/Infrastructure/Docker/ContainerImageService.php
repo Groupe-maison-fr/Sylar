@@ -33,10 +33,20 @@ final class ContainerImageService implements ContainerImageServiceInterface
         if ($existingImages === null) {
             return false;
         }
+        $filteredImages = array_filter($existingImages, function (ImageSummary $imageSummary) use ($imageName) {
+            if (str_contains($imageName, ':')) {
+                return in_array($imageName, $imageSummary->getRepoTags());
+            }
+            foreach ($imageSummary->getRepoTags() as $tag) {
+                if (str_starts_with($tag, $imageName . ':')) {
+                    return true;
+                }
+            }
 
-        return count(array_filter($existingImages, function (ImageSummary $imageSummary) use ($imageName) {
-            return in_array($imageName, $imageSummary->getRepoTags());
-        })) > 0;
+            return false;
+        });
+        // $filteredImages = array_map(fn(ImageSummary $image) => implode(',', $image->getRepoTags()), $filteredImages);
+        return count($filteredImages) > 0;
     }
 
     public function pullImage(string $imageName): bool

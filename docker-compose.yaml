@@ -21,6 +21,7 @@ services:
       - loki
       - redis
     environment:
+      - DOCKER_HOST=tcp://docker-socket-proxy:2375
       - APP_ENV=dev
       - APP_SECRET='secretf0rt3st'
       - DATABASE_URL=sqlite:///%kernel.project_dir%/var/app.db

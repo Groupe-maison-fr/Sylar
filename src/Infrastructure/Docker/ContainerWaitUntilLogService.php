@@ -6,9 +6,9 @@ declare(ticks=1);
 namespace App\Infrastructure\Docker;
 
 use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
-use App\Infrastructure\Docker\Endpoint\ContainerLogsUntil;
-use App\Infrastructure\Docker\Stream\DockerRawStreamUntil;
 use Docker\Docker;
+use Docker\Endpoint\ContainerLogsUntil;
+use Docker\Stream\DockerRawStreamUntil;
 use Psr\Log\LoggerInterface;
 
 final class ContainerWaitUntilLogService implements ContainerWaitUntilLogServiceInterface
@@ -33,9 +33,8 @@ final class ContainerWaitUntilLogService implements ContainerWaitUntilLogService
         if ($container === null) {
             return;
         }
-
         /** @var DockerRawStreamUntil $logsStream */
-        $logsStream = $this->docker->executePsr7Endpoint(new ContainerLogsUntil($container->getId(), [
+        $logsStream = $this->docker->executeEndpoint(new ContainerLogsUntil($container->getId(), [
             'stdout' => true,
             'stderr' => true,
             'follow' => true,

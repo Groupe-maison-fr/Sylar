@@ -63,48 +63,47 @@ final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationT
             'ports' => [[
               'hostIp' => '0.0.0.0',
               'hostPort' => '8198/tcp',
-              'containerPort' => '3000/tcp',
+              'containerPort' => '80/tcp',
             ]],
             'mounts' => [[
               'source' => '/tmp',
               'target' => '/app/tmp',
             ]],
         ]);
-
         $this->containerCreationService->createDocker(
             new ContainerParameterDTO(
                 $dockerName,
                 0,
-                '/tmp'
+                '/tmp',
             ),
             $config,
-            ['sylar-label' => '1']
+            ['sylar-label' => '123'],
         );
 
         sleep(2);
-
         /** @var ContainerSummaryItem $containerSummaryItem */
         $containerSummaryItem = $this->containerFinderService->getDockerByName($dockerName);
         self::assertNotNull($containerSummaryItem);
         self::assertSame('unit-test', $containerSummaryItem->getLabels()['environment']);
         self::assertSame('running', $containerSummaryItem->getState());
-        self::assertSame('node /app/mini-webserver.js', $containerSummaryItem->getCommand());
+        self::assertSame('/docker-entrypoint.sh nginx -g \'daemon off;\'', $containerSummaryItem->getCommand());
         self::assertCount(1, $containerSummaryItem->getPorts());
         $port = $containerSummaryItem->getPorts()[0];
         self::assertSame('0.0.0.0', $port->getIP());
         self::assertSame(8198, $port->getPublicPort());
-        self::assertSame(3000, $port->getPrivatePort());
+        self::assertSame(80, $port->getPrivatePort());
         self::assertSame('tcp', $port->getType());
         self::assertArrayHasKey('sylar-label', $containerSummaryItem->getLabels());
-        self::assertSame('1', $containerSummaryItem->getLabels()['sylar-label']);
-//        self::assertSame($dockerName, trim(file_get_contents(sprintf('/tmp/%s', $dockerName))));
-//        self::assertSame($dockerName, trim($this->containerExecService->exec($dockerName, 'cat', '/app/tmp/' . $dockerName)));
-//        $this->containerExecService->exec($dockerName, 'sh', '-c', 'rm /app/tmp/' . $dockerName);
-//        self::assertFalse(file_exists(sprintf('/tmp/%s', $dockerName)));
+        self::assertSame('123', $containerSummaryItem->getLabels()['sylar-label']);
+        $this->containerExecService->exec($dockerName, 'echo ' . $dockerName);
+        //        self::assertSame($dockerName, trim(file_get_contents(sprintf('/tmp/%s', $dockerName))));
+        //        self::assertSame($dockerName, trim($this->containerExecService->exec($dockerName, 'cat', '/app/tmp/' . $dockerName)));
+        //        $this->containerExecService->exec($dockerName, 'sh', '-c', 'rm /app/tmp/' . $dockerName);
+        //        self::assertFalse(file_exists(sprintf('/tmp/%s', $dockerName)));
     }
 
     private function cleanExistingDockers(): void
     {
-        $this->sudoProcess->mayRun('docker', 'rm', '--force', '$(docker ps --filter "label=environment=unit-test" -a --format "{{.ID}}")');
+        $this->sudoProcess->mayRun('bash', '-c', 'docker rm --force $(docker ps --filter "label=environment=unit-test" -a --format "{{.ID}}")');
     }
 }

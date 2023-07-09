@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Docker;
 
-use Docker\Docker;
+use Docker\API\Client;
 
 interface DockerFactoryInterface
 {
-    public function create(string $dockerRemoteSocket): Docker;
+    public function create(string $dockerRemoteSocket = null): Client;
 }
