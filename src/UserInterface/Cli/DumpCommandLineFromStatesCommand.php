@@ -9,11 +9,13 @@ use App\Core\ServiceCloner\ServiceClonerCommandLineDumperService;
 use App\Core\ServiceCloner\ServiceClonerNamingServiceInterface;
 use App\Core\ServiceCloner\ServiceClonerStateServiceInterface;
 use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 
+#[AsCommand('service:dump:command-line-from-state')]
 final class DumpCommandLineFromStatesCommand extends Command
 {
     private ServiceClonerStateServiceInterface $serviceClonerStateService;
@@ -35,11 +37,6 @@ final class DumpCommandLineFromStatesCommand extends Command
         $this->configurationService = $configurationService;
         $this->serviceClonerCommandLineDumperService = $serviceClonerCommandLineDumperService;
         $this->serviceClonerNamingService = $serviceClonerNamingService;
-    }
-
-    protected function configure(): void
-    {
-        $this->setName('service:dump:command-line-from-state');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

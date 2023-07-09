@@ -41,112 +41,112 @@ final class ServiceClonerArrayDumperServiceIntegrationTest extends AbstractInteg
     private function getExpectedLifecycleHooksArray(): array
     {
         return json_decode(<<<EOJ
-            {
-            "configurationRoot": "\/opt\/sylar\/tests\/Core\/ServiceCloneService\/data\/start_master",
-            "stateRoot": "\/app\/data",
-            "zpoolName": "sylar",
-            "zpoolRoot": "\/sylar",
-            "services": [
-                {
-                    "name": "unit-test-mysql-start-master",
-                    "image": "library\/mariadb:10.5.3",
-                    "command": "",
-                    "entryPoint": null,
-                    "networkMode": "n1",
-                    "lifeCycleHooks": {
-                        "preStartCommands": [
+                        {
+                        "configurationRoot": "\/opt\/sylar\/tests\/Core\/ServiceCloneService\/data\/start_master",
+                        "stateRoot": "\/app\/data",
+                        "zpoolName": "sylar",
+                        "zpoolRoot": "\/sylar",
+                        "services": [
                             {
-                                "executionEnvironment": "host",
-                                "command": [
-                                    "ls",
-                                    "\/"
-                                ]
-                            }
-                        ],
-                        "postStartWaiters": [
-                            {
-                                "type": "logMatch",
-                                "expression": "!Server socket created on IP!",
-                                "timeout": 30
-                            }
-                        ],
-                        "postStartCommands": [
-                            {
-                                "executionEnvironment": "host",
-                                "command": [
-                                    "ls",
-                                    "\/"
-                                ]
-                            }
-                        ],
-                        "postDestroyCommands": [
-                            {
-                                "executionEnvironment": "host",
-                                "command": [
-                                    "ls",
-                                    "\/"
+                                "name": "unit-test-mysql-start-master",
+                                "image": "library\/mariadb:10.5.3",
+                                "command": "",
+                                "entryPoint": null,
+                                "networkMode": "n1",
+                                "lifeCycleHooks": {
+                                    "preStartCommands": [
+                                        {
+                                            "executionEnvironment": "host",
+                                            "command": [
+                                                "ls",
+                                                "\/"
+                                            ]
+                                        }
+                                    ],
+                                    "postStartWaiters": [
+                                        {
+                                            "type": "logMatch",
+                                            "expression": "!Server socket created on IP!",
+                                            "timeout": 30
+                                        }
+                                    ],
+                                    "postStartCommands": [
+                                        {
+                                            "executionEnvironment": "host",
+                                            "command": [
+                                                "ls",
+                                                "\/"
+                                            ]
+                                        }
+                                    ],
+                                    "postDestroyCommands": [
+                                        {
+                                            "executionEnvironment": "host",
+                                            "command": [
+                                                "ls",
+                                                "\/"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "environments": [
+                                    {
+                                        "name": "MYSQL_ROOT_PASSWORD",
+                                        "value": "root_password"
+                                    },
+                                    {
+                                        "name": "MYSQL_USER",
+                                        "value": "user"
+                                    },
+                                    {
+                                        "name": "MYSQL_PASSWORD",
+                                        "value": "password"
+                                    },
+                                    {
+                                        "name": "MYSQL_DATABASE",
+                                        "value": "roketto"
+                                    },
+                                    {
+                                        "name": "MYSQL_INITDB_SKIP_TZINFO",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "name": "CLONE_NAME",
+                                        "value": "mysql-test"
+                                    },
+                                    {
+                                        "name": "CLONE_INDEX",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "name": "CLONE_REPLICATED_FILESYSTEM",
+                                        "value": "toto\/tata"
+                                    }
+                                ],
+                                "mounts": [{
+                                    "source": "toto/tata",
+                                    "target": "/var/lib/mysql"
+                                },{
+                                    "source": "/opt/sylar/tests/Core/ServiceCloneService/data/start_master",
+                                    "target": "/app"
+                                },{
+                                    "source": "/opt/sylar/tests/Core/ServiceCloneService/data/start_master/mysql/etc/mysql/conf.d",
+                                    "target": "/etc/mysql/conf.d"
+                                }],
+                                "ports": [{
+                                    "containerPort": "3306/tcp",
+                                    "hostPort": "3406/tcp",
+                                    "hostIp": "0.0.0.0"
+                                }],
+                                "labels": [
+                                    {
+                                        "name": "environment",
+                                        "value": "unit-test"
+                                    }
                                 ]
                             }
                         ]
-                    },
-                    "environments": [
-                        {
-                            "name": "MYSQL_ROOT_PASSWORD",
-                            "value": "root_password"
-                        },
-                        {
-                            "name": "MYSQL_USER",
-                            "value": "user"
-                        },
-                        {
-                            "name": "MYSQL_PASSWORD",
-                            "value": "password"
-                        },
-                        {
-                            "name": "MYSQL_DATABASE",
-                            "value": "roketto"
-                        },
-                        {
-                            "name": "MYSQL_INITDB_SKIP_TZINFO",
-                            "value": "1"
-                        },
-                        {
-                            "name": "CLONE_NAME",
-                            "value": "mysql-test"
-                        },
-                        {
-                            "name": "CLONE_INDEX",
-                            "value": "0"
-                        },
-                        {
-                            "name": "CLONE_REPLICATED_FILESYSTEM",
-                            "value": "toto\/tata"
-                        }
-                    ],
-                    "mounts": [{
-                        "source": "toto/tata",
-                        "target": "/var/lib/mysql"
-                    },{
-                        "source": "/opt/sylar/tests/Core/ServiceCloneService/data/start_master",
-                        "target": "/app"
-                    },{
-                        "source": "/opt/sylar/tests/Core/ServiceCloneService/data/start_master/mysql/etc/mysql/conf.d",
-                        "target": "/etc/mysql/conf.d"
-                    }],
-                    "ports": [{
-                        "containerPort": "3306/tcp",
-                        "hostPort": "3406/tcp",
-                        "hostIp": "0.0.0.0"
-                    }],
-                    "labels": [
-                        {
-                            "name": "environment",
-                            "value": "unit-test"
-                        }
-                    ]
-                }
-            ]
-        }
-EOJ, true);
+                    }
+            EOJ, true);
     }
 }

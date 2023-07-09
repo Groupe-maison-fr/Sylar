@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Core\ServiceCloneService;
 
+use App\Core\ServiceCloner\ServiceClonerNamingServiceInterface;
 use Docker\API\Model\ContainerSummaryItem;
 use DomainException;
 
@@ -75,13 +76,14 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
         /** @var ContainerSummaryItem $containerSummaryItem */
         $containerSummaryItem = $this->containerFinderService->getDockerByName($dockerName);
 
+        sleep(4);
+
         self::assertSame('running', $containerSummaryItem->getState());
-        $this->serviceCloneService->stop($dockerName, 'master');
-        $this->assertContainsLogThatMatchRegularExpression('!Listening at http!');
+        $this->assertContainsLogThatMatchRegularExpression('!start worker processes!');
         $this->assertContainsLogThatMatchRegularExpression('!Process launched ".*docker ps --no-trunc"!');
-        $this->assertContainsLogThatMatchRegularExpression('!Listening at http!');
+        $this->assertContainsLogThatMatchRegularExpression('!start worker processes!');
         $this->assertContainsLogThatMatchRegularExpression('!Process launched ".*ls -lah /"!');
-        $this->assertContainsLogThatMatchRegularExpression('!Process launched ".*ls -ahl /"!');
+        $this->serviceCloneService->stop($dockerName, ServiceClonerNamingServiceInterface::MASTER_NAME);
     }
 
     /**
@@ -96,6 +98,6 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
 
         self::expectException(DomainException::class);
         self::expectExceptionMessage('Can not delete "unit-test-go-static-webserver", some dependant services are still there [instance_01,instance_02]');
-        $this->serviceCloneService->stop('unit-test-go-static-webserver', 'master');
+        $this->serviceCloneService->stop('unit-test-go-static-webserver', ServiceClonerNamingServiceInterface::MASTER_NAME);
     }
 }

@@ -4,6 +4,7 @@ volumes:
   builder-build: {}
   node-modules-builder: {}
   vendor-sylar: {}
+  var-runner: {}
   prometheus-db: {}
   grafana-db: {}
   redis-data: {}
@@ -39,10 +40,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./.docker/runner/etc/ssh/ssh_config:/etc/ssh/ssh_config:ro
       - ./.docker/runner/etc/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf:ro
-      - ./.docker/runner/etc/php/7.4/fpm/pool.d/www.conf:/etc/php/7.4/fpm/pool.d/www.conf:ro
+      - ./.docker/runner/etc/php/8.1/fpm/pool.d/www.conf:/etc/php/8.1/fpm/pool.d/www.conf:ro
       - ./:/app
       - builder-build:/app/public/build
-      - vendor-sylar:/app/vendor
+      - var-runner:/app/var
       - /dev/zfs:/dev/zfs:rw
       - /sylar:/sylar:shared
 

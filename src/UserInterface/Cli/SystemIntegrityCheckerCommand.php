@@ -7,11 +7,13 @@ namespace App\UserInterface\Cli;
 use App\Core\ServiceCloner\UseCase\StartServiceHandler;
 use App\Infrastructure\Process\Process;
 use App\Infrastructure\Process\ProcessInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
+#[AsCommand('system:checker', description: 'System integrity checker')]
 final class SystemIntegrityCheckerCommand extends Command
 {
     private MessageBusInterface $messageBus;
@@ -30,12 +32,6 @@ final class SystemIntegrityCheckerCommand extends Command
         $this->startServiceHandler = $startServiceHandler;
         $this->process = $process;
         $this->localProcess = $localProcess;
-    }
-
-    protected function configure(): void
-    {
-        $this->setName('system:checker')
-            ->setDescription('System integrity checker');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

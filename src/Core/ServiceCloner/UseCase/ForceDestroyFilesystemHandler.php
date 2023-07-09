@@ -7,16 +7,17 @@ namespace App\Core\ServiceCloner\UseCase;
 use App\Infrastructure\Filesystem\FilesystemServiceInterface;
 use App\Infrastructure\ServerSideEvent\ServerSideEventPublisherInterface;
 use Exception;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class ForceDestroyFilesystemHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+final class ForceDestroyFilesystemHandler
 {
     private FilesystemServiceInterface $filesystemService;
     private ServerSideEventPublisherInterface $serverSideEventPublisher;
 
     public function __construct(
         FilesystemServiceInterface $filesystemService,
-        ServerSideEventPublisherInterface $serverSideEventPublisher
+        ServerSideEventPublisherInterface $serverSideEventPublisher,
     ) {
         $this->filesystemService = $filesystemService;
         $this->serverSideEventPublisher = $serverSideEventPublisher;

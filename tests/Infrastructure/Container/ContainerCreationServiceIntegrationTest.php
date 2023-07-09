@@ -48,11 +48,11 @@ final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationT
     public function it_should_create_a_container_from_config(): void
     {
         $dockerName = 'unit-test-' . Uuid::uuid4()->toString();
-//        file_put_contents(sprintf('/tmp/%s', $dockerName), $dockerName);
+        // file_put_contents(sprintf('/tmp/%s', $dockerName), $dockerName);
         $config = $this->configurationService->createServiceFromArray([
             'name' => 'mini-webserver',
-            'image' => 'tobilg/mini-webserver:0.5.1',
-            'environment' => [[
+            'image' => 'nginx',
+            'environments' => [[
               'name' => 'ENV_VARIABLE_1',
               'value' => 'ENV_VALUE_1',
             ]],

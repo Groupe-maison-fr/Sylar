@@ -18,7 +18,6 @@ final class TreeBuilderConfiguration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('serviceCloner');
 
-        /* @phpstan-ignore-next-line */
         $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('stateRoot')

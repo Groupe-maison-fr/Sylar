@@ -36,11 +36,9 @@ services:
          - '../../src/**/*DTO.php'
          - '../../src/**/*Exception.php'
          - '../../src/**/*Command.php'
-         - '../../src/Infrastructure/Docker/Endpoint/ContainerLogsUntil.php'
-         - '../../src/Infrastructure/Docker/Stream/DockerRawStreamUntil.php'
 
     App\UserInterface\Cli\:
-        resource: '../../src/UserInterface/Cli/**'
+        resource: '../../src/UserInterface/Cli/**Command.php'
         tags: ['console.command']
 
     docker.readwrite:
@@ -53,8 +51,7 @@ services:
         class: Docker\Docker
         factory: ['@App\Infrastructure\Docker\DockerFactory', 'create']
         arguments:
-#            $dockerRemoteSocket: 'unix:///var/run/docker.sock'
-            $dockerRemoteSocket: 'tcp://docker-socket-proxy:2375'
+            $dockerRemoteSocket: 'http://docker-socket-proxy:2375'
 
     App\UserInterface\GraphQL\ResolverMap\:
         resource: '%kernel.project_dir%/src/UserInterface/GraphQL/ResolverMap'

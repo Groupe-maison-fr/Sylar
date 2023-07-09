@@ -1,14 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\Common\Tests;
 
 use App\Common\Tests\LoggerAwareTestTrait;
+use Monolog\LogRecord;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use Symfony\Bridge\Monolog\Logger;
 
+/**
+ * @internal
+ */
 final class LoggerAwareTestTraitUnitTest extends TestCase
 {
     use LoggerAwareTestTrait;
@@ -18,7 +23,7 @@ final class LoggerAwareTestTraitUnitTest extends TestCase
      */
     private $logger;
 
-    public function setUp():void
+    protected function setUp(): void
     {
         $this->logger = new Logger('base');
         $this->initLoggerBufferedHandler($this->logger);
@@ -27,22 +32,24 @@ final class LoggerAwareTestTraitUnitTest extends TestCase
     /**
      * @test
      */
-    public function it_should_store_all_logs(){
+    public function it_should_store_all_logs(): void
+    {
         $this->logger->info('test_info');
         $this->logger->error('test_error');
         $this->logger->notice('test_notice');
 
-        $this->assertCount(3,$this->getBufferedLogs());
+        self::assertCount(3, $this->getBufferedLogs());
         $this->resetBufferedLoggerHandler();
 
         $this->logger->notice('test_notice1');
-        $this->assertCount(1,$this->getBufferedLogs());
+        self::assertCount(1, $this->getBufferedLogs());
     }
 
     /**
      * @test
      */
-    public function it_should_find_string_in_logs(){
+    public function it_should_find_string_in_logs(): void
+    {
         $this->logger->info('test_info');
         $this->logger->error('test_error');
         $this->logger->notice('test_notice');
@@ -54,7 +61,8 @@ final class LoggerAwareTestTraitUnitTest extends TestCase
     /**
      * @test
      */
-    public function it_should_not_find_string_in_logs(){
+    public function it_should_not_find_string_in_logs(): void
+    {
         $this->logger->info('test_info');
         $this->logger->error('test_error');
         $this->logger->notice('test_notice');
@@ -64,7 +72,8 @@ final class LoggerAwareTestTraitUnitTest extends TestCase
     /**
      * @test
      */
-    public function it_should_raise_error_when_does_not_found_string_in_logs(){
+    public function it_should_raise_error_when_does_not_found_string_in_logs(): void
+    {
         $this->logger->info('test_info');
         $this->logger->error('test_error');
         $this->logger->notice('test_notice');
@@ -75,7 +84,8 @@ final class LoggerAwareTestTraitUnitTest extends TestCase
     /**
      * @test
      */
-    public function it_should_not_not_find_string_in_logs(){
+    public function it_should_not_not_find_string_in_logs(): void
+    {
         $this->logger->info('test_info');
         $this->logger->error('test_error');
         $this->logger->notice('test_notice');
@@ -86,7 +96,8 @@ final class LoggerAwareTestTraitUnitTest extends TestCase
     /**
      * @test
      */
-    public function it_should_found_substring_in_logs(){
+    public function it_should_found_substring_in_logs(): void
+    {
         $this->logger->info('a test_info in logs');
         $this->logger->error('a test_error in logs');
         $this->logger->notice('a test_notice in logs');
@@ -100,7 +111,8 @@ final class LoggerAwareTestTraitUnitTest extends TestCase
     /**
      * @test
      */
-    public function it_should_not_found_substring_in_logs(){
+    public function it_should_not_found_substring_in_logs(): void
+    {
         $this->logger->info('a test_info in logs');
         $this->logger->error('a test_error in logs');
         $this->logger->notice('a test_notice in logs');
@@ -111,7 +123,8 @@ final class LoggerAwareTestTraitUnitTest extends TestCase
     /**
      * @test
      */
-    public function it_should_raise_error_when_does_not_found_substring_in_logs(){
+    public function it_should_raise_error_when_does_not_found_substring_in_logs(): void
+    {
         $this->logger->info('test_info');
         $this->logger->error('test_error');
         $this->logger->notice('test_notice');
@@ -122,7 +135,8 @@ final class LoggerAwareTestTraitUnitTest extends TestCase
     /**
      * @test
      */
-    public function it_should_not_raise_error_when_does_not_found_substring_in_logs(){
+    public function it_should_not_raise_error_when_does_not_found_substring_in_logs(): void
+    {
         $this->logger->info('test_info');
         $this->logger->error('test_error');
         $this->logger->notice('test_notice');
@@ -132,30 +146,25 @@ final class LoggerAwareTestTraitUnitTest extends TestCase
     /**
      * @test
      */
-    public function it_should_found_in_logs_when_using_callable(){
+    public function it_should_found_in_logs_when_using_callable(): void
+    {
         $this->logger->info('test_info');
         $this->logger->error('test_error');
         $this->logger->notice('test_notice');
-        $this->assertContainsLog(function(array $logElement){
-            return $logElement['level_name']===strtoupper(LogLevel::ERROR);
-        });
+        $this->assertContainsLog(fn (LogRecord $logElement) => strtoupper($logElement->level->name) === strtoupper(LogLevel::ERROR));
 
         self::expectException(ExpectationFailedException::class);
-        $this->assertContainsLog(function(array $logElement){
-            return $logElement['level_name']===strtoupper(LogLevel::WARNING);
-        });
+        $this->assertContainsLog(fn (LogRecord $logElement) => strtoupper($logElement->level->name) === strtoupper(LogLevel::WARNING));
     }
 
     /**
      * @test
      */
-    public function it_should_not_found_in_logs_when_using_callable(){
+    public function it_should_not_found_in_logs_when_using_callable(): void
+    {
         $this->logger->info('test_info');
         $this->logger->error('test_error');
         $this->logger->notice('test_notice');
-        $this->assertNotContainsLog(function(array $logElement){
-            return $logElement['level_name']===strtoupper(LogLevel::WARNING);
-        });
+        $this->assertNotContainsLog(fn (LogRecord $logElement) => strtoupper($logElement->level->name) === strtoupper(LogLevel::WARNING));
     }
-
 }

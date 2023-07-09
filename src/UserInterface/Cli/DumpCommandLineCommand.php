@@ -6,12 +6,14 @@ namespace App\UserInterface\Cli;
 
 use App\Core\ServiceCloner\ServiceClonerCommandLineDumperService;
 use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 
+#[AsCommand('service:dump:command-line')]
 final class DumpCommandLineCommand extends Command
 {
     private const ARGUMENT_SERVICE_NAME = 'serviceName';
@@ -29,21 +31,21 @@ final class DumpCommandLineCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('service:dump:command-line')
+        $this
             ->addArgument(
                 self::ARGUMENT_SERVICE_NAME,
                 InputArgument::REQUIRED,
-                'Service name'
+                'Service name',
             )
             ->addArgument(
                 self::ARGUMENT_INSTANCE_INDEX,
                 InputArgument::REQUIRED,
-                'Instance index'
+                'Instance index',
             )
             ->addArgument(
                 self::ARGUMENT_REPLICA_FILESYSTEM_PATH,
                 InputArgument::REQUIRED,
-                'Replica filesystem pmath'
+                'Replica filesystem pmath',
             );
     }
 

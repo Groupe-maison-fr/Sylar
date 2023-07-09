@@ -3,7 +3,7 @@ zpoolName: 'sylar'
 zpoolRoot: '/sylar'
 services:
   - name: unit-test-go-static-webserver
-    image: 'pierrezemb/gostatic:latest'
+    image: 'nginx'
     labels:
       - name: environment
         value: unit-test

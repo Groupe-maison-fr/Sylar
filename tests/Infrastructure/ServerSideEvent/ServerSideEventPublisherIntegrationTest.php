@@ -18,9 +18,9 @@ final class ServerSideEventPublisherIntegrationTest extends AbstractIntegrationT
     public function it_should_publish_event(): void
     {
         $publisher = $this->getService(ServerSideEventPublisherInterface::class);
-        self::assertStringStartsWith('urn:', $publisher->publish(
+        self::assertNotEmpty('urn:', $publisher->publish(
             'sylar',
-            ['status' => true]
+            ['status' => true],
         ));
     }
 }

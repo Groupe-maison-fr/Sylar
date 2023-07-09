@@ -6,13 +6,6 @@
 /public/bundles/
 /var/
 /vendor/
-bin/box
-/build
-!/build/.gitignore
-.vagrant
-.vboxhdd/
-/node_modules
-provisioning/roles/namiops.fish_shell/
 ###< symfony/framework-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###
@@ -45,3 +38,6 @@ provisioning/slow_query.log
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+mutagen.yml
+mutagen.yml.lock

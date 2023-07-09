@@ -6,12 +6,14 @@ namespace App\UserInterface\Cli;
 
 use App\Core\ServiceCloner\Exception\StopServiceException;
 use App\Core\ServiceCloner\UseCase\StopServiceCommand as StopServiceBusCommand;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
+#[AsCommand('service:stop', description: 'Stop a replicated service')]
 final class StopServiceCommand extends Command
 {
     private const ARGUMENT_SERVICE_NAME = 'serviceName';
@@ -28,17 +30,16 @@ final class StopServiceCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('service:stop')
-            ->setDescription('generate a dataset based on parameters')
+        $this
             ->addArgument(
                 self::ARGUMENT_SERVICE_NAME,
                 InputArgument::REQUIRED,
-                'Service name'
+                'Service name',
             )
             ->addArgument(
                 self::ARGUMENT_INSTANCE_NAME,
                 InputArgument::REQUIRED,
-                'Instance name'
+                'Instance name',
             );
     }
 

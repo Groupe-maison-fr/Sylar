@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Core\ServiceCloner\UseCase;
 
 use App\Core\ServiceCloner\ServiceClonerServiceInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class StopServiceHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+final class StopServiceHandler
 {
     private ServiceClonerServiceInterface $serviceClonerService;
 
     public function __construct(
-        ServiceClonerServiceInterface $serviceClonerService
+        ServiceClonerServiceInterface $serviceClonerService,
     ) {
         $this->serviceClonerService = $serviceClonerService;
     }
@@ -21,7 +22,7 @@ final class StopServiceHandler implements MessageHandlerInterface
     {
         $this->serviceClonerService->stop(
             $stopServiceCommand->getMasterName(),
-            $stopServiceCommand->getInstanceName()
+            $stopServiceCommand->getInstanceName(),
         );
     }
 }

@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
-        '@PHP71Migration:risky' => true,
+        '@PHP80Migration' => true,
+        '@PHP80Migration:risky' => true,
         'declare_strict_types' => true,
         'phpdoc_align' => false,
         'phpdoc_summary' => false,
+        'phpdoc_to_comment' => false,
         'concat_space' => ['spacing' => 'one'],
-        'no_multiline_whitespace_before_semicolons' => true,
+        'multiline_whitespace_before_semicolons' => false,
         'no_useless_else' => true,
         'no_useless_return' => true,
         'ordered_imports' => [
@@ -20,31 +22,38 @@ return PhpCsFixer\Config::create()
         ],
         'phpdoc_order' => true,
         'array_syntax' => ['syntax' => 'short'],
-        'no_short_echo_tag' => true,
-        'php_unit_test_annotation' => [
-            'style' => 'annotation',
-        ],
-        'php_unit_method_casing' => ['case' => 'snake_case'],
+        'echo_tag_syntax' => ['format' => 'long'],
+        'php_unit_method_casing' => false,
         'php_unit_set_up_tear_down_visibility' => true,
         'php_unit_internal_class' => true,
         'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
-        'final_internal_class' => true,
-        'pre_increment' => false,
+        'final_internal_class' => false,
+        'increment_style' => ['style' => 'pre'],
         'return_type_declaration' => ['space_before' => 'none'],
+        'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters']],
+        'global_namespace_import' => ['import_classes' => true, 'import_constants' => false, 'import_functions' => false],
         'void_return' => true,
         'yoda_style' => [
             'equal' => false,
             'identical' => false,
         ],
         'class_definition' => [
-            'multiLineExtendsEachSingleLine' => true,
+            'multi_line_extends_each_single_line' => true,
         ],
         'single_line_throw' => false,
+        'compact_nullable_typehint' => true,
     ])
     ->setCacheFile('/tmp/backend.php_cs.cache')
     ->setFinder(
         PhpCsFixer\Finder::create()
-            ->in([__DIR__ . '/src', __DIR__ . '/tests', __DIR__ . '/config', __DIR__ . '/tests'])
-            ->exclude([])
+            ->in([
+                __DIR__ . '/src',
+                __DIR__ . '/lib',
+                __DIR__ . '/tests',
+                __DIR__ . '/config',
+            ])
+            ->exclude([
+                __DIR__ . 'var',
+            ])
             ->name('*.php')
     );

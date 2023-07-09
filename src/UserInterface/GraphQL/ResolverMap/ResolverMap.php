@@ -28,7 +28,7 @@ final class ResolverMap extends ResolverMapParent
         return null;
     }
 
-    protected function map()
+    protected function map(): mixed
     {
         return [
             'StartServiceOutput' => [

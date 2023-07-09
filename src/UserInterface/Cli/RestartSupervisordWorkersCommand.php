@@ -10,14 +10,14 @@ use GuzzleHttp\Client as GuzzleHttpClient;
 use Http\Adapter\Guzzle7\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Supervisor\Supervisor;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand('tools:restart-worker', description: 'restart supervisord process')]
 final class RestartSupervisordWorkersCommand extends Command
 {
-    public const TOOLS_RESTART_WORKER_COMMAND = 'tools:restart-worker';
-
     private Supervisor $supervisor;
 
     public function __construct(
@@ -32,14 +32,9 @@ final class RestartSupervisordWorkersCommand extends Command
                 new GuzzleMessageFactory(),
                 new Client(new GuzzleHttpClient([
                     'auth' => [$supervisordUser, $supervisordPassword],
-                ]))
-            )));
-    }
-
-    protected function configure(): void
-    {
-        $this->setName(self::TOOLS_RESTART_WORKER_COMMAND)
-            ->setDescription('restart supervisord process');
+                ])),
+            ),
+        ));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

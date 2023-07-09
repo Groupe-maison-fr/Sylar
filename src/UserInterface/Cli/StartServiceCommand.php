@@ -6,12 +6,14 @@ namespace App\UserInterface\Cli;
 
 use App\Core\ServiceCloner\Exception\StartServiceException;
 use App\Core\ServiceCloner\UseCase\StartServiceCommand as StartServiceBusCommand;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
+#[AsCommand('service:start', description: 'Start a replicated service')]
 final class StartServiceCommand extends Command
 {
     private const ARGUMENT_SERVICE_NAME = 'serviceName';
@@ -29,22 +31,21 @@ final class StartServiceCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('service:start')
-            ->setDescription('generate a dataset based on parameters')
+        $this
             ->addArgument(
                 self::ARGUMENT_SERVICE_NAME,
                 InputArgument::REQUIRED,
-                'Service name'
+                'Service name',
             )
             ->addArgument(
                 self::ARGUMENT_INSTANCE_NAME,
                 InputArgument::REQUIRED,
-                'Instance name'
+                'Instance name',
             )
             ->addArgument(
                 self::ARGUMENT_INSTANCE_INDEX,
                 InputArgument::OPTIONAL,
-                'Instance index'
+                'Instance index',
             );
     }
 

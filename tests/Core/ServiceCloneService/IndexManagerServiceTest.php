@@ -7,6 +7,7 @@ namespace Tests\Core\ServiceCloneService;
 use App\Core\ServiceCloner\IndexManagerService;
 use App\Core\ServiceCloner\ServiceClonerStateServiceInterface;
 use App\Core\ServiceCloner\ServiceClonerStatusDTO;
+use Mockery;
 use Tests\AbstractIntegrationTest;
 
 /**
@@ -16,11 +17,12 @@ final class IndexManagerServiceTest extends AbstractIntegrationTest
 {
     /**
      * @test
+     *
      * @dataProvider it_should_get_next_available_index_data
      */
     public function it_should_get_next_available_index(int $expectedIndex, array $usedIndexes): void
     {
-        $serviceClonerStateServiceInterface = \Mockery::mock(ServiceClonerStateServiceInterface::class);
+        $serviceClonerStateServiceInterface = Mockery::mock(ServiceClonerStateServiceInterface::class);
         $indexManagerService = new IndexManagerService($serviceClonerStateServiceInterface);
         $serviceClonerStateServiceInterface
             ->shouldReceive('getStates')
@@ -31,7 +33,7 @@ final class IndexManagerServiceTest extends AbstractIntegrationTest
                 '',
                 '',
                 '',
-                0
+                0,
             ), $usedIndexes));
         self::assertSame($expectedIndex, $indexManagerService->getNextAvailable());
     }

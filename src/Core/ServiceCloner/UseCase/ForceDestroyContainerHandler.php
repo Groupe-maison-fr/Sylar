@@ -8,9 +8,10 @@ use App\Infrastructure\Docker\ContainerDeleteServiceInterface;
 use App\Infrastructure\Docker\ContainerStopServiceInterface;
 use App\Infrastructure\ServerSideEvent\ServerSideEventPublisherInterface;
 use Exception;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class ForceDestroyContainerHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+final class ForceDestroyContainerHandler
 {
     private ContainerStopServiceInterface $containerStopService;
     private ServerSideEventPublisherInterface $serverSideEventPublisher;
@@ -19,7 +20,7 @@ final class ForceDestroyContainerHandler implements MessageHandlerInterface
     public function __construct(
         ContainerStopServiceInterface $containerStopService,
         ContainerDeleteServiceInterface $containerDeleteService,
-        ServerSideEventPublisherInterface $serverSideEventPublisher
+        ServerSideEventPublisherInterface $serverSideEventPublisher,
     ) {
         $this->containerStopService = $containerStopService;
         $this->containerDeleteService = $containerDeleteService;

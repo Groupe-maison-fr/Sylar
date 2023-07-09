@@ -22,11 +22,11 @@ interface FilesystemServiceInterface
 
     public function getSnapshots(): FilesystemCollection;
 
-    public function getSnapshot(string $name, ?string $instance = null): ?FilesystemDTO;
+    public function getSnapshot(string $name, string $instance = null): ?FilesystemDTO;
 
     public function hasSnapshot(string $name, string $instance): bool;
 
-    public function cloneSnapshot(string $name, string $snap, ?string $mountPoint = null): void;
+    public function cloneSnapshot(string $name, string $snap, string $mountPoint = null): void;
 
     public function getClones(string $name, string $snap): FilesystemCollection;
 

@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Common\Tests;
 
+use Monolog\LogRecord;
 use Symfony\Bridge\Monolog\Logger;
 
 trait LoggerAwareTestTrait
@@ -28,40 +30,33 @@ trait LoggerAwareTestTrait
         $logger->pushHandler($this->bufferedLoggerHandler);
     }
 
-    protected function assertContainsLog(callable $test, string $message=''){
-        self::assertNotEmpty(array_filter($this->bufferedLoggerHandler->getLogs(),$test),$message);
-    }
-
-    protected function assertNotContainsLog(callable $test, string $message=''){
-        self::assertEmpty(array_filter($this->bufferedLoggerHandler->getLogs(),$test),$message);
-    }
-
-    protected function assertContainsLogWithSameMessage(string $needle, string $message = '')
+    protected function assertContainsLog(callable $test, string $message = ''): void
     {
-        $this->assertContainsLog(function (array $logElement) use ($needle) {
-            return $logElement['message'] === $needle;
-        }, $message);
+        self::assertNotEmpty(array_filter($this->bufferedLoggerHandler->getLogs(), $test), $message);
     }
 
-    protected function assertContainsLogThatMatchRegularExpression(string $regexp, string $message = '')
+    protected function assertNotContainsLog(callable $test, string $message = ''): void
     {
-        $this->assertContainsLog(function (array $logElement) use ($regexp) {
-            return preg_match($regexp,$logElement['message']);
-        }, $message);
+        self::assertEmpty(array_filter($this->bufferedLoggerHandler->getLogs(), $test), $message);
     }
 
-    protected function assertNotContainsLogWithSameMessage(string $needle, string $message = '')
+    protected function assertContainsLogWithSameMessage(string $needle, string $message = ''): void
     {
-        $this->assertNotContainsLog(function (array $logElement) use ($needle) {
-            return $logElement['message'] === $needle;
-        }, $message);
+        $this->assertContainsLog(fn (LogRecord $logElement) => $logElement->message === $needle, $message);
     }
 
-    protected function assertNotContainsLogThatMatchRegularExpression(string $regexp, string $message = '')
+    protected function assertContainsLogThatMatchRegularExpression(string $regexp, string $message = ''): void
     {
-        $this->assertNotContainsLog(function (array $logElement) use ($regexp) {
-            return preg_match($regexp,$logElement['message']);
-        }, $message);
+        $this->assertContainsLog(fn (LogRecord $logElement) => preg_match($regexp, $logElement->message), $message);
     }
 
+    protected function assertNotContainsLogWithSameMessage(string $needle, string $message = ''): void
+    {
+        $this->assertNotContainsLog(fn (LogRecord $logElement) => $logElement->message === $needle, $message);
+    }
+
+    protected function assertNotContainsLogThatMatchRegularExpression(string $regexp, string $message = ''): void
+    {
+        $this->assertNotContainsLog(fn (LogRecord $logElement) => preg_match($regexp, $logElement->message), $message);
+    }
 }

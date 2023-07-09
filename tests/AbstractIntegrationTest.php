@@ -28,11 +28,11 @@ abstract class AbstractIntegrationTest extends KernelTestCase
      */
     protected function getService($serviceName)
     {
-        return static::$container->get($serviceName);
+        return static::getContainer()->get($serviceName);
     }
 
     protected function setService($serviceId, $service)
     {
-        return static::$container->set($serviceId, $service);
+        return static::getContainer()->set($serviceId, $service);
     }
 }
