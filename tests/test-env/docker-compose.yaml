@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+  mariadb:
+    image: library/mariadb:10.5.13
+    command:
+      - --log-bin
+      - --server-id=999
+      - --binlog-format=mixed
+      - --skip-name-resolve=1
+    container_name: mysql-master-test
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '13306:3306'
+    expose:
+      - '13306'
+    volumes:
+      - test-mariadb-db:/var/lib/mysql
+    networks:
+      - test-network
+volumes:
+  test-mariadb-db:
+networks:
+  test-network:

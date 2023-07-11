@@ -42,8 +42,8 @@ services:
     mounts:
       - source: '=containerParameter.getReplicatedFilesystem()~"/data"'
         target: /var/lib/mysql
-      - source: '=(configurationRoot)~"/"~((containerParameter.getIndex() === 0)?"mysql-master/etc/mysql/conf.d":"mysql-replicate/etc/mysql/conf.d")'
-        target: /etc/mysql/conf.d
+      - source: '=(configurationRoot)~"/"~((containerParameter.getIndex() === 0)?"mysql-master/etc/mysql/my.cnf":"mysql-replicate/etc/mysql/my.cnf")'
+        target: /etc/mysql/my.cnf
 commands:
   - name: test1
     subCommands:
