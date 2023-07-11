@@ -1,7 +1,7 @@
 Filesystem:
   type: object
   config:
-    resolveField: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver", [info, value, args])'
+    resolveField: '@=query("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver", info, value, args)'
     fields:
       name:
         type: String!

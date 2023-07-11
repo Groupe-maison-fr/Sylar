@@ -1,7 +1,7 @@
 Service:
   type: object
   config:
-    resolveField: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver", [info, value, args])'
+    resolveField: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver", info, value, args)'
     fields:
       name:
         type: String!
