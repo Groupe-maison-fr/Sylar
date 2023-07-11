@@ -8,6 +8,7 @@ volumes:
   prometheus-db: {}
   grafana-db: {}
   redis-data: {}
+  loki-data: {}
 
 services:
   runner:
@@ -216,6 +217,7 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - .docker/loki/etc/loki/local-config.yaml:/etc/loki/local-config.yaml
+      - loki-data:/loki
 
   promtail:
     container_name: sylar-promtail
