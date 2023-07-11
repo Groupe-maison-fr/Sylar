@@ -9,7 +9,7 @@ use Throwable;
 
 final class NonExistingServiceStateFileException extends DomainException
 {
-    public function __construct(string $serviceName, string $instanceName, $code = 0, Throwable $previous = null)
+    public function __construct(string $serviceName, string $instanceName, int $code = 0, Throwable $previous = null)
     {
         parent::__construct(sprintf('Service state instance %s@%s does not exists', $serviceName, $instanceName), $code, $previous);
     }

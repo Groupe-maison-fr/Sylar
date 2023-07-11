@@ -11,13 +11,11 @@ use App\Infrastructure\Docker\ContainerLabelServiceInterface;
 use App\Infrastructure\Docker\ContainerStateServiceInterface;
 use App\Infrastructure\Filesystem\FilesystemServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Psr\Log\LoggerInterface;
 
 final class ServiceClonerStateService implements ServiceClonerStateServiceInterface
 {
     public function __construct(
         private FilesystemServiceInterface $zfsService,
-        private LoggerInterface $logger,
         private ContainerStateServiceInterface $dockerStateService,
         private ConfigurationServiceInterface $configurationService,
         private ServiceClonerNamingServiceInterface $serviceClonerNamingService,

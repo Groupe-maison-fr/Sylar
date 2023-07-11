@@ -10,5 +10,8 @@ interface ContainerFinderServiceInterface
 {
     public function getDockerByName(string $dockerName): ?ContainerSummaryItem;
 
+    /**
+     * @return string[]
+     */
     public function getDockersByLabel(string $labelKey, string $labelValue): array;
 }

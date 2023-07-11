@@ -55,7 +55,12 @@ final class Process implements ProcessInterface
         return $this->exec(new CommandDTO($arguments, false, true));
     }
 
-    private function flattenArguments(...$argumentList): array
+    /**
+     * @param string|string[]|null $argumentList
+     *
+     * @return string[]
+     */
+    private function flattenArguments(null|string|array ...$argumentList): array
     {
         return array_reduce($argumentList, function (array $arguments, $argument) {
             if (is_array($argument)) {

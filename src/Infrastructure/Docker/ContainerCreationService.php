@@ -121,6 +121,9 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         $container->setEnv($service->getEnvironments()->map(fn (Environment $environment) => $this->environmentSpecificationFactory->createFromConfiguration($containerParameter, $environment))->toArray());
     }
 
+    /**
+     * @param string[] $labels
+     */
     private function setLabel(ContainerParameterDTO $containerParameter, ContainersCreatePostBody $container, Service $service, array $labels): void
     {
         if ($service->getLabels()->isEmpty() && empty($labels)) {

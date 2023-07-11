@@ -15,7 +15,7 @@ use Overblog\GraphQLBundle\Resolver\ResolverMap as ResolverMapParent;
 
 final class ResolverMap extends ResolverMapParent
 {
-    private function isGenericMap($value): ?string
+    private function isGenericMap(mixed $value): ?string
     {
         if ($value instanceof FailedOutputDTO) {
             return 'FailedOutput';

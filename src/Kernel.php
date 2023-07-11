@@ -37,7 +37,7 @@ class Kernel extends BaseKernel
     protected function dumpContainer(ConfigCache $cache, ContainerBuilder $container, string $class, string $baseClass): void
     {
         parent::dumpContainer($cache, $container, $class, $baseClass);
-        // $this->postDumpContainerAction($container);
+        $this->postDumpContainerAction($container);
     }
 
     public function build(ContainerBuilder $container): void

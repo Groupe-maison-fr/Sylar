@@ -65,6 +65,7 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
 
     public function getClones(string $name, string $snap): FilesystemCollection
     {
+        /** @var FilesystemCollection */
         return $this->mapZfsListToZfsCollection(
             $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput(),
         )->filter(fn (FilesystemDTO $filesystem) => $filesystem->getOrigin() === sprintf('%s@%s', $name, $snap));

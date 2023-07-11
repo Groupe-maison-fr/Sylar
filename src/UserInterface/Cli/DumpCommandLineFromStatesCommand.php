@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\UserInterface\Cli;
 
-use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\ServiceClonerCommandLineDumperService;
 use App\Core\ServiceCloner\ServiceClonerNamingServiceInterface;
 use App\Core\ServiceCloner\ServiceClonerStateServiceInterface;
@@ -13,7 +12,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 
 #[AsCommand('service:dump:command-line-from-state')]
 final class DumpCommandLineFromStatesCommand extends Command
@@ -21,7 +19,6 @@ final class DumpCommandLineFromStatesCommand extends Command
     public function __construct(
         private ServiceClonerStateServiceInterface $serviceClonerStateService,
         private ServiceClonerCommandLineDumperService $serviceClonerCommandLineDumperService,
-        private ConfigurationServiceInterface $configurationService,
         private ServiceClonerNamingServiceInterface $serviceClonerNamingService,
     ) {
         parent::__construct();
@@ -45,15 +42,5 @@ final class DumpCommandLineFromStatesCommand extends Command
         }
 
         return 0;
-    }
-
-    protected function getWrite($output, $a): void
-    {
-        $output->write(Yaml::dump(
-            $a,
-            2,
-            2,
-            Yaml::DUMP_OBJECT_AS_MAP | Yaml::DUMP_NULL_AS_TILDE | Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK,
-        ));
     }
 }

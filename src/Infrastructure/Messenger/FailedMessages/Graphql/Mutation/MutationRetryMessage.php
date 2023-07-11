@@ -22,7 +22,12 @@ final class MutationRetryMessage implements MutationInterface
     ) {
     }
 
-    public function __invoke(string $messageId)
+    /**
+     * @return array{
+     *     success: bool
+     * }
+     */
+    public function __invoke(string $messageId): array
     {
         $envelop = $this->receiver->find($messageId);
         if ($envelop === null) {

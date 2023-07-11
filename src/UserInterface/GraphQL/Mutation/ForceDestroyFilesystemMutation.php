@@ -18,7 +18,7 @@ final class ForceDestroyFilesystemMutation implements MutationInterface
     ) {
     }
 
-    public function __invoke(string $name)
+    public function __invoke(string $name): ForceDestroyFilesystemOutputDTO|FailedOutputDTO
     {
         try {
             $this->messageBus->dispatch(new ForceDestroyFilesystemCommand($name));

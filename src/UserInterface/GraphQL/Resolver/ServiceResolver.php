@@ -22,7 +22,7 @@ final class ServiceResolver implements QueryInterface
     ) {
     }
 
-    public function __invoke(ResolveInfo $info, Service $service, Argument $args)
+    public function __invoke(ResolveInfo $info, Service $service, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'name':
@@ -46,6 +46,9 @@ final class ServiceResolver implements QueryInterface
         throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
+    /**
+     * @return ArrayCollection<int, Service>
+     */
     public function resolve(): ArrayCollection
     {
         return $this->configurationService->getConfiguration()->getServices();

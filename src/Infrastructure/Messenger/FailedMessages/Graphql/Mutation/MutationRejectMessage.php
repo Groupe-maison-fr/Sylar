@@ -16,9 +16,12 @@ final class MutationRejectMessage implements MutationInterface
     ) {
     }
 
+    /**
+     * @param mixed[] $messageIds
+     */
     public function __invoke(
         array $messageIds,
-    ) {
+    ): bool {
         array_map(function (string $messageId): void {
             $envelop = $this->receiver->find($messageId);
             $this->receiver->reject($envelop);

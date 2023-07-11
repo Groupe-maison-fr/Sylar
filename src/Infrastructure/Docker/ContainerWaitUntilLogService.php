@@ -48,7 +48,7 @@ final class ContainerWaitUntilLogService implements ContainerWaitUntilLogService
         \pcntl_alarm($timeout);
     }
 
-    private function getStreamMatcherCallback(string $type, string $expression, DockerRawStreamUntil $logsStream, ContainerParameterDTO $containerParameter)
+    private function getStreamMatcherCallback(string $type, string $expression, DockerRawStreamUntil $logsStream, ContainerParameterDTO $containerParameter): callable
     {
         return function ($buffer) use ($type, $expression, $logsStream, $containerParameter): void {
             if (preg_match($expression, $buffer)) {

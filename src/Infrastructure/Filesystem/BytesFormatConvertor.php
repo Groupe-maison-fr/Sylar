@@ -36,7 +36,7 @@ final class BytesFormatConvertor implements BytesFormatConvertorInterface
         return $value * $unitSize + ((int) (floatval($precision) * $unitSize));
     }
 
-    public function format($bytes, $precision = 3): string
+    public function format(int $bytes, int $precision = 3): string
     {
         $base = log($bytes, 1024);
 

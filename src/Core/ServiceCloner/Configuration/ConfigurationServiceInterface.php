@@ -11,7 +11,13 @@ interface ConfigurationServiceInterface
 {
     public function getConfiguration(): ServiceCloner;
 
+    /**
+     * @param array<mixed> $data
+     */
     public function createServiceClonerFromArray(array $data): ServiceCloner;
 
+    /**
+     * @param array<mixed>[] $data
+     */
     public function createServiceFromArray(array $data): Service;
 }

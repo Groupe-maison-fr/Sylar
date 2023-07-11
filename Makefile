@@ -46,8 +46,7 @@ host-test-phpunit:
 
 .PHONY: host-test-phpstan
 host-test-phpstan:
-	docker-compose exec runner bash -c "vendor/bin/phpstan analyse src --level 5"
-	docker-compose exec runner bash -c "vendor/bin/php-cs-fixer fix --verbose --dry-run"
+	docker-compose exec runner bash -c "vendor/bin/phpstan analyse src --level 6"
 
 .PHONY: host-test-cs-fixer
 host-test-cs-fixer:

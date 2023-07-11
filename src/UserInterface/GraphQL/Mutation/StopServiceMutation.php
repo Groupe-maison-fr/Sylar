@@ -18,7 +18,7 @@ final class StopServiceMutation implements MutationInterface
     ) {
     }
 
-    public function __invoke(string $masterName, string $instanceName)
+    public function __invoke(string $masterName, string $instanceName): StopServiceSuccessOutputDTO|FailedOutputDTO
     {
         try {
             $this->messageBus->dispatch(new StopServiceCommand(

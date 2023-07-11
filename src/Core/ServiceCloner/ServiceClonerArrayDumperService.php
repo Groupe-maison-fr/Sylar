@@ -21,6 +21,85 @@ use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
 use Doctrine\Common\Collections\Collection;
 use DomainException;
 
+/**
+ * @phpstan-type dumpStruct array{
+ *       preStartCommands: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }|string,
+ *       postStartWaiters: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }|string,
+ *       postStartCommands: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }|string,
+ *       postDestroyCommands: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }|string
+ *   }|array{
+ *       source: ?string,
+ *       target: ?string
+ *   }|array{
+ *       containerPort: ?string,
+ *       hostPort: ?string,
+ *       hostIp: ?string
+ *   }|array{
+ *       executionEnvironment: ?string,
+ *       command: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }|string
+ *   }|array{
+ *       executionEnvironment: ?string,
+ *       command: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }|string
+ *   }|array{
+ *       type: ?string,
+ *       expression: ?string,
+ *       timeout: int
+ *   }|array{
+ *       executionEnvironment: ?string,
+ *       command: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }|string
+ *   }|array{
+ *       name: ?string,
+ *       image: ?string,
+ *       command: ?string,
+ *       entryPoint: ?string,
+ *       networkMode: ?string,
+ *       lifeCycleHooks: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }|string,
+ *       environments: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }|string,
+ *       mounts: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }|string
+ *   }|array{
+ *       configurationRoot: ?string,
+ *       stateRoot: ?string,
+ *       zpoolName: ?string,
+ *       zpoolRoot: ?string,
+ *       services: array{
+ *           name: ?string,
+ *           value: ?string
+ *       }
+ *   }|array{
+ *       name: ?string,
+ *       value: ?string
+ *   }
+ **/
 final class ServiceClonerArrayDumperService
 {
     public function __construct(
@@ -38,11 +117,17 @@ final class ServiceClonerArrayDumperService
         return $this->configurationExpressionGenerator->generate($containerParameter, $expression);
     }
 
-    public function dump(ContainerParameterDTO $containerParameter): array
+    /**
+     * @phpstan-return dumpStruct|string|bool
+     */
+    public function dump(ContainerParameterDTO $containerParameter): array|string|bool
     {
         return $this->dumpNode($containerParameter, $this->dockerConfiguration->getConfiguration());
     }
 
+    /**
+     * @phpstan-return dumpStruct|string|bool
+     */
     private function dumpNode(ContainerParameterDTO $containerParameter, mixed $node): array|string|bool
     {
         switch (true) {

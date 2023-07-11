@@ -19,7 +19,7 @@ final class StorageResolver implements QueryInterface
     ) {
     }
 
-    public function __invoke(ResolveInfo $info, FilesystemDTO $zfsFilesystem, Argument $args)
+    public function __invoke(ResolveInfo $info, FilesystemDTO $zfsFilesystem, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'name':

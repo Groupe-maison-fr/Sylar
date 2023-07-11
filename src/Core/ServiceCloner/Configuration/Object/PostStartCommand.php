@@ -25,7 +25,7 @@ final class PostStartCommand
     }
 
     /**
-     * @return ArrayCollection<string>
+     * @return ArrayCollection<int, string>
      */
     public function getCommand(): ArrayCollection
     {
@@ -38,7 +38,11 @@ final class PostStartCommand
         $this->executionEnvironment = $executionEnvironment;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param string[] $command
+     */
     public function setCommand(array $command): void
     {
         $this->command = $command;

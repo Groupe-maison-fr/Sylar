@@ -18,7 +18,7 @@ final class RestartServiceMutation implements MutationInterface
     ) {
     }
 
-    public function __invoke(string $masterName, string $instanceName, ?int $index)
+    public function __invoke(string $masterName, string $instanceName, ?int $index): RestartServiceSuccessOutputDTO|FailedOutputDTO
     {
         try {
             $this->messageBus->dispatch(new RestartServiceCommand(

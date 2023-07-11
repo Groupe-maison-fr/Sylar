@@ -9,6 +9,9 @@ use App\Infrastructure\Filesystem\FilesystemDTO;
 final class ServiceClonerStatusDTO
 {
     private bool $isMaster;
+    /**
+     * @var string[]|int[]
+     */
     private array $exposedPorts;
     private ?FilesystemDTO $zfsFilesystem;
     private ?string $dockerState;
@@ -28,6 +31,17 @@ final class ServiceClonerStatusDTO
         $this->exposedPorts = [];
     }
 
+    /**
+     * @return array{
+     *     sylar-masterName: string,
+     *     sylar-instanceName: string,
+     *     sylar-index: numeric-string,
+     *     sylar-containerName: string,
+     *     sylar-zfsFilesystemName: string,
+     *     sylar-zfsFilesystemPath: string,
+     *     sylar-createdAt: numeric-string
+     * }
+     */
     public function toArray(): array
     {
         return [
@@ -41,6 +55,17 @@ final class ServiceClonerStatusDTO
         ];
     }
 
+    /**
+     * @param array{
+     *     sylar-masterName: string,
+     *     sylar-instanceName: string,
+     *     sylar-index: numeric-string,
+     *     sylar-containerName: string,
+     *     sylar-zfsFilesystemName: string,
+     *     sylar-zfsFilesystemPath: string,
+     *     sylar-createdAt: numeric-string
+     * } $data
+     */
     public static function createFromArray(array $data): self
     {
         return new self(
@@ -99,11 +124,17 @@ final class ServiceClonerStatusDTO
         $this->dockerState = $dockerState;
     }
 
+    /**
+     * @return string[]|int[]
+     */
     public function getExposedPorts(): array
     {
         return $this->exposedPorts;
     }
 
+    /**
+     * @param string[]|int[] $exposedPorts
+     */
     public function setExposedPorts(array $exposedPorts): void
     {
         $this->exposedPorts = $exposedPorts;

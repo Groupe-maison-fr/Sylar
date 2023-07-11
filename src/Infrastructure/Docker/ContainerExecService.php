@@ -10,13 +10,11 @@ use Docker\API\Model\ExecIdStartPostBody;
 use Docker\Docker;
 use Docker\Stream\DockerRawStream;
 use DomainException;
-use Psr\Log\LoggerInterface;
 
 final class ContainerExecService implements ContainerExecServiceInterface
 {
     public function __construct(
         private Docker $dockerReadWrite,
-        private LoggerInterface $logger,
         private ContainerFinderServiceInterface $dockerFinderService,
     ) {
     }

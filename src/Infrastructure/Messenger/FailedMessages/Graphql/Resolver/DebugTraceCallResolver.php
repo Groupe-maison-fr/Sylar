@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Messenger\FailedMessages\Graphql\Resolver;
 
+use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
@@ -11,7 +12,10 @@ use stdClass;
 
 final class DebugTraceCallResolver implements QueryInterface
 {
-    public function __invoke(ResolveInfo $info, array $debugTraceCall, Argument $args)
+    /**
+     * @param mixed[] $debugTraceCall
+     */
+    public function __invoke(ResolveInfo $info, array $debugTraceCall, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'namespace':
@@ -31,9 +35,10 @@ final class DebugTraceCallResolver implements QueryInterface
             case 'arguments':
                 return json_encode($this->createArgumentsTree($debugTraceCall['args']));
         }
+        throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
-    private function createArgumentsTree($arguments)
+    private function createArgumentsTree(mixed $arguments): mixed
     {
         if (!is_array($arguments)) {
             return $arguments;

@@ -14,9 +14,6 @@ final class CommandExecutor implements CommandExecutorInterface
     ) {
     }
 
-    /**
-     * @return CommandExecutorResultDTO[]
-     */
     public function run(Command $command): array
     {
         return $command->getSubCommands()->map(function (string $subCommand) {

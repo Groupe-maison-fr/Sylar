@@ -47,6 +47,6 @@ final class ContainerLabelService implements ContainerLabelServiceInterface
             return [];
         }
 
-        return current($containers)->getLabels()->getArrayCopy();
+        return current($containers)->getLabels();
     }
 }

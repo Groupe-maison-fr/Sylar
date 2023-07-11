@@ -18,7 +18,7 @@ final class StartServiceMutation implements MutationInterface
     ) {
     }
 
-    public function __invoke(string $masterName, string $instanceName, ?int $index)
+    public function __invoke(string $masterName, string $instanceName, ?int $index): StartServiceSuccessOutputDTO|FailedOutputDTO
     {
         try {
             $this->messageBus->dispatch(new StartServiceCommand(

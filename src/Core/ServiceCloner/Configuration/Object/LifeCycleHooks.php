@@ -33,7 +33,7 @@ final class LifeCycleHooks
     }
 
     /**
-     * @return ArrayCollection<PreStartCommand>
+     * @return ArrayCollection<int, PreStartCommand>
      */
     public function getPreStartCommands(): ArrayCollection
     {
@@ -41,7 +41,7 @@ final class LifeCycleHooks
     }
 
     /**
-     * @return ArrayCollection<PostStartWaiter>
+     * @return ArrayCollection<int, PostStartWaiter>
      */
     public function getPostStartWaiters(): ArrayCollection
     {
@@ -49,7 +49,7 @@ final class LifeCycleHooks
     }
 
     /**
-     * @return ArrayCollection<PostStartCommand>
+     * @return ArrayCollection<int, PostStartCommand>
      */
     public function getPostStartCommands(): ArrayCollection
     {
@@ -57,32 +57,48 @@ final class LifeCycleHooks
     }
 
     /**
-     * @return ArrayCollection<PostDestroyCommand>
+     * @return ArrayCollection<int, PostDestroyCommand>
      */
     public function getPostDestroyCommands(): ArrayCollection
     {
         return new ArrayCollection($this->postDestroyCommands);
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param PreStartCommand[] $preStartCommands
+     */
     public function setPreStartCommands(array $preStartCommands): void
     {
         $this->preStartCommands = $preStartCommands;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param PostStartWaiter[] $postStartWaiters
+     */
     public function setPostStartWaiters(array $postStartWaiters): void
     {
         $this->postStartWaiters = $postStartWaiters;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param PostStartCommand[] $postStartCommands
+     */
     public function setPostStartCommands(array $postStartCommands): void
     {
         $this->postStartCommands = $postStartCommands;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param PostDestroyCommand[] $postDestroyCommands
+     */
     public function setPostDestroyCommands(array $postDestroyCommands): void
     {
         $this->postDestroyCommands = $postDestroyCommands;

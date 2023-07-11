@@ -11,7 +11,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 
 #[AsCommand('service:dump:command-line')]
 final class DumpCommandLineCommand extends Command
@@ -63,15 +62,5 @@ final class DumpCommandLineCommand extends Command
         )));
 
         return 0;
-    }
-
-    protected function getWrite($output, $a): void
-    {
-        $output->write(Yaml::dump(
-            $a,
-            2,
-            2,
-            Yaml::DUMP_OBJECT_AS_MAP | Yaml::DUMP_NULL_AS_TILDE | Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK,
-        ));
     }
 }

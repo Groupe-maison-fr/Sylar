@@ -10,7 +10,7 @@ use App\UserInterface\Cli\RestartSupervisordWorkersCommand;
 final class RestartSupervisorMessengerConsumer implements PostContainerDumpServiceInterface
 {
     public function __construct(
-        private Process $process,
+        // private Process $process,
     ) {
     }
 

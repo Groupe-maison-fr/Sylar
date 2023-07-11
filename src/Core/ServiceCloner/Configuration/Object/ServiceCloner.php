@@ -26,23 +26,23 @@ final class ServiceCloner
     {
     }
 
-    public function getstateRoot()
+    public function getstateRoot(): string
     {
         return $this->stateRoot;
     }
 
-    public function getZpoolName()
+    public function getZpoolName(): string
     {
         return $this->zpoolName;
     }
 
-    public function getZpoolRoot()
+    public function getZpoolRoot(): string
     {
         return $this->zpoolRoot;
     }
 
     /**
-     * @return ArrayCollection<Service>
+     * @return ArrayCollection<int, Service>
      */
     public function getServices(): ArrayCollection
     {
@@ -61,7 +61,7 @@ final class ServiceCloner
     }
 
     /**
-     * @return ArrayCollection<Command>
+     * @return ArrayCollection<int, Command>
      */
     public function getCommands(): ArrayCollection
     {
@@ -108,13 +108,21 @@ final class ServiceCloner
         $this->configurationRoot = $configurationRoot;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param Service[] $services
+     */
     public function setServices(array $services): void
     {
         $this->services = $services;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param Command[] $commands
+     */
     public function setCommands(array $commands): void
     {
         $this->commands = $commands;

@@ -6,6 +6,7 @@ namespace App\Infrastructure\Messenger\FailedMessages\Graphql\Resolver;
 
 use App\Infrastructure\Messenger\FailedMessages\FailedMessageDTO;
 use App\Infrastructure\Messenger\FailedMessages\Repository\FailedMessagesRepositoryInterface;
+use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
@@ -17,7 +18,7 @@ final class MessagesResolver implements QueryInterface
     ) {
     }
 
-    public function __invoke(ResolveInfo $info, FailedMessageDTO $failedMessage, Argument $args)
+    public function __invoke(ResolveInfo $info, FailedMessageDTO $failedMessage, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'id':
@@ -35,6 +36,7 @@ final class MessagesResolver implements QueryInterface
             case 'date':
                 return $failedMessage->getDateTime();
         }
+        throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
     public function resolve(int $id): FailedMessageDTO
@@ -42,6 +44,9 @@ final class MessagesResolver implements QueryInterface
         return $this->failedMessagesRepository->getById($id);
     }
 
+    /**
+     * @return FailedMessageDTO[]
+     */
     public function findAll(int $max): array
     {
         return $this->failedMessagesRepository->findAll($max);

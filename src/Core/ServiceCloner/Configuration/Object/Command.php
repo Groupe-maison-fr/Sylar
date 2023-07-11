@@ -30,7 +30,7 @@ final class Command
     }
 
     /**
-     * @return ArrayCollection<string>
+     * @return ArrayCollection<int, string>
      */
     public function getSubCommands(): ArrayCollection
     {
@@ -43,7 +43,11 @@ final class Command
         $this->name = $name;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param string[] $subCommands
+     */
     public function setSubCommands(array $subCommands): void
     {
         $this->subCommands = $subCommands;

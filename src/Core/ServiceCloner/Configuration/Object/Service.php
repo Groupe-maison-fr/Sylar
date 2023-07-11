@@ -74,7 +74,7 @@ final class Service
     }
 
     /**
-     * @return ArrayCollection<Environment>
+     * @return ArrayCollection<int, Environment>
      */
     public function getEnvironments(): ArrayCollection
     {
@@ -82,7 +82,7 @@ final class Service
     }
 
     /**
-     * @return ArrayCollection<Mount>
+     * @return ArrayCollection<int, Mount>
      */
     public function getMounts(): ArrayCollection
     {
@@ -90,7 +90,7 @@ final class Service
     }
 
     /**
-     * @return ArrayCollection<Port>
+     * @return ArrayCollection<int, Port>
      */
     public function getPorts(): ArrayCollection
     {
@@ -103,7 +103,7 @@ final class Service
     }
 
     /**
-     * @return ArrayCollection<Label>
+     * @return ArrayCollection<int, Label>
      */
     public function getLabels(): ArrayCollection
     {
@@ -146,25 +146,41 @@ final class Service
         $this->networkMode = $networkMode;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param Environment[] $environments
+     */
     public function setEnvironments(array $environments): void
     {
         $this->environments = $environments;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param Mount[] $mounts
+     */
     public function setMounts(array $mounts): void
     {
         $this->mounts = $mounts;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param Port[] $ports
+     */
     public function setPorts(array $ports): void
     {
         $this->ports = $ports;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param Label[] $labels
+     */
     public function setLabels(array $labels): void
     {
         $this->labels = $labels;

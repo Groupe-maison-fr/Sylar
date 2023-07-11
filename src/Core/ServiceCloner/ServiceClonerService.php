@@ -18,7 +18,7 @@ use App\Infrastructure\Docker\ContainerStateServiceInterface;
 use App\Infrastructure\Docker\ContainerStopServiceInterface;
 use App\Infrastructure\Filesystem\FilesystemServiceInterface;
 use App\Infrastructure\ServerSideEvent\ServerSideEventPublisherInterface;
-use Docker\Api\Exception\ContainerDeleteNotFoundException;
+use Docker\API\Exception\ContainerDeleteNotFoundException;
 use DomainException;
 use Exception;
 use Psr\Log\LoggerInterface;

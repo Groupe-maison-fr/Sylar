@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Messenger\FailedMessages\Graphql\Resolver;
 
+use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
@@ -11,7 +12,7 @@ use Symfony\Component\ErrorHandler\Exception\FlattenException;
 
 final class FlattenExceptionResolver implements QueryInterface
 {
-    public function __invoke(ResolveInfo $info, FlattenException $flattenException, Argument $args)
+    public function __invoke(ResolveInfo $info, FlattenException $flattenException, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'message':
@@ -39,5 +40,6 @@ final class FlattenExceptionResolver implements QueryInterface
             case 'asString':
                 return $flattenException->getAsString();
         }
+        throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 }

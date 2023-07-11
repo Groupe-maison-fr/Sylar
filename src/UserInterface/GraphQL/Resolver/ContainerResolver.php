@@ -18,7 +18,7 @@ final class ContainerResolver implements QueryInterface
     ) {
     }
 
-    public function __invoke(ResolveInfo $info, ServiceClonerStatusDTO $state, Argument $args)
+    public function __invoke(ResolveInfo $info, ServiceClonerStatusDTO $state, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'containerName':
@@ -45,6 +45,9 @@ final class ContainerResolver implements QueryInterface
         throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
+    /**
+     * @return ServiceClonerStatusDTO[]
+     */
     public function resolve(): array
     {
         return $this->serviceClonerStateService->getStates();

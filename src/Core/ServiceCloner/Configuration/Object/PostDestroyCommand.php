@@ -25,7 +25,7 @@ final class PostDestroyCommand
     }
 
     /**
-     * @return ArrayCollection<string>
+     * @return ArrayCollection<int, string>
      */
     public function getCommand(): ArrayCollection
     {
@@ -38,7 +38,11 @@ final class PostDestroyCommand
         $this->executionEnvironment = $executionEnvironment;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @param string[] $command
+     */
     public function setCommand(array $command): void
     {
         $this->command = $command;

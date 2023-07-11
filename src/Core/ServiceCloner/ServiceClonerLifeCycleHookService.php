@@ -27,6 +27,11 @@ final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleH
     ) {
     }
 
+    /**
+     * @param ArrayCollection<int, string> $arguments
+     *
+     * @return string[]
+     */
     private function processArray(ContainerParameterDTO $containerParameter, ArrayCollection $arguments): array
     {
         return $arguments->map(fn (string $argument) => $this->configurationExpressionGenerator->generate($containerParameter, $argument))->toArray();

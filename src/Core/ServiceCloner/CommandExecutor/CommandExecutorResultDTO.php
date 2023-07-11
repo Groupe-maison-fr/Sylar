@@ -6,6 +6,9 @@ namespace App\Core\ServiceCloner\CommandExecutor;
 
 final class CommandExecutorResultDTO
 {
+    /**
+     * @param string[] $output
+     */
     public function __construct(
         private string $subCommand,
         private array $output,
@@ -17,6 +20,9 @@ final class CommandExecutorResultDTO
         return $this->subCommand;
     }
 
+    /**
+     * @return string[]
+     */
     public function getOutput(): array
     {
         return $this->output;

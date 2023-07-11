@@ -8,5 +8,8 @@ use App\Core\ServiceCloner\Configuration\Object\Label;
 
 interface LabelFactoryInterface
 {
+    /**
+     * @return array{string,string}
+     */
     public function createFromConfiguration(ContainerParameterDTO $containerParameter, Label $label): array;
 }

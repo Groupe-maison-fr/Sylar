@@ -6,6 +6,9 @@ namespace App\Infrastructure\Process;
 
 final class CommandDTO
 {
+    /**
+     * @param string[] $arguments
+     */
     public function __construct(
         private array $arguments,
         private bool $mustRun,
@@ -13,6 +16,9 @@ final class CommandDTO
     ) {
     }
 
+    /**
+     * @return string[]
+     */
     public function getArguments(): array
     {
         return $this->arguments;

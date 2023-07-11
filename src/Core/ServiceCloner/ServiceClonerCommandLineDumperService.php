@@ -39,7 +39,7 @@ final class ServiceClonerCommandLineDumperService
         return $this->configurationExpressionGenerator->generate($container, $expression);
     }
 
-    private function dumpNode(ContainerParameterDTO $container, $node): ?string
+    private function dumpNode(ContainerParameterDTO $container, mixed $node): ?string
     {
         switch (true) {
             case is_array($node):

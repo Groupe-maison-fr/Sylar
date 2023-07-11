@@ -18,7 +18,7 @@ final class ForceDestroyContainerMutation implements MutationInterface
     ) {
     }
 
-    public function __invoke(string $name)
+    public function __invoke(string $name): ForceDestroyContainerOutputDTO|FailedOutputDTO
     {
         try {
             $this->messageBus->dispatch(new ForceDestroyContainerCommand($name));
