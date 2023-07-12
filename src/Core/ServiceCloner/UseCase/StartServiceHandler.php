@@ -20,7 +20,7 @@ final class StartServiceHandler
         $this->serviceClonerService->startService(
             $startServiceCommand->getMasterName(),
             $startServiceCommand->getInstanceName(),
-            $startServiceCommand->getIndex() === null ? null : (int) $startServiceCommand->getIndex(),
+            $startServiceCommand->getIndex(),
         );
     }
 }

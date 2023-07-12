@@ -6,6 +6,7 @@
 /public/bundles/
 /var/
 /vendor/
+tests/Core/ServiceCloner/Reservation/database/
 ###< symfony/framework-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###

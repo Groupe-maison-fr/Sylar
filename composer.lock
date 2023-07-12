@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2603e1e67ddabeec9470c68da42d2ef4",
+    "content-hash": "7a18ec421d13cfbb56712978de32a6c6",
     "packages": [
         {
             "name": "brick/math",
@@ -2591,6 +2591,61 @@
                 "source": "https://github.com/lstrojny/fxmlrpc/tree/0.22.0"
             },
             "time": "2021-06-21T09:30:29+00:00"
+        },
+        {
+            "name": "micoli/elql",
+            "version": "v0.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/micoli/Elql.git",
+                "reference": "21b2b9b02b5ed76c2f4860a7f3dcbb3d7a07f2eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/micoli/Elql/zipball/21b2b9b02b5ed76c2f4860a7f3dcbb3d7a07f2eb",
+                "reference": "21b2b9b02b5ed76c2f4860a7f3dcbb3d7a07f2eb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/expression-language": "^6.0",
+                "symfony/filesystem": "^6.0",
+                "symfony/lock": "^6.0",
+                "symfony/property-access": "^6.0",
+                "symfony/property-info": "^6.0",
+                "symfony/serializer": "^6.0",
+                "symfony/yaml": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.16",
+                "php-coveralls/php-coveralls": "^0.1.0",
+                "phpdocumentor/reflection-docblock": "^5.3",
+                "phpunit/phpunit": "^10.0",
+                "ramsey/uuid": "^4.7",
+                "symfony/var-dumper": "^6.0",
+                "vimeo/psalm": "^5.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Micoli\\Elql\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Olivier MICHAUD",
+                    "email": "olivier@micoli.org"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/micoli/Elql/issues",
+                "source": "https://github.com/micoli/Elql/tree/v0.5.2"
+            },
+            "time": "2023-07-14T12:57:38+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -6582,6 +6637,84 @@
                 }
             ],
             "time": "2023-06-26T06:02:47+00:00"
+        },
+        {
+            "name": "symfony/lock",
+            "version": "v6.2.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/lock.git",
+                "reference": "20e2169217c37bb21bcad84e251498a256e03ac3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/20e2169217c37bb21bcad84e251498a256e03ac3",
+                "reference": "20e2169217c37bb21bcad84e251498a256e03ac3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "psr/log": "^1|^2|^3"
+            },
+            "conflict": {
+                "doctrine/dbal": "<2.13",
+                "symfony/cache": "<6.2"
+            },
+            "require-dev": {
+                "doctrine/dbal": "^2.13|^3.0",
+                "predis/predis": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Lock\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jérémy Derussé",
+                    "email": "jeremy@derusse.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Creates and manages locks, a mechanism to provide exclusive access to a shared resource",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "cas",
+                "flock",
+                "locking",
+                "mutex",
+                "redlock",
+                "semaphore"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/lock/tree/v6.2.12"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-06-24T11:48:11+00:00"
         },
         {
             "name": "symfony/mercure",

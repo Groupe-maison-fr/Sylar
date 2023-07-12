@@ -82,7 +82,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
     private function start(string $masterName, string $instanceName, ?int $index): void
     {
         if ($index === null) {
-            $index = $this->indexManagerService->getNextAvailable();
+            $index = $this->indexManagerService->getNextAvailable($masterName);
         }
         $this->logger->debug(sprintf('-------------%s----------', $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '@')));
         $this->startFilesystem($masterName, $instanceName);

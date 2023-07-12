@@ -17,6 +17,9 @@ interface ServiceClonerStateServiceInterface
     /** @return ServiceClonerStatusDTO[] */
     public function getStates(): array;
 
+    /** @return ServiceClonerStatusDTO[] */
+    public function getStatesByService(string $serviceName): array;
+
     public function createServiceClonerStatusDTO(string $masterName, string $instanceName, int $index): ServiceClonerStatusDTO;
 
     /**

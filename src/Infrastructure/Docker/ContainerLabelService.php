@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 final class ContainerLabelService implements ContainerLabelServiceInterface
 {
     public function __construct(
-        private Docker $dockerReadWrite,
+        private Docker $dockerReadOnly,
         private LoggerInterface $logger,
     ) {
     }
@@ -25,7 +25,7 @@ final class ContainerLabelService implements ContainerLabelServiceInterface
         try {
             /** @var ContainerSummaryItem[] $containers */
             $containers = array_filter(
-                $this->dockerReadWrite->containerList([
+                $this->dockerReadOnly->containerList([
                     'filters' => json_encode([
                         'name' => [$dockerName],
                     ]),
@@ -47,6 +47,6 @@ final class ContainerLabelService implements ContainerLabelServiceInterface
             return [];
         }
 
-        return current($containers)->getLabels();
+        return iterator_to_array(current($containers)->getLabels());
     }
 }

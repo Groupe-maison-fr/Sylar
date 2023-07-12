@@ -12,7 +12,7 @@ use App\Infrastructure\Docker\ContainerStateServiceInterface;
 use App\Infrastructure\Filesystem\FilesystemServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class ServiceClonerStateService implements ServiceClonerStateServiceInterface
+class ServiceClonerStateService implements ServiceClonerStateServiceInterface
 {
     public function __construct(
         private FilesystemServiceInterface $zfsService,
@@ -95,6 +95,14 @@ final class ServiceClonerStateService implements ServiceClonerStateServiceInterf
         });
 
         return $states;
+    }
+
+    public function getStatesByService(string $serviceName): array
+    {
+        return array_values(array_filter(
+            $this->getStates(),
+            fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getMasterName() === $serviceName,
+        ));
     }
 
     public function createServiceClonerStatusDTO(string $masterName, string $instanceName, int $index): ServiceClonerStatusDTO
