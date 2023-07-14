@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Container, Grid, makeStyles} from '@material-ui/core';
 import Page from '../../components/Page';
 import Reservations from './Reservations';
+import ReservationAdd from "./ReservationAdd";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = () => {
   const classes = useStyles();
+  const [refresh,setRefresh] = useState('');
   return (
     <Page
       className={classes.root}
@@ -22,7 +24,10 @@ const Dashboard = () => {
       <Container maxWidth={false}>
         <Grid container spacing={3}>
           <Grid item lg={12} md={12} xl={12} xs={12}>
-            <Reservations />
+            <ReservationAdd onAdd={setRefresh}/>
+          </Grid>
+          <Grid item lg={12} md={12} xl={12} xs={12}>
+            <Reservations refresh={refresh}/>
           </Grid>
         </Grid>
       </Container>

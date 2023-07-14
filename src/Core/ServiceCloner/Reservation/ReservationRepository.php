@@ -45,4 +45,15 @@ final class ReservationRepository implements ReservationRepositoryInterface
     {
         return $this->database->find(Reservation::class);
     }
+
+    public function add(Reservation $reservation): void
+    {
+        $this->database->add($reservation);
+        $this->database->persister->flush();
+    }
+
+    public function delete(string $service, string $name, int $index): void
+    {
+
+    }
 }

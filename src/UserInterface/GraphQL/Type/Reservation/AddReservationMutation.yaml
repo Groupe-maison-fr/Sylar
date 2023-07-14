@@ -1,0 +1,15 @@
+AddReservationInput:
+  type: input-object
+  config:
+    fields:
+      name:
+        type: String!
+      service:
+        type: String!
+      index:
+        type: Int
+
+AddReservationOutput:
+  type: union
+  config:
+    types: [SuccessOutput, FailedOutput]

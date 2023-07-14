@@ -17,4 +17,8 @@ interface ReservationRepositoryInterface
      * @return Reservation[]
      */
     public function findAll(): array;
+
+    public function add(Reservation $reservation): void;
+
+    public function delete(string $service, string $name, int $index): void;
 }

@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Reservations = ({className, ...rest}) => {
+const Reservations = ({className,refresh, ...rest}) => {
   const classes = useStyles();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -46,6 +46,9 @@ const Reservations = ({className, ...rest}) => {
   useEffect(()=>{
     loadReservations();
   },[]);
+  useEffect(()=>{
+    loadReservations();
+  },[refresh]);
 
   return (
       <Card
@@ -86,10 +89,12 @@ const Reservations = ({className, ...rest}) => {
 };
 
 Reservations.propTypes = {
-  className: PropTypes.string.isRequired
+  className: PropTypes.string.isRequired,
+  refresh: PropTypes.string.isRequired
 };
 Reservations.defaultProps = {
-  className: ''
+  className: '',
+  refresh: ''
 }
 
 export default Reservations;
