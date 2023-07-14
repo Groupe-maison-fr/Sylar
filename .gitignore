@@ -6,6 +6,7 @@
 /public/bundles/
 /var/
 /vendor/
+data/database/
 tests/Core/ServiceCloner/Reservation/database/
 ###< symfony/framework-bundle ###
 

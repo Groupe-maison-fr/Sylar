@@ -14,6 +14,7 @@ import {
   Settings as SettingsIcon,
   ZapOff as FrammerIcon,
   BarChart2 as BarChart2Icon,
+  Bookmark as BookmarkIcon,
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -22,6 +23,11 @@ const items = [
     href: '/app/services',
     icon: BarChartIcon,
     title: 'Services'
+  },
+  {
+    href: '/app/reservations',
+    icon: BookmarkIcon,
+    title: 'Reservations'
   },
   {
     href: '/app/system',

@@ -20,4 +20,7 @@ QueryUserInterface:
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolveByName",[args["commandName"]])'
         args:
           commandName: String!
+      reservations:
+        type: "[Reservation]"
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ReservationResolver::resolve")'
 

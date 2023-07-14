@@ -1,0 +1,11 @@
+Reservation:
+  type: object
+  config:
+    resolveField: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ReservationResolver", info, value, args)'
+    fields:
+      service:
+        type: String!
+      name:
+        type: String!
+      index:
+        type: Int!
