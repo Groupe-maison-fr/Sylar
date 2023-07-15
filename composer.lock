@@ -2594,16 +2594,16 @@
         },
         {
             "name": "micoli/elql",
-            "version": "v0.6.0",
+            "version": "v0.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/micoli/Elql.git",
-                "reference": "d40045f19e48977f2e42839617b1c1231bf9fc45"
+                "reference": "66b002dc1b8f819d66f8d55895d42f14b2e24f9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/micoli/Elql/zipball/d40045f19e48977f2e42839617b1c1231bf9fc45",
-                "reference": "d40045f19e48977f2e42839617b1c1231bf9fc45",
+                "url": "https://api.github.com/repos/micoli/Elql/zipball/66b002dc1b8f819d66f8d55895d42f14b2e24f9d",
+                "reference": "66b002dc1b8f819d66f8d55895d42f14b2e24f9d",
                 "shasum": ""
             },
             "require": {
@@ -2643,9 +2643,9 @@
             ],
             "support": {
                 "issues": "https://github.com/micoli/Elql/issues",
-                "source": "https://github.com/micoli/Elql/tree/v0.6.0"
+                "source": "https://github.com/micoli/Elql/tree/v0.6.1"
             },
-            "time": "2023-07-14T22:37:05+00:00"
+            "time": "2023-07-15T05:16:01+00:00"
         },
         {
             "name": "mockery/mockery",

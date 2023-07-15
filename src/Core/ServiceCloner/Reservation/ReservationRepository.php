@@ -54,6 +54,15 @@ final class ReservationRepository implements ReservationRepositoryInterface
 
     public function delete(string $service, string $name, int $index): void
     {
-
+        $this->database->delete(
+            Reservation::class,
+            'record.getService() == _service and record.getName() == _name and record.getIndex() == _index',
+            [
+                '_service' => $service,
+                '_name' => $name,
+                '_index' => $index,
+            ],
+        );
+        $this->database->persister->flush();
     }
 }

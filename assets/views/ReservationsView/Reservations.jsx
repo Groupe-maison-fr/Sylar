@@ -16,9 +16,9 @@ import {
   TableRow
 } from '@material-ui/core';
 import queryReservations from "../../graphQL/Reservation/queryReservations";
-import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
-import EventBus from '../../components/EventBus';
 import ReplayIcon from "@material-ui/icons/Replay";
+import DeleteIcon from "@material-ui/icons/Delete";
+import mutationDeleteReservation from "../../graphQL/Reservation/mutationDeleteReservation";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -40,6 +40,14 @@ const Reservations = ({className,refresh, ...rest}) => {
     return queryReservations().then((result)=>{
       setData(result);
       setLoading(false);
+    });
+  }
+
+  const deleteReservation = (reservation) =>{
+    setLoading(true);
+    return mutationDeleteReservation(reservation.service,reservation.name,reservation.index).then((result)=>{
+      setLoading(false);
+      loadReservations();
     });
   }
 
@@ -78,6 +86,9 @@ const Reservations = ({className,refresh, ...rest}) => {
                       <TableCell style={{ verticalAlign: 'top' }}>{reservation.service}</TableCell>
                       <TableCell style={{ verticalAlign: 'top' }}>{reservation.name}</TableCell>
                       <TableCell style={{ verticalAlign: 'top' }}>{reservation.index}</TableCell>
+                      <Button onClick={() => deleteReservation(reservation)}>
+                        <DeleteIcon />
+                      </Button>
                     </TableRow>
                 ))}
               </TableBody>

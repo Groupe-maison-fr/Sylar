@@ -39,3 +39,9 @@ MutationUserInterface:
         args:
           input:
             type: AddReservationInput!
+      deleteReservation:
+        type: DeleteReservationOutput!
+        resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\DeleteReservationMutation", args["input"]["service"], args["input"]["name"], args["input"]["index"])'
+        args:
+          input:
+            type: DeleteReservationInput!

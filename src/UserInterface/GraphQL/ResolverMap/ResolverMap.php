@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\UserInterface\GraphQL\ResolverMap;
 
 use App\UserInterface\GraphQL\Map\AddReservationOutputDTO;
+use App\UserInterface\GraphQL\Map\DeleteReservationOutputDTO;
 use App\UserInterface\GraphQL\Map\FailedOutputDTO;
 use App\UserInterface\GraphQL\Map\ForceDestroyContainerOutputDTO;
 use App\UserInterface\GraphQL\Map\ForceDestroyFilesystemOutputDTO;
@@ -104,6 +105,19 @@ final class ResolverMap extends ResolverMapParent
                         return $genericType;
                     }
                     if ($value instanceof AddReservationOutputDTO) {
+                        return 'SuccessOutput';
+                    }
+
+                    return null;
+                },
+            ],
+            'DeleteReservationOutput' => [
+                self::RESOLVE_TYPE => function ($value): ?string {
+                    $genericType = $this->isGenericMap($value);
+                    if ($genericType !== null) {
+                        return $genericType;
+                    }
+                    if ($value instanceof DeleteReservationOutputDTO) {
                         return 'SuccessOutput';
                     }
 

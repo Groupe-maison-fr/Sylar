@@ -1,0 +1,15 @@
+DeleteReservationInput:
+  type: input-object
+  config:
+    fields:
+      name:
+        type: String!
+      service:
+        type: String!
+      index:
+        type: Int
+
+DeleteReservationOutput:
+  type: union
+  config:
+    types: [SuccessOutput, FailedOutput]
