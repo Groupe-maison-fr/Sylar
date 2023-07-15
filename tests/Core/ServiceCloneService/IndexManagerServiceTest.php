@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Tests\Core\ServiceCloneService;
 
 use App\Core\ServiceCloner\IndexManagerService;
-use App\Core\ServiceCloner\Reservation\ServiceReservationRepositoryInterface;
+use App\Core\ServiceCloner\Reservation\Object\Reservation;
+use App\Core\ServiceCloner\Reservation\ReservationRepositoryInterface;
 use App\Core\ServiceCloner\ServiceClonerStateService;
 use App\Core\ServiceCloner\ServiceClonerStatusDTO;
+use LogicException;
 use Mockery;
 use Tests\AbstractIntegrationTest;
 
@@ -24,7 +26,7 @@ final class IndexManagerServiceTest extends AbstractIntegrationTest
     public function it_should_get_next_available_index(array $expectedIndexes, array $reservations, array $usedIndexes): void
     {
         $serviceClonerStateServiceInterface = Mockery::mock(ServiceClonerStateService::class)->makePartial();
-        $serviceReservationRepositoryStub = new class($reservations) implements ServiceReservationRepositoryInterface {
+        $serviceReservationRepositoryStub = new class($reservations) implements ReservationRepositoryInterface {
             public function __construct(private array $reservations)
             {
             }
@@ -32,6 +34,21 @@ final class IndexManagerServiceTest extends AbstractIntegrationTest
             public function getReservationIndexesByService(string $serviceName): array
             {
                 return $this->reservations[$serviceName];
+            }
+
+            public function findAll(): array
+            {
+                throw new LogicException('unimplemented');
+            }
+
+            public function add(Reservation $reservation): void
+            {
+                throw new LogicException('unimplemented');
+            }
+
+            public function delete(string $service, string $name, int $index): void
+            {
+                throw new LogicException('unimplemented');
             }
         };
         $indexManagerService = new IndexManagerService(

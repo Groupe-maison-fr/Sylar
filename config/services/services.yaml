@@ -26,6 +26,7 @@ services:
             $configurationFilename: '%sylar_config_filename%'
             $mountedConfigurationPath: '%mounted_configuration_path%'
             $containerConfigurationPath: '/app/data'
+            $containerDatabasePath: '/app/data/database'
             $dockerReadOnly: '@docker.readonly'
             $dockerReadWrite: '@docker.readwrite'
 

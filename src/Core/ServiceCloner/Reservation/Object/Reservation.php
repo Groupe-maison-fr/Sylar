@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Core\ServiceCloner\Reservation\Object;
 
+use Micoli\Elql\Metadata\Table;
 use Micoli\Elql\Metadata\Unique;
 
+#[Table('reservations')]
 #[Unique('[record.getService(),record.getIndex()]', 'unique service/index')]
 #[Unique('[record.getService(),record.getName()]', 'unique service/name')]
 final class Reservation

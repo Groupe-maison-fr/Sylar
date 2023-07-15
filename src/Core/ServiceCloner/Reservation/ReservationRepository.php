@@ -15,15 +15,14 @@ final class ReservationRepository implements ReservationRepositoryInterface
     private Elql $database;
 
     public function __construct(
-        string $containerConfigurationPath,
+        string $containerDatabasePath,
     ) {
-        $path = $containerConfigurationPath . '/database';
-        if (!file_exists($path)) {
-            mkdir($path);
+        if (!file_exists($containerDatabasePath)) {
+            mkdir($containerDatabasePath);
         }
         $this->database = new Elql(
             new FilePersister(
-                $path,
+                $containerDatabasePath,
                 new MetadataManager(),
                 YamlEncoder::FORMAT,
             ),
@@ -35,10 +34,13 @@ final class ReservationRepository implements ReservationRepositoryInterface
      */
     public function getReservationIndexesByService(string $serviceName): array
     {
-        return array_values(array_map(
+        $values = array_values(array_map(
             fn (Reservation $reservation) => $reservation->getIndex(),
             $this->database->find(Reservation::class, sprintf('record.getService() == "%s"', $serviceName)),
         ));
+        sort($values);
+
+        return $values;
     }
 
     public function findAll(): array
