@@ -37,7 +37,7 @@ host-docker-stats:
 
 .PHONY: host-test-install
 host-test-install:
-	docker-compose exec runner bash -c "APP_ENV=test composer install --prefer-dist"
+	docker-compose exec runner bash -c "APP_ENV=test composer install --prefer-dist || true"
 
 .PHONY: host-test-phpunit
 host-test-phpunit:
@@ -52,12 +52,30 @@ host-test-phpstan:
 host-test-cs-fixer:
 	docker-compose exec runner bash -c "vendor/bin/php-cs-fixer fix --verbose --dry-run"
 
-.PHONY: host-test
-host-test:
+.PHONY: host-test-tsc
+host-test-tsc:
+	docker-compose exec builder sh -c "yarn run tsc"
+
+.PHONY: host-test-eslint
+host-test-eslint:
+	docker-compose exec builder sh -c "yarn run eslint assets/"
+
+.PHONY: host-test-php
+host-test-php:
 	$(MAKE) host-test-install
 	$(MAKE) host-test-phpunit
 	$(MAKE) host-test-phpstan
 	$(MAKE) host-test-cs-fixer
+
+.PHONY: host-test-ts
+host-test-ts:
+	$(MAKE) host-test-tsc
+	$(MAKE) host-test-eslint
+
+.PHONY: host-test
+host-test:
+	$(MAKE) host-test-php
+	$(MAKE) host-test-ts
 
 .PHONY: host-docker-logs
 host-docker-logs:
