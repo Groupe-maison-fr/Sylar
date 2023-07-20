@@ -40,7 +40,7 @@ services:
         - executionEnvironment: host
           command: ['ls','/']
     mounts:
-      - source: '=containerParameter.getReplicatedFilesystem()~"/data"'
+      - source: '=containerParameter.getReplicatedFilesystem()'
         target: /var/lib/mysql
       - source: '=(configurationRoot)~"/"~((containerParameter.getIndex() === 0)?"mysql-master/etc/mysql/my.cnf":"mysql-replicate/etc/mysql/my.cnf")'
         target: /etc/mysql/my.cnf
@@ -62,10 +62,17 @@ services:
       - hostPort: '=(25432+containerParameter.getIndex())~"/tcp"'
         containerPort: '5432/tcp'
     lifeCycleHooks:
+      preStartCommands:
+        - executionEnvironment: host
+          when: '=containerParameter.getIndex() !== 0'
+          command: ['rm','=containerParameter.getReplicatedFilesystem() ~ "/pgdata/postgresql.auto.conf"']
+        - executionEnvironment: host
+          when: '=containerParameter.getIndex() !== 0'
+          command: ['rm','=containerParameter.getReplicatedFilesystem() ~ "/pgdata/standby.signal"']
       postStartWaiters:
         - type: logMatch
           expression: '!database system is ready to accept connections!'
-          timeout: 30
+          timeout: 10
     mounts:
       - source: '=containerParameter.getReplicatedFilesystem()'
         target: /var/lib/postgresql/data
