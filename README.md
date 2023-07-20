@@ -110,10 +110,10 @@ make docker-compose-up-dev-amd64
 ### Test environment setup (mysql primary)
 
 ```bash
-sudo apt-get install -y mariadb-client
+sudo apt-get install -y mariadb-client postgresql-client
 docker-compose  -f tests/test-env/docker-compose.yaml up -d
 sleep 5
-tests/test-env/init.sh
+tests/test-env/init-mysql.sh
 ```
 
 ### Test environment setup (sylar master on replication to mysql-primary)

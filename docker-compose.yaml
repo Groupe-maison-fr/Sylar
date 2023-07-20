@@ -16,6 +16,9 @@ services:
     container_name: sylar-runner
     build: .docker/runner
     entrypoint: ["/app/.docker/runner/entrypoint.sh"]
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     restart: unless-stopped
     working_dir: /app
     privileged: true
@@ -55,6 +58,9 @@ services:
     container_name: sylar-builder
     build: .docker/builder
     entrypoint: ["/app/.docker/builder/entrypoint.sh"]
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     restart: unless-stopped
     working_dir: /app
     environment:
@@ -67,6 +73,9 @@ services:
   webserver:
     container_name: sylar-webserver
     image: nginx:latest
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     restart: unless-stopped
     working_dir: /app
     volumes:
@@ -88,7 +97,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - LOG_LEVEL=debug
+      - LOG_LEVEL=info
       - ALLOW_RESTARTS=1
       - AUTH=1
       - BUILD=1
@@ -119,6 +128,9 @@ services:
     container_name: sylar-mercure
     build: .docker/mercure
     entrypoint: ["/entrypoint.sh"]
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     restart: unless-stopped
     environment:
       - APP_ENV=prod
@@ -138,6 +150,9 @@ services:
     image: redis:6.2-alpine
     restart: always
     command: redis-server --save 20 1 --loglevel warning --requirepass ZVlWWDdFd1ZtbXhLU
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     volumes:
       - redis-data:/data
 
@@ -223,10 +238,12 @@ services:
 
   promtail:
     container_name: sylar-promtail
-    image: grafana/promtail:1.4.1
+    image: grafana/promtail:2.8.2
+#    entrypoint: ["sleep","7200"]
+    command: -config.file=/etc/promtail/config.yml
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers
-      - .docker/promtail/etc/promtail/config.yaml:/etc/promtail/config.yaml
-    command: -config.file=/etc/promtail/config.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .docker/promtail/etc/promtail:/etc/promtail
     depends_on:
       - loki

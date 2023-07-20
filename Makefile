@@ -81,6 +81,10 @@ host-test:
 host-docker-logs:
 	docker-compose logs -f
 
+.PHONY: host-docker-loki-logs
+host-docker-loki-logs:
+	docker exec -it sylar-runner logcli --addr "http://sylar-loki:3100" query '{host=~ ".+"}' --tail
+
 .PHONY: host-restart-worker
 host-restart-worker:
 	docker-compose exec runner supervisorctl restart php-worker
