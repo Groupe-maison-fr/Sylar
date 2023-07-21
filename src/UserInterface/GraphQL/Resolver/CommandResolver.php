@@ -7,8 +7,6 @@ namespace App\UserInterface\GraphQL\Resolver;
 use App\Core\ServiceCloner\CommandExecutor\CommandExecutorInterface;
 use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\Configuration\Object\Command;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
@@ -26,9 +24,9 @@ final class CommandResolver implements QueryInterface
     {
         switch ($info->fieldName) {
             case 'subCommands':
-                return $command->getSubCommands();
+                return $command->subCommands;
             case 'name':
-                return $command->getName();
+                return $command->name;
             case 'output':
                 return $this->commandExecutor->run($command);
         }
@@ -41,10 +39,10 @@ final class CommandResolver implements QueryInterface
     }
 
     /**
-     * @return ArrayCollection<int, Command>
+     * @return Command[]
      */
-    public function resolve(): Collection
+    public function resolve(): array
     {
-        return $this->configurationService->getConfiguration()->getCommands();
+        return $this->configurationService->getConfiguration()->commands;
     }
 }

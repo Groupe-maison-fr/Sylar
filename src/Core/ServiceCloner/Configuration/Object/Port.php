@@ -4,42 +4,12 @@ declare(strict_types=1);
 
 namespace App\Core\ServiceCloner\Configuration\Object;
 
-final class Port
+final readonly class Port
 {
-    private string $containerPort;
-    private string $hostPort;
-    private string $hostIp;
-
-    public function getContainerPort(): string
-    {
-        return $this->containerPort;
-    }
-
-    public function getHostPort(): string
-    {
-        return $this->hostPort;
-    }
-
-    public function getHostIp(): ?string
-    {
-        return $this->hostIp;
-    }
-
-    /** @internal */
-    public function setContainerPort(string $containerPort): void
-    {
-        $this->containerPort = $containerPort;
-    }
-
-    /** @internal */
-    public function setHostPort(string $hostPort): void
-    {
-        $this->hostPort = $hostPort;
-    }
-
-    /** @internal */
-    public function setHostIp(?string $hostIp): void
-    {
-        $this->hostIp = $hostIp;
+    public function __construct(
+        public string $containerPort,
+        public string $hostPort,
+        public string $hostIp,
+    ) {
     }
 }

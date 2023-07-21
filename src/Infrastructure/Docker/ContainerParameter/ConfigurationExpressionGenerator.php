@@ -25,7 +25,7 @@ final class ConfigurationExpressionGenerator implements ConfigurationExpressionG
 
         return (string) $this->expressionLanguage->evaluate(mb_substr($configurationExpression, 1), [
             'containerParameter' => $containerParameter,
-            'configurationRoot' => $this->configurationService->getConfiguration()->getConfigurationRoot(),
+            'configurationRoot' => $this->configurationService->getConfiguration()->configurationRoot,
         ]);
     }
 }

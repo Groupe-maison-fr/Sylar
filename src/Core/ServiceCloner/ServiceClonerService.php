@@ -197,7 +197,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
 
         $filesystem = sprintf(
             '%s/%s',
-            $this->dockerConfiguration->getConfiguration()->getZpoolName(),
+            $this->dockerConfiguration->getConfiguration()->zpoolName,
             $this->slugger->slug($masterName)->toString(),
         );
         $snapshotName = $this->slugger->slug($instanceName)->toString();
@@ -208,7 +208,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
 
     private function stopFilesystem(string $masterName, string $instanceName): void
     {
-        $zfsFilesystemName = $this->dockerConfiguration->getConfiguration()->getZpoolName() . '/' . $masterName;
+        $zfsFilesystemName = $this->dockerConfiguration->getConfiguration()->zpoolName . '/' . $masterName;
         /*
         if (!$this->zfsService->hasSnapshot($zfsFilesystemName, $instanceName)) {
             $this->logger->debug(sprintf('Can not stop filesystem, !hasSnapshot %s', $instanceName));
@@ -239,7 +239,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
 
         $filesystem = sprintf(
             '%s/%s',
-            $this->dockerConfiguration->getConfiguration()->getZpoolName(),
+            $this->dockerConfiguration->getConfiguration()->zpoolName,
             $this->slugger->slug($masterName)->toString(),
         );
 

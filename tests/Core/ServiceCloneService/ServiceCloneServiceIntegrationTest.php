@@ -20,7 +20,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
     {
         $this->setConfigurationDependentServices('specific_configuration');
         $config = $this->configurationService->getConfiguration()->getServiceByName('unit-test-mysql_specific_configuration');
-        self::assertSame('ABCDEFGH', $config->getLabels()->get(1)->getValue());
+        self::assertSame('ABCDEFGH', $config->labels[1]->value);
     }
 
     /**
@@ -29,10 +29,10 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
     public function it_should_load_configuration_service_with_commands(): void
     {
         $this->setConfigurationDependentServices('commands');
-        self::assertCount(2, $this->configurationService->getConfiguration()->getCommands()->toArray());
-        self::assertCount(2, $this->configurationService->getConfiguration()->getCommandByName('test1')->getSubCommands()->toArray());
-        self::assertCount(3, $this->configurationService->getConfiguration()->getCommandByName('test2')->getSubCommands()->toArray());
-        self::assertSame('pwd', $this->configurationService->getConfiguration()->getCommandByName('test2')->getSubCommands()->toArray()[0]);
+        self::assertCount(2, $this->configurationService->getConfiguration()->commands);
+        self::assertCount(2, $this->configurationService->getConfiguration()->getCommandByName('test1')->subCommands);
+        self::assertCount(3, $this->configurationService->getConfiguration()->getCommandByName('test2')->subCommands);
+        self::assertSame('pwd', $this->configurationService->getConfiguration()->getCommandByName('test2')->subCommands[0]);
         self::assertNull($this->configurationService->getConfiguration()->getCommandByName('test3'));
     }
 
@@ -70,7 +70,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
         $this->setConfigurationDependentServices('lifecycle_hooks');
         $this->resetBufferedLoggerHandler();
 
-        $dockerName = $this->configurationService->getConfiguration()->getServices()[0]->getName();
+        $dockerName = $this->configurationService->getConfiguration()->services[0]->name;
         $this->serviceCloneService->startMaster($dockerName);
 
         /** @var ContainerSummaryItem $containerSummaryItem */

@@ -17,12 +17,12 @@ final class ServiceClonerNamingService implements ServiceClonerNamingServiceInte
 
     public function getZfsFilesystemName(string $masterName, string $instanceName): string
     {
-        return sprintf('%s/%s', $this->dockerConfiguration->getConfiguration()->getZpoolName(), $this->getFullName($masterName, $instanceName, '@'));
+        return sprintf('%s/%s', $this->dockerConfiguration->getConfiguration()->zpoolName, $this->getFullName($masterName, $instanceName, '@'));
     }
 
     public function getZfsFilesystemPath(string $masterName, string $instanceName): string
     {
-        return sprintf('%s/%s', $this->dockerConfiguration->getConfiguration()->getZpoolRoot(), $this->getFullName($masterName, $instanceName, '-'));
+        return sprintf('%s/%s', $this->dockerConfiguration->getConfiguration()->zpoolRoot, $this->getFullName($masterName, $instanceName, '-'));
     }
 
     public function getFullName(string $masterName, string $instanceName, string $separator): string

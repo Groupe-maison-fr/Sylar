@@ -22,7 +22,7 @@ final class ContainerWaitUntilLogService implements ContainerWaitUntilLogService
 
     public function wait(ContainerParameterDTO $containerParameter, string $expression, int $timeout): void
     {
-        $container = $this->containerFinderService->getDockerByName($containerParameter->getName());
+        $container = $this->containerFinderService->getDockerByName($containerParameter->name);
         if ($container === null) {
             return;
         }
@@ -42,7 +42,7 @@ final class ContainerWaitUntilLogService implements ContainerWaitUntilLogService
     private function initTimeoutAlarm(int $timeout, DockerRawStreamUntil $logsStream, ContainerParameterDTO $containerParameter): void
     {
         \pcntl_signal(SIGALRM, function (int $signo) use ($logsStream, $containerParameter): void {
-            $this->logger->debug(sprintf('SIGALRM (%d) DockerWaitUntilLogService for %s', $signo, $containerParameter->getName()));
+            $this->logger->debug(sprintf('SIGALRM (%d) DockerWaitUntilLogService for %s', $signo, $containerParameter->name));
             $logsStream->exitWait();
         }, true);
         \pcntl_alarm($timeout);
@@ -55,7 +55,7 @@ final class ContainerWaitUntilLogService implements ContainerWaitUntilLogService
                 \pcntl_alarm(0);
                 $logsStream->exitWait();
             }
-            $this->logger->debug(sprintf('%s on "%s": %s', strtoupper($type), $containerParameter->getName(), $buffer));
+            $this->logger->debug(sprintf('%s on "%s": %s', strtoupper($type), $containerParameter->name, $buffer));
         };
     }
 }

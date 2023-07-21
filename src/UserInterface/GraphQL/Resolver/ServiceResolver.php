@@ -8,7 +8,6 @@ use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\Configuration\Object\Service;
 use App\Core\ServiceCloner\ServiceClonerStateServiceInterface;
 use App\Core\ServiceCloner\ServiceClonerStatusDTO;
-use Doctrine\Common\Collections\ArrayCollection;
 use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
@@ -26,31 +25,31 @@ final class ServiceResolver implements QueryInterface
     {
         switch ($info->fieldName) {
             case 'name':
-                return $service->getName();
+                return $service->name;
             case 'image':
-                return $service->getImage();
+                return $service->image;
             case 'command':
-                return $service->getCommand();
+                return $service->command;
             case 'labels':
-                return $service->getLabels();
+                return $service->labels;
             case 'ports':
-                return $service->getPorts();
+                return $service->ports;
             case 'environments':
-                return $service->getEnvironments();
+                return $service->environments;
             case 'containers':
                 return array_filter(
                     $this->serviceClonerStateService->getStates(),
-                    fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getMasterName() === $service->getName(),
+                    fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getMasterName() === $service->name,
                 );
         }
         throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
     /**
-     * @return ArrayCollection<int, Service>
+     * @return Service[]
      */
-    public function resolve(): ArrayCollection
+    public function resolve(): array
     {
-        return $this->configurationService->getConfiguration()->getServices();
+        return $this->configurationService->getConfiguration()->services;
     }
 }

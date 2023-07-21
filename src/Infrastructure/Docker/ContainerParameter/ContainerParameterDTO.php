@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Docker\ContainerParameter;
 
-final class ContainerParameterDTO
+final readonly class ContainerParameterDTO
 {
     public function __construct(
-        private string $name,
-        private int $index,
-        private string $replicatedFilesystem,
+        public string $name,
+        public int $index,
+        public string $replicatedFilesystem,
     ) {
     }
 

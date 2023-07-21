@@ -25,11 +25,14 @@ final class CommandExecutorTest extends AbstractIntegrationTest
     /** @test */
     public function it_should_run_commands(): void
     {
-        $command = new Command();
-        $command->setName('test');
-        $command->addSubCommand('pwd');
-        $command->addSubCommand('cd /tmp;pwd');
-        $command->addSubCommand('cd /var;pwd');
+        $command = new Command(
+            'test',
+            [
+                'pwd',
+                'cd /tmp;pwd',
+                'cd /var;pwd',
+            ],
+        );
         $output = $this->commandExecutor->run($command);
         self::assertCount(3, $output);
         self::assertSame('pwd', $output[0]->getSubCommand());

@@ -132,80 +132,81 @@ final class ServiceClonerArrayDumperService
     {
         switch (true) {
             case is_bool($node):
-            case is_array($node):
             case is_string($node):
                 return $node;
+            case is_array($node):
+                return array_map(fn ($item) => $this->dumpNode($containerParameter, $item), $node);
             case $node instanceof Collection:
                 return $node->map(fn ($item) => $this->dumpNode($containerParameter, $item))->toArray();
             case $node instanceof Environment:
                 return [
-                    'name' => $this->evaluate($containerParameter, $node->getName()),
-                    'value' => $this->evaluate($containerParameter, $node->getValue()),
+                    'name' => $this->evaluate($containerParameter, $node->name),
+                    'value' => $this->evaluate($containerParameter, $node->value),
                 ];
             case $node instanceof Label:
                 return [
-                    'name' => $this->evaluate($containerParameter, $node->getName()),
-                    'value' => $this->evaluate($containerParameter, $node->getValue()),
+                    'name' => $this->evaluate($containerParameter, $node->name),
+                    'value' => $this->evaluate($containerParameter, $node->value),
                 ];
             case $node instanceof LifeCycleHooks:
                 return [
-                    'preStartCommands' => $this->dumpNode($containerParameter, $node->getPostDestroyCommands()),
-                    'postStartWaiters' => $this->dumpNode($containerParameter, $node->getPostStartWaiters()),
-                    'postStartCommands' => $this->dumpNode($containerParameter, $node->getPostStartCommands()),
-                    'postDestroyCommands' => $this->dumpNode($containerParameter, $node->getPostDestroyCommands()),
+                    'preStartCommands' => $this->dumpNode($containerParameter, $node->postDestroyCommands),
+                    'postStartWaiters' => $this->dumpNode($containerParameter, $node->postStartWaiters),
+                    'postStartCommands' => $this->dumpNode($containerParameter, $node->postStartCommands),
+                    'postDestroyCommands' => $this->dumpNode($containerParameter, $node->postDestroyCommands),
                 ];
             case $node instanceof Mount:
                 return [
-                    'source' => $this->evaluate($containerParameter, $node->getSource()),
-                    'target' => $this->evaluate($containerParameter, $node->getTarget()),
+                    'source' => $this->evaluate($containerParameter, $node->source),
+                    'target' => $this->evaluate($containerParameter, $node->target),
                 ];
             case $node instanceof Port:
                 return [
-                    'containerPort' => $this->evaluate($containerParameter, $node->getContainerPort()),
-                    'hostPort' => $this->evaluate($containerParameter, $node->getHostPort()),
-                    'hostIp' => $this->evaluate($containerParameter, $node->getHostIp()),
+                    'containerPort' => $this->evaluate($containerParameter, $node->containerPort),
+                    'hostPort' => $this->evaluate($containerParameter, $node->hostPort),
+                    'hostIp' => $this->evaluate($containerParameter, $node->hostIp),
                 ];
             case $node instanceof PostDestroyCommand:
                 return [
-                    'executionEnvironment' => $this->evaluate($containerParameter, $node->getExecutionEnvironment()),
-                    'command' => $this->dumpNode($containerParameter, $node->getCommand()),
+                    'executionEnvironment' => $this->evaluate($containerParameter, $node->executionEnvironment),
+                    'command' => $this->dumpNode($containerParameter, $node->command),
                 ];
             case $node instanceof PostStartCommand:
                 return [
-                    'executionEnvironment' => $this->evaluate($containerParameter, $node->getExecutionEnvironment()),
-                    'command' => $this->dumpNode($containerParameter, $node->getCommand()),
+                    'executionEnvironment' => $this->evaluate($containerParameter, $node->executionEnvironment),
+                    'command' => $this->dumpNode($containerParameter, $node->command),
                 ];
             case $node instanceof PostStartWaiter:
                 return [
-                    'type' => $this->evaluate($containerParameter, $node->getType()),
-                    'expression' => $this->evaluate($containerParameter, $node->getExpression()),
-                    'timeout' => (int) $this->evaluate($containerParameter, (string) $node->getTimeout()),
+                    'type' => $this->evaluate($containerParameter, $node->type),
+                    'expression' => $this->evaluate($containerParameter, $node->expression),
+                    'timeout' => (int) $this->evaluate($containerParameter, (string) $node->timeout),
                 ];
             case $node instanceof PreStartCommand:
                 return [
-                    'executionEnvironment' => $this->evaluate($containerParameter, $node->getExecutionEnvironment()),
-                    'command' => $this->dumpNode($containerParameter, $node->getCommand()),
+                    'executionEnvironment' => $this->evaluate($containerParameter, $node->executionEnvironment),
+                    'command' => $this->dumpNode($containerParameter, $node->command),
                 ];
             case $node instanceof Service:
                 return [
-                    'name' => $this->evaluate($containerParameter, $node->getName()),
-                    'image' => $this->evaluate($containerParameter, $node->getImage()),
-                    'command' => $this->evaluate($containerParameter, $node->getCommand()),
-                    'entryPoint' => $this->evaluate($containerParameter, $node->getEntryPoint()),
-                    'networkMode' => $this->evaluate($containerParameter, $node->getNetworkMode()),
-                    'lifeCycleHooks' => $this->dumpNode($containerParameter, $node->getLifeCycleHooks()),
-                    'environments' => $this->dumpNode($containerParameter, $node->getEnvironments()),
-                    'mounts' => $this->dumpNode($containerParameter, $node->getMounts()),
-                    'ports' => $this->dumpNode($containerParameter, $node->getPorts()),
-                    'labels' => $this->dumpNode($containerParameter, $node->getLabels()),
+                    'name' => $this->evaluate($containerParameter, $node->name),
+                    'image' => $this->evaluate($containerParameter, $node->image),
+                    'command' => $this->evaluate($containerParameter, $node->command),
+                    'entryPoint' => $this->evaluate($containerParameter, $node->entryPoint),
+                    'networkMode' => $this->evaluate($containerParameter, $node->networkMode),
+                    'lifeCycleHooks' => $this->dumpNode($containerParameter, $node->lifeCycleHooks),
+                    'environments' => $this->dumpNode($containerParameter, $node->environments),
+                    'mounts' => $this->dumpNode($containerParameter, $node->mounts),
+                    'ports' => $this->dumpNode($containerParameter, $node->ports),
+                    'labels' => $this->dumpNode($containerParameter, $node->labels),
                 ];
             case $node instanceof ServiceCloner:
                 return [
-                    'configurationRoot' => $this->evaluate($containerParameter, $node->getConfigurationRoot()),
-                    'stateRoot' => $this->evaluate($containerParameter, $node->getstateRoot()),
-                    'zpoolName' => $this->evaluate($containerParameter, $node->getZpoolName()),
-                    'zpoolRoot' => $this->evaluate($containerParameter, $node->getZpoolRoot()),
-                    'services' => $this->dumpNode($containerParameter, $node->getServices()),
+                    'configurationRoot' => $this->evaluate($containerParameter, $node->configurationRoot),
+                    'stateRoot' => $this->evaluate($containerParameter, $node->stateRoot),
+                    'zpoolName' => $this->evaluate($containerParameter, $node->zpoolName),
+                    'zpoolRoot' => $this->evaluate($containerParameter, $node->zpoolRoot),
+                    'services' => $this->dumpNode($containerParameter, $node->services),
                 ];
         }
 

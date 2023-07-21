@@ -43,7 +43,7 @@ final class ServiceClonerCommandLineDumperService
     {
         switch (true) {
             case is_array($node):
-                return implode(' ', $node);
+                return implode(' ', array_map(fn ($item) => $this->dumpNode($container, $item), $node));
             case $node instanceof Collection:
                 return implode(' ', $node->map(fn ($item) => $this->dumpNode($container, $item))->toArray());
             case $node instanceof PreStartCommand:
@@ -55,46 +55,46 @@ final class ServiceClonerCommandLineDumperService
             case $node instanceof Environment:
                 return sprintf(
                     '--env %s=%s',
-                    $this->evaluate($container, $node->getName()),
-                    $this->evaluate($container, $this->evaluate($container, $node->getValue())),
+                    $this->evaluate($container, $node->name),
+                    $this->evaluate($container, $this->evaluate($container, $node->value)),
                 );
             case $node instanceof Label:
                 return sprintf(
                     '--label %s=%s',
-                    $this->evaluate($container, $node->getName()),
-                    $this->evaluate($container, $node->getValue()),
+                    $this->evaluate($container, $node->name),
+                    $this->evaluate($container, $node->value),
                 );
             case $node instanceof Mount:
                 return sprintf(
                     '--mount type=bind,target=%s,source=%s',
-                    $this->evaluate($container, $node->getTarget()),
-                    $this->evaluate($container, $node->getSource()),
+                    $this->evaluate($container, $node->target),
+                    $this->evaluate($container, $node->source),
                 );
             case $node instanceof Port:
                 return sprintf(
                     '--publish %s:%s:%s',
-                    $this->evaluate($container, $node->getHostIp()),
-                    str_replace(['/tcp', '/udp'], '', $this->evaluate($container, $node->getHostPort())),
-                    $this->evaluate($container, $node->getContainerPort()),
+                    $this->evaluate($container, $node->hostIp),
+                    str_replace(['/tcp', '/udp'], '', $this->evaluate($container, $node->hostPort)),
+                    $this->evaluate($container, $node->containerPort),
                 );
             case $node instanceof Service:
-                $networkMode = $node->getNetworkMode() === null ? '' : $this->evaluate($container, $node->getNetworkMode());
+                $networkMode = $node->networkMode === null ? '' : $this->evaluate($container, $node->networkMode);
 
                 return implode(' ', array_filter([
                     'docker run',
-                    $this->dumpNode($container, $node->getEnvironments()),
-                    $this->dumpNode($container, $node->getMounts()),
-                    $this->dumpNode($container, $node->getPorts()),
-                    $this->dumpNode($container, $node->getLabels()),
-                    $node->getNetworkMode() !== null ? sprintf('--net=%s', $networkMode) : '',
-                    '--name ' . $this->evaluate($container, $container->getName()),
+                    $this->dumpNode($container, $node->environments),
+                    $this->dumpNode($container, $node->mounts),
+                    $this->dumpNode($container, $node->ports),
+                    $this->dumpNode($container, $node->labels),
+                    $node->networkMode !== null ? sprintf('--net=%s', $networkMode) : '',
+                    '--name ' . $this->evaluate($container, $container->name),
                     '--detach',
-                    $this->evaluate($container, $node->getImage()),
-                    $node->getEntryPoint() != '' ? sprintf('--entrypoint %s', $this->evaluate($container, $node->getEntryPoint())) : '',
-                    $this->evaluate($container, $node->getCommand()),
+                    $this->evaluate($container, $node->image),
+                    $node->entryPoint != '' ? sprintf('--entrypoint %s', $this->evaluate($container, $node->entryPoint)) : '',
+                    $this->evaluate($container, $node->command),
                 ]));
             case $node instanceof ServiceCloner:
-                return $this->dumpNode($container, $node->getServices());
+                return $this->dumpNode($container, $node->services);
         }
         throw new DomainException('Unknown type to map');
     }

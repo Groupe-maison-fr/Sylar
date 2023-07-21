@@ -35,6 +35,7 @@ services:
         exclude:
          - '../../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
          - '../../src/**/Core/ServiceCloner/Reservation/Object/*.php'
+         - '../../src/**/Core/ServiceCloner/Configuration/Object/*.php'
          - '../../src/**/*DTO.php'
          - '../../src/**/*Exception.php'
          - '../../src/**/*Command.php'

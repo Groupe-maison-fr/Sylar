@@ -6,24 +6,18 @@ namespace App\Core\ServiceCloner\Configuration\Object;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class ServiceCloner
+final readonly class ServiceCloner
 {
-    private string $stateRoot;
-    private string $zpoolName;
-    private string $zpoolRoot;
-    private string $configurationRoot;
-
-    /**
-     * @var Service[]
-     */
-    private array $services = [];
-    /**
-     * @var Command[]
-     */
-    private array $commands = [];
-
-    public function __construct()
-    {
+    public function __construct(
+        public string $stateRoot,
+        public string $zpoolName,
+        public string $zpoolRoot,
+        public string $configurationRoot,
+        /** @var Service[] */
+        public array $services = [],
+        /** @var Command[] */
+        public array $commands = [],
+    ) {
     }
 
     public function getstateRoot(): string
@@ -51,7 +45,7 @@ final class ServiceCloner
 
     public function getServiceByName(string $name): ?Service
     {
-        $services = $this->getServices()->filter(fn (Service $service) => $service->getName() === $name);
+        $services = (new ArrayCollection($this->services))->filter(fn (Service $service) => $service->name === $name);
 
         if ($services->isEmpty()) {
             return null;
@@ -60,71 +54,14 @@ final class ServiceCloner
         return $services->first();
     }
 
-    /**
-     * @return ArrayCollection<int, Command>
-     */
-    public function getCommands(): ArrayCollection
-    {
-        return new ArrayCollection($this->commands);
-    }
-
     public function getCommandByName(string $name): ?Command
     {
-        $commands = $this->getCommands()->filter(fn (Command $command) => $command->getName() === $name);
+        $commands = (new ArrayCollection($this->commands))->filter(fn (Command $command) => $command->name === $name);
 
         if ($commands->isEmpty()) {
             return null;
         }
 
         return $commands->first();
-    }
-
-    public function getConfigurationRoot(): string
-    {
-        return $this->configurationRoot;
-    }
-
-    /** @internal */
-    public function setstateRoot(string $stateRoot): void
-    {
-        $this->stateRoot = $stateRoot;
-    }
-
-    /** @internal */
-    public function setZpoolName(string $zpoolName): void
-    {
-        $this->zpoolName = $zpoolName;
-    }
-
-    /** @internal */
-    public function setZpoolRoot(string $zpoolRoot): void
-    {
-        $this->zpoolRoot = $zpoolRoot;
-    }
-
-    /** @internal */
-    public function setConfigurationRoot(string $configurationRoot): void
-    {
-        $this->configurationRoot = $configurationRoot;
-    }
-
-    /**
-     * @internal
-     *
-     * @param Service[] $services
-     */
-    public function setServices(array $services): void
-    {
-        $this->services = $services;
-    }
-
-    /**
-     * @internal
-     *
-     * @param Command[] $commands
-     */
-    public function setCommands(array $commands): void
-    {
-        $this->commands = $commands;
     }
 }

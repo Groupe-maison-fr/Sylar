@@ -6,28 +6,9 @@ namespace App\Core\ServiceCloner\Configuration\Object;
 
 final class Label
 {
-    private string $name;
-    private string $value;
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    /** @internal */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    /** @internal */
-    public function setValue(string $value): void
-    {
-        $this->value = $value;
+    public function __construct(
+        public string $name,
+        public string $value,
+    ) {
     }
 }

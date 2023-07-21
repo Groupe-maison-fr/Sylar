@@ -44,7 +44,7 @@ class ServiceClonerStateService implements ServiceClonerStateServiceInterface
     {
         $zfsFilesystemPath = sprintf(
             '/%s/%s',
-            $this->configurationService->getConfiguration()->getZpoolName(),
+            $this->configurationService->getConfiguration()->zpoolName,
             $this->serviceClonerNamingService->getFullName(
                 $serviceClonerStatusDTO->getMasterName(),
                 $serviceClonerStatusDTO->getInstanceName(),
