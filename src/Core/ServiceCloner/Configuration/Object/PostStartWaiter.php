@@ -10,6 +10,7 @@ final readonly class PostStartWaiter
         public string $type,
         public string $expression,
         public int $timeout,
+        public ?string $when = null,
     ) {
     }
 }

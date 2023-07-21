@@ -7,4 +7,6 @@ namespace App\Infrastructure\Docker\ContainerParameter;
 interface ConfigurationExpressionGeneratorInterface
 {
     public function generate(ContainerParameterDTO $containerParameter, string $configurationExpression): string;
+
+    public function evaluate(ContainerParameterDTO $containerParameter, string $configurationExpression): mixed;
 }

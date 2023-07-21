@@ -89,6 +89,27 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
     /**
      * @test
      */
+    public function it_should_create_a_container_and_run_lifecycles_hooks_(): void
+    {
+        $this->setConfigurationDependentServices('when_disabling_all_lifecycle_hooks');
+        $this->resetBufferedLoggerHandler();
+
+        $dockerName = $this->configurationService->getConfiguration()->services[0]->name;
+        $this->serviceCloneService->startMaster($dockerName);
+
+        /** @var ContainerSummaryItem $containerSummaryItem */
+        $containerSummaryItem = $this->containerFinderService->getDockerByName($dockerName);
+
+        sleep(4);
+
+        self::assertSame('running', $containerSummaryItem->getState());
+        $this->assertNotContainsLogThatMatchRegularExpression('!should not appear!');
+        $this->serviceCloneService->stop($dockerName, ServiceClonerNamingServiceInterface::MASTER_NAME);
+    }
+
+    /**
+     * @test
+     */
     public function it_should_start_master_and_clones_and_can_not_stop_master_if_clone_is_running(): void
     {
         $this->setConfigurationDependentServices('network');

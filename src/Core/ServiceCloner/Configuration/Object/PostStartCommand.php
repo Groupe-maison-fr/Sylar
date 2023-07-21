@@ -10,6 +10,7 @@ final readonly class PostStartCommand
         public string $executionEnvironment,
         /** @var string[] */
         public array $command = [],
+        public ?string $when = null,
     ) {
     }
 }

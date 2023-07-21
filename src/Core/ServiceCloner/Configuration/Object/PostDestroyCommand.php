@@ -10,6 +10,7 @@ final readonly class PostDestroyCommand
         public string $executionEnvironment,
         /** @var string[] */
         public array $command = [],
+        public ?string $when = null,
     ) {
     }
 }
