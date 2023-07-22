@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionNamedType;
 use SplFileInfo;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,6 +23,7 @@ use Symfony\Component\Messenger\Stamp\SentToFailureTransportStamp;
 use Symfony\Component\Messenger\Stamp\TransportMessageIdStamp;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 
+#[AsCommand('debug:messenger:failed-messages-fixtures')]
 final class TestFailedMessagesConsoleCommand extends Command
 {
     public function __construct(
@@ -29,11 +31,6 @@ final class TestFailedMessagesConsoleCommand extends Command
         private TransportInterface $failedTransport,
     ) {
         parent::__construct();
-    }
-
-    protected function configure(): void
-    {
-        $this->setName('debug:messenger:failed-messages-fixtures');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -128,45 +125,27 @@ final class TestFailedMessagesConsoleCommand extends Command
         if (empty($reflectionClass->getConstructor()->getParameters())) {
             return $reflectionClass->newInstanceArgs([]);
         }
-        foreach ($reflectionClass->getConstructor()->getParameters() as $argument) {
-            /** @var ?ReflectionNamedType $reflectionNamedType */
-            $reflectionNamedType = $argument->getType();
-            if ($reflectionNamedType === null) {
-                return $reflectionClass->newInstanceArgs([]);
-            }
-            if ($reflectionNamedType->getName() === 'string') {
-                $arguments[] = $this->generateRandomString(5, 20);
-                continue;
-            }
-            if ($reflectionNamedType->getName() === 'int') {
-                $arguments[] = random_int(1, 100);
-                continue;
-            }
-            if ($reflectionNamedType->getName() === 'DateTimeImmutable') {
-                $arguments[] = new DateTimeImmutable();
-                continue;
-            }
-            if ($reflectionNamedType->getName() === 'bool') {
-                $arguments[] = true;
-                continue;
-            }
-            if ($reflectionNamedType->getName() === 'float') {
-                $arguments[] = random_int(100, 1000) / random_int(3, 12);
-                continue;
-            }
-            if ($reflectionNamedType->getName() === 'array') {
-                return null;
-            }
-            if ($reflectionNamedType->getName() === 'Throwable') {
-                $arguments[] = new Exception();
-                continue;
+        try {
+            foreach ($reflectionClass->getConstructor()->getParameters() as $argument) {
+                /** @var ?ReflectionNamedType $reflectionNamedType */
+                $reflectionNamedType = $argument->getType();
+                if ($reflectionNamedType === null) {
+                    return $reflectionClass->newInstanceArgs([]);
+                }
+                $arguments[] = match ($reflectionNamedType->getName()) {
+                    'string' => $this->generateRandomString(5, 20),
+                    'int' => random_int(1, 100),
+                    'DateTimeImmutable' => new DateTimeImmutable(),
+                    'bool' => true,
+                    'float' => random_int(100, 1000) / random_int(3, 12),
+                    'Throwable' => new Exception(),
+                    'array' => throw new InvalidArgumentException(),
+                    default => throw new InvalidArgumentException()
+                };
             }
 
-            return null;
-        }
-        try {
             return $reflectionClass->newInstanceArgs($arguments);
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException) {
             return null;
         }
     }

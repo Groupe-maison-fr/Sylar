@@ -17,113 +17,40 @@ use Overblog\GraphQLBundle\Resolver\ResolverMap as ResolverMapParent;
 
 final class ResolverMap extends ResolverMapParent
 {
-    private function isGenericMap(mixed $value): ?string
-    {
-        if ($value instanceof FailedOutputDTO) {
-            return 'FailedOutput';
-        }
-
-        if ($value instanceof SuccessOutputDTO) {
-            return 'SuccessOutput';
-        }
-
-        return null;
-    }
-
     protected function map(): mixed
     {
         return [
-            'StartServiceOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
-                    $genericType = $this->isGenericMap($value);
-                    if ($genericType !== null) {
-                        return $genericType;
-                    }
-                    if ($value instanceof StartServiceSuccessOutputDTO) {
-                        return 'SuccessOutput';
-                    }
+            'StartServiceOutput' => $this->resolveAsSuccess(StartServiceSuccessOutputDTO::class),
+            'StopServiceOutput' => $this->resolveAsSuccess(StopServiceSuccessOutputDTO::class),
+            'RestartServiceOutput' => $this->resolveAsSuccess(RestartServiceSuccessOutputDTO::class),
+            'ForceDestroyFilesystemOutput' => $this->resolveAsSuccess(ForceDestroyFilesystemOutputDTO::class),
+            'ForceDestroyContainerOutput' => $this->resolveAsSuccess(ForceDestroyContainerOutputDTO::class),
+            'AddReservationOutput' => $this->resolveAsSuccess(AddReservationOutputDTO::class),
+            'DeleteReservationOutput' => $this->resolveAsSuccess(DeleteReservationOutputDTO::class),
+        ];
+    }
 
-                    return null;
-                },
-            ],
-            'StopServiceOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
-                    $genericType = $this->isGenericMap($value);
-                    if ($genericType !== null) {
-                        return $genericType;
-                    }
-                    if ($value instanceof StopServiceSuccessOutputDTO) {
-                        return 'SuccessOutput';
-                    }
+    /**
+     * @return array{'%%resolveType': callable(mixed): ?string}
+     */
+    public function resolveAsSuccess(string $className): array
+    {
+        return [
+            self::RESOLVE_TYPE => function ($value) use ($className): ?string {
+                if ($value instanceof FailedOutputDTO) {
+                    return 'FailedOutput';
+                }
 
-                    return null;
-                },
-            ],
-            'RestartServiceOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
-                    $genericType = $this->isGenericMap($value);
-                    if ($genericType !== null) {
-                        return $genericType;
-                    }
-                    if ($value instanceof RestartServiceSuccessOutputDTO) {
-                        return 'SuccessOutput';
-                    }
+                if ($value instanceof SuccessOutputDTO) {
+                    return 'SuccessOutput';
+                }
 
-                    return null;
-                },
-            ],
-            'ForceDestroyFilesystemOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
-                    $genericType = $this->isGenericMap($value);
-                    if ($genericType !== null) {
-                        return $genericType;
-                    }
-                    if ($value instanceof ForceDestroyFilesystemOutputDTO) {
-                        return 'SuccessOutput';
-                    }
+                if (is_subclass_of($value, $className)) {
+                    return 'SuccessOutput';
+                }
 
-                    return null;
-                },
-            ],
-            'ForceDestroyContainerOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
-                    $genericType = $this->isGenericMap($value);
-                    if ($genericType !== null) {
-                        return $genericType;
-                    }
-                    if ($value instanceof ForceDestroyContainerOutputDTO) {
-                        return 'SuccessOutput';
-                    }
-
-                    return null;
-                },
-            ],
-            'AddReservationOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
-                    $genericType = $this->isGenericMap($value);
-                    if ($genericType !== null) {
-                        return $genericType;
-                    }
-                    if ($value instanceof AddReservationOutputDTO) {
-                        return 'SuccessOutput';
-                    }
-
-                    return null;
-                },
-            ],
-            'DeleteReservationOutput' => [
-                self::RESOLVE_TYPE => function ($value): ?string {
-                    $genericType = $this->isGenericMap($value);
-                    if ($genericType !== null) {
-                        return $genericType;
-                    }
-                    if ($value instanceof DeleteReservationOutputDTO) {
-                        return 'SuccessOutput';
-                    }
-
-                    return null;
-                },
-            ],
+                return null;
+            },
         ];
     }
 }

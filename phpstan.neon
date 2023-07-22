@@ -1,3 +1,9 @@
+includes:
+- vendor/tomasvotruba/cognitive-complexity/config/extension.neon
 parameters:
+    level: 6
     ignoreErrors:
     - '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children\(\).#'
+    cognitive_complexity:
+        class: 30
+        function: 6

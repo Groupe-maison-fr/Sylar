@@ -55,7 +55,8 @@
         "rector/rector": "*",
         "symfony/phpunit-bridge": "^6.2",
         "symfony/stopwatch": "6.2.*",
-        "symfony/web-profiler-bundle": "6.2.*"
+        "symfony/web-profiler-bundle": "6.2.*",
+        "tomasvotruba/cognitive-complexity": "*"
     },
     "minimum-stability": "alpha",
     "config": {
