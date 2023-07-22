@@ -1,6 +1,6 @@
 import GraphQL from '../GraphQL';
 
-export default (masterName:string, index:number, instanceName:string) => GraphQL.query(`
+export default (masterName:string, index:number|null, instanceName:string) => GraphQL.query(`
     mutation {
       startService (input:{
         masterName: "${masterName}"

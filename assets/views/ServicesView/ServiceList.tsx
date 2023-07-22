@@ -140,7 +140,7 @@ const ServiceList = ({ ...rest }) => {
                       <Collapse in timeout="auto" unmountOnExit>
                         <Box margin={1}>
                           <Typography variant="h6" gutterBottom component="div">
-                            Services
+                            Instances
                           </Typography>
                           <Table size="small">
                             <TableHead>
@@ -159,23 +159,25 @@ const ServiceList = ({ ...rest }) => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {service.containers && service.containers.map((container) => (
-                                <TableRow
-                                  hover
-                                  key={container.containerName}
-                                >
-                                  <TableCell>{container.instanceName}</TableCell>
-                                  <TableCell>{container.instanceIndex}</TableCell>
-                                  <TableCell>{container.containerName}</TableCell>
-                                  <TableCell>{container.exposedPorts.join(', ')}</TableCell>
-                                  <TableCell>{container.zfsFilesystem && container.zfsFilesystem.name}</TableCell>
-                                  <TableCell>{container.zfsFilesystem && container.zfsFilesystem.mountPoint}</TableCell>
-                                  <TableCell align="right">{container.zfsFilesystem && numberWithCommas(container.zfsFilesystem.used)}</TableCell>
-                                  <TableCell align="right">{container.zfsFilesystem && numberWithCommas(container.zfsFilesystem.available)}</TableCell>
-                                  <TableCell>{container.dockerState}</TableCell>
-                                  <TableCell>{moment(container.time * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
-                                  <TableCell>
-                                    {container.instanceName !== 'master' && (
+                              {service.containers && service.containers
+                                .sort((container1, container2) => (container1.instanceIndex < container2.instanceIndex ? -1 : 1))
+                                .map((container) => (
+                                  <TableRow
+                                    hover
+                                    key={container.containerName}
+                                  >
+                                    <TableCell>{container.instanceName}</TableCell>
+                                    <TableCell>{container.instanceIndex}</TableCell>
+                                    <TableCell>{container.containerName}</TableCell>
+                                    <TableCell>{container.exposedPorts.join(', ')}</TableCell>
+                                    <TableCell>{container.zfsFilesystem && container.zfsFilesystem.name}</TableCell>
+                                    <TableCell>{container.zfsFilesystem && container.zfsFilesystem.mountPoint}</TableCell>
+                                    <TableCell align="right">{container.zfsFilesystem && numberWithCommas(container.zfsFilesystem.used)}</TableCell>
+                                    <TableCell align="right">{container.zfsFilesystem && numberWithCommas(container.zfsFilesystem.available)}</TableCell>
+                                    <TableCell>{container.dockerState}</TableCell>
+                                    <TableCell>{moment(container.time * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
+                                    <TableCell>
+                                      {container.instanceName !== 'master' && (
                                       <>
                                         <Button onClick={() => stopService(container.masterName, container.instanceName)}>
                                           <DeleteIcon />
@@ -184,10 +186,10 @@ const ServiceList = ({ ...rest }) => {
                                           <ReplayIcon />
                                         </Button>
                                       </>
-                                    )}
-                                  </TableCell>
-                                </TableRow>
-                              ))}
+                                      )}
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
                             </TableBody>
                           </Table>
                         </Box>
