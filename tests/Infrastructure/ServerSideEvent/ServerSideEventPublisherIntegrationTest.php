@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tests\Infrastructure\ServerSideEvent;
 
 use App\Infrastructure\ServerSideEvent\ServerSideEventPublisherInterface;
-use Tests\AbstractIntegrationTest;
+use Tests\AbstractIntegrationTestCase;
 
 /**
  * @internal
  */
-final class ServerSideEventPublisherIntegrationTest extends AbstractIntegrationTest
+final class ServerSideEventPublisherIntegrationTest extends AbstractIntegrationTestCase
 {
     /**
      * @test

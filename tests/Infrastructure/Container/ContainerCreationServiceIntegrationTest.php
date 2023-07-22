@@ -12,12 +12,12 @@ use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
 use App\Infrastructure\Process\ProcessInterface;
 use Docker\API\Model\ContainerSummaryItem;
 use Ramsey\Uuid\Uuid;
-use Tests\AbstractIntegrationTest;
+use Tests\AbstractIntegrationTestCase;
 
 /**
  * @internal
  */
-final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationTest
+final class ContainerCreationServiceIntegrationTest extends AbstractIntegrationTestCase
 {
     private ConfigurationServiceInterface $configurationService;
     private ContainerCreationServiceInterface $containerCreationService;

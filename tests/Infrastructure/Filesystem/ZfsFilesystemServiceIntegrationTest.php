@@ -10,12 +10,12 @@ use App\Infrastructure\Filesystem\FilesystemServiceInterface;
 use App\Infrastructure\Process\Exception\ProcessFailedException;
 use App\Infrastructure\Process\Process;
 use App\Infrastructure\Process\ProcessInterface;
-use Tests\AbstractIntegrationTest;
+use Tests\AbstractIntegrationTestCase;
 
 /**
  * @internal
  */
-final class ZfsFilesystemServiceIntegrationTest extends AbstractIntegrationTest
+final class ZfsFilesystemServiceIntegrationTest extends AbstractIntegrationTestCase
 {
     private FilesystemServiceInterface $zfsFilesystemService;
     private ProcessInterface $process;

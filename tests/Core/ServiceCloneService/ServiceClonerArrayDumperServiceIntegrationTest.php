@@ -8,12 +8,12 @@ use App\Core\ServiceCloner\Configuration\ConfigurationService;
 use App\Core\ServiceCloner\ServiceClonerArrayDumperService;
 use App\Infrastructure\Docker\ContainerParameter\ConfigurationExpressionGenerator;
 use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
-use Tests\AbstractIntegrationTest;
+use Tests\AbstractIntegrationTestCase;
 
 /**
  * @internal
  */
-final class ServiceClonerArrayDumperServiceIntegrationTest extends AbstractIntegrationTest
+final class ServiceClonerArrayDumperServiceIntegrationTest extends AbstractIntegrationTestCase
 {
     /**
      * @test

@@ -13,9 +13,9 @@ use App\Infrastructure\Docker\ContainerExecServiceInterface;
 use App\Infrastructure\Docker\ContainerFinderServiceInterface;
 use App\Infrastructure\Docker\ContainerStopServiceInterface;
 use App\Infrastructure\Process\ProcessInterface;
-use Tests\AbstractIntegrationTest;
+use Tests\AbstractIntegrationTestCase;
 
-abstract class AbstractServiceCloneServiceIntegrationTest extends AbstractIntegrationTest
+abstract class AbstractServiceCloneServiceIntegrationTestCase extends AbstractIntegrationTestCase
 {
     use LoggerAwareTestTrait;
 

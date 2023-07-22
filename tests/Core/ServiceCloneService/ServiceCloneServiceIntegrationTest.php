@@ -11,7 +11,7 @@ use DomainException;
 /**
  * @internal
  */
-final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServiceIntegrationTest
+final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServiceIntegrationTestCase
 {
     /**
      * @test

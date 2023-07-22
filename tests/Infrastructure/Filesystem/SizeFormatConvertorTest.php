@@ -6,12 +6,12 @@ namespace Tests\Infrastructure\Filesystem;
 
 use App\Infrastructure\Filesystem\BytesFormatConvertorInterface;
 use App\Infrastructure\Filesystem\UnitFormatException;
-use Tests\AbstractIntegrationTest;
+use Tests\AbstractIntegrationTestCase;
 
 /**
  * @internal
  */
-final class SizeFormatConvertorTest extends AbstractIntegrationTest
+final class SizeFormatConvertorTest extends AbstractIntegrationTestCase
 {
     private BytesFormatConvertorInterface $sizeFormatConvertor;
 
@@ -46,7 +46,7 @@ final class SizeFormatConvertorTest extends AbstractIntegrationTest
         self::assertSame($formattedString, $this->sizeFormatConvertor->format($size));
     }
 
-    public function valid_bytes_data(): array
+    public static function valid_bytes_data(): array
     {
         return [
             ['1B', 1],
@@ -83,7 +83,7 @@ final class SizeFormatConvertorTest extends AbstractIntegrationTest
         $this->sizeFormatConvertor->parse($badString);
     }
 
-    public function it_should_not_parse_unformatted_string_data(): array
+    public static function it_should_not_parse_unformatted_string_data(): array
     {
         return [
             [' A12B'],

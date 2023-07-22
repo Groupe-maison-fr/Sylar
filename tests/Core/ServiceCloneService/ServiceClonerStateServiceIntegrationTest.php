@@ -10,7 +10,7 @@ use App\Core\ServiceCloner\ServiceClonerStatusDTO;
 /**
  * @internal
  */
-final class ServiceClonerStateServiceIntegrationTest extends AbstractServiceCloneServiceIntegrationTest
+final class ServiceClonerStateServiceIntegrationTest extends AbstractServiceCloneServiceIntegrationTestCase
 {
     /**
      * @test

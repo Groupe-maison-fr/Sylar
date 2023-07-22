@@ -7,12 +7,12 @@ namespace Tests\Core\ServiceCloner;
 use App\Core\ServiceCloner\CommandExecutor\CommandExecutor;
 use App\Core\ServiceCloner\CommandExecutor\CommandExecutorInterface;
 use App\Core\ServiceCloner\Configuration\Object\Command;
-use Tests\AbstractIntegrationTest;
+use Tests\AbstractIntegrationTestCase;
 
 /**
  * @internal
  */
-final class CommandExecutorTest extends AbstractIntegrationTest
+final class CommandExecutorTest extends AbstractIntegrationTestCase
 {
     private CommandExecutorInterface $commandExecutor;
 

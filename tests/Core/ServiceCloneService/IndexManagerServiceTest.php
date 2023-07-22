@@ -11,12 +11,12 @@ use App\Core\ServiceCloner\ServiceClonerStateService;
 use App\Core\ServiceCloner\ServiceClonerStatusDTO;
 use LogicException;
 use Mockery;
-use Tests\AbstractIntegrationTest;
+use Tests\AbstractIntegrationTestCase;
 
 /**
  * @internal
  */
-final class IndexManagerServiceTest extends AbstractIntegrationTest
+final class IndexManagerServiceTest extends AbstractIntegrationTestCase
 {
     /**
      * @test
@@ -73,7 +73,7 @@ final class IndexManagerServiceTest extends AbstractIntegrationTest
         self::assertSame($expectedIndexes['b'], $indexManagerService->getNextAvailable('b'));
     }
 
-    public function it_should_get_next_available_index_data(): array
+    public static function it_should_get_next_available_index_data(): array
     {
         return [
             [

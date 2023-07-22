@@ -41,8 +41,7 @@ host-test-install:
 
 .PHONY: host-test-phpunit
 host-test-phpunit:
-	docker-compose exec runner bash -c "vendor/bin/phpunit --configuration phpunit.xml.dist tests --testdox"
-	docker-compose exec runner bash -c "vendor/bin/phpunit --configuration phpunit.xml.dist lib/tests --testdox"
+	docker-compose exec runner bash -c "vendor/bin/phpunit --configuration phpunit.xml.dist --testdox"
 
 .PHONY: host-test-phpstan
 host-test-phpstan:

@@ -8,12 +8,12 @@ use App\Core\ServiceCloner\Reservation\Object\Reservation;
 use App\Core\ServiceCloner\Reservation\ReservationRepository;
 use Micoli\Elql\Exception\NonUniqueException;
 use Micoli\Elql\Metadata\MetadataManager;
-use Tests\AbstractIntegrationTest;
+use Tests\AbstractIntegrationTestCase;
 
 /**
  * @internal
  */
-class ServiceReservationRepositoryTest extends AbstractIntegrationTest
+class ServiceReservationRepositoryTest extends AbstractIntegrationTestCase
 {
     private string $databasePath;
     private ReservationRepository $reservationRepository;

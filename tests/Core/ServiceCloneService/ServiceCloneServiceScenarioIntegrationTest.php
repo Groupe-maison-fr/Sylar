@@ -9,7 +9,7 @@ use App\Core\ServiceCloner\ServiceClonerNamingServiceInterface;
 /**
  * @internal
  */
-final class ServiceCloneServiceScenarioIntegrationTest extends AbstractServiceCloneServiceIntegrationTest
+final class ServiceCloneServiceScenarioIntegrationTest extends AbstractServiceCloneServiceIntegrationTestCase
 {
     /**
      * @test
