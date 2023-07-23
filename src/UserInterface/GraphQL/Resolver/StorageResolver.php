@@ -12,7 +12,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class StorageResolver implements QueryInterface
+final readonly class StorageResolver implements QueryInterface
 {
     public function __construct(
         private ZfsFilesystemService $zfsService,

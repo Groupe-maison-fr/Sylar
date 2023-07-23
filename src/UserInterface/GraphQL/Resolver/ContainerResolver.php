@@ -11,7 +11,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class ContainerResolver implements QueryInterface
+final readonly class ContainerResolver implements QueryInterface
 {
     public function __construct(
         private ServiceClonerStateService $serviceClonerStateService,

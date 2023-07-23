@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UserInterface\GraphQL\Map;
 
-final class SuccessOutputDTO
+final readonly class SuccessOutputDTO
 {
     public function __construct(
         private bool $success,

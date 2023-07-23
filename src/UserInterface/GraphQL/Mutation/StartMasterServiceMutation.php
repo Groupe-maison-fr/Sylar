@@ -11,7 +11,7 @@ use Exception;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class StartMasterServiceMutation implements MutationInterface
+final readonly class StartMasterServiceMutation implements MutationInterface
 {
     public function __construct(
         private MessageBusInterface $messageBus,

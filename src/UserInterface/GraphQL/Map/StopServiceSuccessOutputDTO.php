@@ -7,7 +7,7 @@ namespace App\UserInterface\GraphQL\Map;
 use App\UserInterface\GraphQL\ResolverMap\ResolvedAs;
 
 #[ResolvedAs('StopServiceOutput')]
-final class StopServiceSuccessOutputDTO
+final readonly class StopServiceSuccessOutputDTO
 {
     public function __construct(
         private bool $success,

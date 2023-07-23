@@ -7,7 +7,7 @@ namespace App\UserInterface\GraphQL\Map;
 use App\UserInterface\GraphQL\ResolverMap\ResolvedAs;
 
 #[ResolvedAs('AddReservationOutput')]
-final class AddReservationOutputDTO
+final readonly class AddReservationOutputDTO
 {
     public function __construct(
         private bool $success,

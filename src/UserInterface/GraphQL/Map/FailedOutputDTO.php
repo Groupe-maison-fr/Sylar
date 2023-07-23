@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UserInterface\GraphQL\Map;
 
-final class FailedOutputDTO
+final readonly class FailedOutputDTO
 {
     public function __construct(
         private int $code,

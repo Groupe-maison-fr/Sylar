@@ -11,7 +11,7 @@ use Exception;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class ForceDestroyFilesystemMutation implements MutationInterface
+final readonly class ForceDestroyFilesystemMutation implements MutationInterface
 {
     public function __construct(
         private MessageBusInterface $messageBus,

@@ -7,7 +7,7 @@ namespace App\UserInterface\GraphQL\Map;
 use App\UserInterface\GraphQL\ResolverMap\ResolvedAs;
 
 #[ResolvedAs('DeleteReservationOutput')]
-final class DeleteReservationOutputDTO
+final readonly class DeleteReservationOutputDTO
 {
     public function __construct(
         private bool $success,

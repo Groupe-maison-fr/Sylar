@@ -7,7 +7,7 @@ namespace App\UserInterface\GraphQL\Map;
 use App\UserInterface\GraphQL\ResolverMap\ResolvedAs;
 
 #[ResolvedAs('ForceDestroyFilesystemOutput')]
-final class ForceDestroyFilesystemOutputDTO
+final readonly class ForceDestroyFilesystemOutputDTO
 {
     public function __construct(
         private bool $success,

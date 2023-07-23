@@ -11,7 +11,7 @@ use App\UserInterface\GraphQL\Map\FailedOutputDTO;
 use Exception;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 
-final class AddReservationMutation implements MutationInterface
+final readonly class AddReservationMutation implements MutationInterface
 {
     public function __construct(
         private ReservationRepositoryInterface $reservationRepository,
