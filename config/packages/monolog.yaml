@@ -9,9 +9,8 @@ monolog:
         console:
             type: console
             handler: loki
-            level: info
             process_psr_3_messages: false
-            channels: ["!event", "!doctrine", "!console"]
+            channels: ["!php", "!event", "!doctrine", "!console"]
         security:
             type: stream
             level: info
@@ -22,3 +21,7 @@ monolog:
             level: info
             id: Itspire\MonologLoki\Handler\LokiHandler
             channels: ["!event", "!doctrine", "!console"]
+        mercure:
+            type: service
+            id: App\Infrastructure\Logging\ServerSideEventPublisherHandler
+            channels: ["!php", "!event", "!doctrine", "!console"]

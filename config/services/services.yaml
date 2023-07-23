@@ -82,6 +82,11 @@ services:
         arguments:
             $receiver: '@messenger.transport.failed'
 
+    App\Infrastructure\Logging\ServerSideEventPublisherHandler:
+        arguments:
+            $level: WARNING
+            $bubble: false
+
     Itspire\MonologLoki\Handler\LokiHandler:
         arguments:
             $apiConfig:

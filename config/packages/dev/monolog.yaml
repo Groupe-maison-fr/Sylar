@@ -2,14 +2,12 @@ monolog:
     handlers:
         main:
             type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
             handler: loki
             level: info
             channels: ["!event", "!doctrine"]
         console:
             type: console
             handler: loki
-            level: info
             process_psr_3_messages: false
             channels: ["!php", "!event", "!doctrine", "!console"]
         security:
@@ -22,3 +20,7 @@ monolog:
             level: info
             id: Itspire\MonologLoki\Handler\LokiHandler
             channels: ["!event", "!doctrine", "!console"]
+        mercure:
+            type: service
+            id: App\Infrastructure\Logging\ServerSideEventPublisherHandler
+            channels: ["!php", "!event", "!doctrine", "!console"]
