@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\UserInterface\GraphQL\Map;
 
+use App\UserInterface\GraphQL\ResolverMap\ResolvedAs;
+
+#[ResolvedAs('StartServiceOutput')]
 final class StartServiceSuccessOutputDTO
 {
     public function __construct(

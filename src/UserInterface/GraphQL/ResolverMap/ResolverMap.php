@@ -4,39 +4,34 @@ declare(strict_types=1);
 
 namespace App\UserInterface\GraphQL\ResolverMap;
 
-use App\UserInterface\GraphQL\Map\AddReservationOutputDTO;
-use App\UserInterface\GraphQL\Map\DeleteReservationOutputDTO;
 use App\UserInterface\GraphQL\Map\FailedOutputDTO;
-use App\UserInterface\GraphQL\Map\ForceDestroyContainerOutputDTO;
-use App\UserInterface\GraphQL\Map\ForceDestroyFilesystemOutputDTO;
-use App\UserInterface\GraphQL\Map\RestartServiceSuccessOutputDTO;
-use App\UserInterface\GraphQL\Map\StartServiceSuccessOutputDTO;
-use App\UserInterface\GraphQL\Map\StopServiceSuccessOutputDTO;
 use App\UserInterface\GraphQL\Map\SuccessOutputDTO;
 use Overblog\GraphQLBundle\Resolver\ResolverMap as ResolverMapParent;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class ResolverMap extends ResolverMapParent
 {
+    /** @param array{string:class-string[]} $resoledAsMap */
+    public function __construct(
+        #[Autowire('%graphql_resolved_as%')]
+        private readonly array $resoledAsMap,
+    ) {
+    }
+
     protected function map(): mixed
     {
-        return [
-            'StartServiceOutput' => $this->resolveAsSuccess(StartServiceSuccessOutputDTO::class),
-            'StopServiceOutput' => $this->resolveAsSuccess(StopServiceSuccessOutputDTO::class),
-            'RestartServiceOutput' => $this->resolveAsSuccess(RestartServiceSuccessOutputDTO::class),
-            'ForceDestroyFilesystemOutput' => $this->resolveAsSuccess(ForceDestroyFilesystemOutputDTO::class),
-            'ForceDestroyContainerOutput' => $this->resolveAsSuccess(ForceDestroyContainerOutputDTO::class),
-            'AddReservationOutput' => $this->resolveAsSuccess(AddReservationOutputDTO::class),
-            'DeleteReservationOutput' => $this->resolveAsSuccess(DeleteReservationOutputDTO::class),
-        ];
+        return array_map($this->resolveAsSuccess(...), $this->resoledAsMap);
     }
 
     /**
+     * @param class-string[] $classNames
+     *
      * @return array{'%%resolveType': callable(mixed): ?string}
      */
-    public function resolveAsSuccess(string $className): array
+    public function resolveAsSuccess(array $classNames): array
     {
         return [
-            self::RESOLVE_TYPE => function ($value) use ($className): ?string {
+            self::RESOLVE_TYPE => function ($value) use ($classNames): ?string {
                 if ($value instanceof FailedOutputDTO) {
                     return 'FailedOutput';
                 }
@@ -44,9 +39,10 @@ final class ResolverMap extends ResolverMapParent
                 if ($value instanceof SuccessOutputDTO) {
                     return 'SuccessOutput';
                 }
-
-                if (is_subclass_of($value, $className)) {
-                    return 'SuccessOutput';
+                foreach ($classNames as $className) {
+                    if (is_a($value, $className)) {
+                        return 'SuccessOutput';
+                    }
                 }
 
                 return null;

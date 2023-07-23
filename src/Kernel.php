@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Infrastructure\CompilerPass\ConsoleCommandFilterCompilerPass;
+use App\Infrastructure\CompilerPass\GraphQLResolverCompilerPass;
 use App\Infrastructure\PostContainerDumpActions\PostContainerDumpServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\ConfigCache;
@@ -45,6 +46,7 @@ class Kernel extends BaseKernel
         if ($this->environment === 'prod') {
             $container->addCompilerPass(new ConsoleCommandFilterCompilerPass());
         }
+        $container->addCompilerPass(new GraphQLResolverCompilerPass());
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
