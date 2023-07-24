@@ -21,7 +21,7 @@ const SystemView = () => {
   return (
     <div className={classes.root}>
       <Page
-        title="Dashboard22"
+        title="Dashboard"
       >
         <Container maxWidth={false}>
           <Grid container spacing={3}>

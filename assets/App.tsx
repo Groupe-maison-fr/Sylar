@@ -10,6 +10,7 @@ import PrefersDarkModeContext from './Context/PrefersDarkModeContext';
 import { initialDarkMode } from './components/DarkMode';
 import EventBus from './components/EventBus';
 import AppSnackbars from './AppSnackbars';
+import { LogListProvider } from './Context/LogListContext';
 
 EventBus.handleEventSource('/.well-known/mercure?topic=sylar');
 
@@ -28,12 +29,14 @@ const App = () => {
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <PrefersDarkModeContext.Provider value={{ prefersDarkMode, setPrefersDarkMode }}>
-      <AppSnackbars />
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <GlobalStyles />
-        {routing}
-      </ThemeProvider>
+      <LogListProvider>
+        <AppSnackbars />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <GlobalStyles />
+          {routing}
+        </ThemeProvider>
+      </LogListProvider>
     </PrefersDarkModeContext.Provider>
   );
 };

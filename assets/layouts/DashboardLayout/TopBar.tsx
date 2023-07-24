@@ -1,22 +1,32 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
 import Brightness3Icon from '@material-ui/icons/Brightness3';
+import LoggerOpenedIcon from '@material-ui/icons/BorderVerticalOutlined';
+import LoggerClosedIcon from '@material-ui/icons/BorderVertical';
 import {
-  AppBar,
+  AppBar, Badge,
   Box,
   Hidden,
   IconButton,
   Toolbar,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import Logo from '../../components/Logo';
 import { useDarkMode } from '../../Context/PrefersDarkModeContext';
 import { setInitialDarkMode } from '../../components/DarkMode';
+import { useLogList } from '../../Context/LogListContext';
 
-const TopBar = () => {
+const TopBar = ({
+  isDrawerLoggerBarOpen,
+  setDrawerLoggerBarOpen
+}:{
+  setDrawerLoggerBarOpen:(open: boolean)=>void,
+  isDrawerLoggerBarOpen:boolean
+}) => {
   // @ts-ignore
   const { prefersDarkMode, setPrefersDarkMode } = useDarkMode();
+  const { logListContextData } = useLogList();
   return (
     <AppBar
       elevation={0}
@@ -41,6 +51,16 @@ const TopBar = () => {
             }}
           >
             {prefersDarkMode ? <Brightness3Icon /> : <BrightnessHighIcon />}
+          </IconButton>
+          <IconButton
+            color="inherit"
+            onClick={() => {
+              setDrawerLoggerBarOpen(!isDrawerLoggerBarOpen);
+            }}
+          >
+            <Badge badgeContent={logListContextData.list.length} color="secondary">
+              {isDrawerLoggerBarOpen ? <LoggerOpenedIcon /> : <LoggerClosedIcon />}
+            </Badge>
           </IconButton>
         </Hidden>
       </Toolbar>
