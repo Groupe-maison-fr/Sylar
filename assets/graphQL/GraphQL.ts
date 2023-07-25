@@ -1,12 +1,13 @@
-const query = (queryPayload: any, headers = []) => fetch('/graphql/', {
-  method: 'post',
-  headers: {
-    Accept: 'application/json, text/plain, */*',
-    'Content-Type': 'application/json',
-    ...headers
-  },
-  body: JSON.stringify({ query: queryPayload })
-});
+const query = (queryPayload: any, headers = []) =>
+  fetch('/graphql/', {
+    method: 'post',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      ...headers,
+    },
+    body: JSON.stringify({ query: queryPayload }),
+  });
 
 const mutation = (mutationPayload: any, headers = [], files = []) => {
   if (files.length === 0) {
@@ -15,9 +16,9 @@ const mutation = (mutationPayload: any, headers = [], files = []) => {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        ...headers
+        ...headers,
       },
-      body: JSON.stringify({ query: mutationPayload })
+      body: JSON.stringify({ query: mutationPayload }),
     });
   }
 
@@ -29,13 +30,13 @@ const mutation = (mutationPayload: any, headers = [], files = []) => {
     method: 'post',
     headers: {
       Accept: 'application/json, text/plain, */*',
-      ...headers
+      ...headers,
     },
-    body: data
+    body: data,
   });
 };
 
 export default {
   query,
-  mutation
+  mutation,
 };

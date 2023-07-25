@@ -3,7 +3,8 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import moment from 'moment';
 
 import {
-  Box, Button,
+  Box,
+  Button,
   Card,
   CardHeader,
   Collapse,
@@ -14,11 +15,13 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
 import DeleteIcon from '@material-ui/icons/Delete';
-import queryService, { Services } from '../../graphQL/ServiceCloner/queryServices';
+import queryService, {
+  Services,
+} from '../../graphQL/ServiceCloner/queryServices';
 import mutationStopService from '../../graphQL/ServiceCloner/mutationStopService';
 import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
 import EventBus from '../../components/EventBus';
@@ -26,11 +29,11 @@ import EventBus from '../../components/EventBus';
 const useStyles = makeStyles(() => ({
   root: {},
   value: {
-    display: 'inline-block'
+    display: 'inline-block',
   },
   actions: {
-    justifyContent: 'flex-end'
-  }
+    justifyContent: 'flex-end',
+  },
 }));
 
 const ServiceList = ({ ...rest }) => {
@@ -46,28 +49,28 @@ const ServiceList = ({ ...rest }) => {
     });
   };
 
-  const numberWithCommas = (x:number) => {
+  const numberWithCommas = (x: number) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
 
-  const stopService = (masterName:string, instanceName:string) => {
+  const stopService = (masterName: string, instanceName: string) => {
     setLoading(true);
     return mutationStopService(masterName, instanceName).then(() => {
       loadServices();
     });
   };
 
-  const restartService = (masterName:string, instanceName:string) => {
+  const restartService = (masterName: string, instanceName: string) => {
     setLoading(true);
     return mutationRestartService(masterName, instanceName).then(() => {
       loadServices();
     });
   };
 
-  const sortBy = (key: string) => (
-    valueA:{[key:string]: any},
-    valueB:{[key:string]: any}
-  ) => (valueA[key] < valueB[key] ? -1 : 1);
+  const sortBy =
+    (key: string) =>
+    (valueA: { [key: string]: any }, valueB: { [key: string]: any }) =>
+      valueA[key] < valueB[key] ? -1 : 1;
 
   useEffect(() => {
     loadServices();
@@ -80,9 +83,7 @@ const ServiceList = ({ ...rest }) => {
   }, []);
 
   return (
-    <Card
-      {...rest}
-    >
+    <Card {...rest}>
       <CardHeader title="Services" />
       <Divider />
       <PerfectScrollbar>
@@ -104,30 +105,32 @@ const ServiceList = ({ ...rest }) => {
             <TableBody>
               {data.map((service) => (
                 <React.Fragment key={service.name}>
-                  <TableRow
-                    hover
-                  >
-                    <TableCell style={{ verticalAlign: 'top' }}>{service.name}</TableCell>
-                    <TableCell style={{ verticalAlign: 'top' }}>{service.image}</TableCell>
+                  <TableRow hover>
+                    <TableCell style={{ verticalAlign: 'top' }}>
+                      {service.name}
+                    </TableCell>
+                    <TableCell style={{ verticalAlign: 'top' }}>
+                      {service.image}
+                    </TableCell>
                     <TableCell style={{ verticalAlign: 'top' }}>
                       <ul>
-                        {service.environments.sort(sortBy('name')).map((environment) => (
-                          <li key={environment.name}>
-                            {environment.name}
-                            :
-                            {' '}
-                            <pre className={classes.value}>{environment.value}</pre>
-                          </li>
-                        ))}
+                        {service.environments
+                          .sort(sortBy('name'))
+                          .map((environment) => (
+                            <li key={environment.name}>
+                              {environment.name}:{' '}
+                              <pre className={classes.value}>
+                                {environment.value}
+                              </pre>
+                            </li>
+                          ))}
                       </ul>
                     </TableCell>
                     <TableCell style={{ verticalAlign: 'top' }}>
                       <ul>
                         {service.labels.sort(sortBy('name')).map((label) => (
                           <li key={label.name}>
-                            {label.name}
-                            :
-                            {' '}
+                            {label.name}:{' '}
                             <pre className={classes.value}>{label.value}</pre>
                           </li>
                         ))}
@@ -136,7 +139,10 @@ const ServiceList = ({ ...rest }) => {
                     <TableCell />
                   </TableRow>
                   <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
+                    <TableCell
+                      style={{ paddingBottom: 0, paddingTop: 0 }}
+                      colSpan={4}
+                    >
                       <Collapse in timeout="auto" unmountOnExit>
                         <Box margin={1}>
                           <Typography variant="h6" gutterBottom component="div">
@@ -159,37 +165,88 @@ const ServiceList = ({ ...rest }) => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {service.containers && service.containers
-                                .sort((container1, container2) => (container1.instanceIndex < container2.instanceIndex ? -1 : 1))
-                                .map((container) => (
-                                  <TableRow
-                                    hover
-                                    key={container.containerName}
-                                  >
-                                    <TableCell>{container.instanceName}</TableCell>
-                                    <TableCell>{container.instanceIndex}</TableCell>
-                                    <TableCell>{container.containerName}</TableCell>
-                                    <TableCell>{container.exposedPorts.join(', ')}</TableCell>
-                                    <TableCell>{container.zfsFilesystem && container.zfsFilesystem.name}</TableCell>
-                                    <TableCell>{container.zfsFilesystem && container.zfsFilesystem.mountPoint}</TableCell>
-                                    <TableCell align="right">{container.zfsFilesystem && numberWithCommas(container.zfsFilesystem.used)}</TableCell>
-                                    <TableCell align="right">{container.zfsFilesystem && numberWithCommas(container.zfsFilesystem.available)}</TableCell>
-                                    <TableCell>{container.dockerState}</TableCell>
-                                    <TableCell>{moment(container.time * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
-                                    <TableCell>
-                                      {container.instanceName !== 'master' && (
-                                      <>
-                                        <Button onClick={() => stopService(container.masterName, container.instanceName)}>
-                                          <DeleteIcon />
-                                        </Button>
-                                        <Button onClick={() => restartService(container.masterName, container.instanceName)}>
-                                          <ReplayIcon />
-                                        </Button>
-                                      </>
-                                      )}
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
+                              {service.containers &&
+                                service.containers
+                                  .sort((container1, container2) =>
+                                    container1.instanceIndex <
+                                    container2.instanceIndex
+                                      ? -1
+                                      : 1,
+                                  )
+                                  .map((container) => (
+                                    <TableRow
+                                      hover
+                                      key={container.containerName}
+                                    >
+                                      <TableCell>
+                                        {container.instanceName}
+                                      </TableCell>
+                                      <TableCell>
+                                        {container.instanceIndex}
+                                      </TableCell>
+                                      <TableCell>
+                                        {container.containerName}
+                                      </TableCell>
+                                      <TableCell>
+                                        {container.exposedPorts.join(', ')}
+                                      </TableCell>
+                                      <TableCell>
+                                        {container.zfsFilesystem &&
+                                          container.zfsFilesystem.name}
+                                      </TableCell>
+                                      <TableCell>
+                                        {container.zfsFilesystem &&
+                                          container.zfsFilesystem.mountPoint}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {container.zfsFilesystem &&
+                                          numberWithCommas(
+                                            container.zfsFilesystem.used,
+                                          )}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {container.zfsFilesystem &&
+                                          numberWithCommas(
+                                            container.zfsFilesystem.available,
+                                          )}
+                                      </TableCell>
+                                      <TableCell>
+                                        {container.dockerState}
+                                      </TableCell>
+                                      <TableCell>
+                                        {moment(container.time * 1000).format(
+                                          'DD/MM/YYYY HH:mm:ss',
+                                        )}
+                                      </TableCell>
+                                      <TableCell>
+                                        {container.instanceName !==
+                                          'master' && (
+                                          <>
+                                            <Button
+                                              onClick={() =>
+                                                stopService(
+                                                  container.masterName,
+                                                  container.instanceName,
+                                                )
+                                              }
+                                            >
+                                              <DeleteIcon />
+                                            </Button>
+                                            <Button
+                                              onClick={() =>
+                                                restartService(
+                                                  container.masterName,
+                                                  container.instanceName,
+                                                )
+                                              }
+                                            >
+                                              <ReplayIcon />
+                                            </Button>
+                                          </>
+                                        )}
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
                             </TableBody>
                           </Table>
                         </Box>

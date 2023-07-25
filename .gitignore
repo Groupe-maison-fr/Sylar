@@ -8,6 +8,7 @@
 /vendor/
 data/database/
 /sqlite
+tsconfig.tsbuildinfo
 tests/Core/ServiceCloner/Reservation/database/
 ###< symfony/framework-bundle ###
 

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Box, Chip, Grid, styled
-} from '@material-ui/core';
+import { Box, Chip, Grid, styled } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { useLogList } from '../../Context/LogListContext';
 import { LogColor } from '../../components/Logging';
@@ -22,7 +20,13 @@ const LogList = () => {
           <Item>
             <Chip label={message.moment.format('HH:mm:ss')} color="primary" />
             <Chip label={message.channel} color="secondary" />
-            <Chip label={message.level_name} style={{ backgroundColor: LogColor[message.level_name as keyof typeof LogColor] }} />
+            <Chip
+              label={message.level_name}
+              style={{
+                backgroundColor:
+                  LogColor[message.level_name as keyof typeof LogColor],
+              }}
+            />
             <Box style={{ width: '100%', overflowX: 'auto' }}>
               <pre style={{ whiteSpace: 'pre-wrap' }}>{message.message}</pre>
             </Box>

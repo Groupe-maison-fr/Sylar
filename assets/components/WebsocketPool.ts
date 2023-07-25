@@ -1,26 +1,32 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
-type Callback = (args: any)=>void
+type Callback = (args: any) => void;
 
 interface Pool {
-  [k: string]:{
-    socket:ReconnectingWebSocket
-    clients:{
-      [k:string]: Callback
-    }
-    state:string|null
-  }
+  [k: string]: {
+    socket: ReconnectingWebSocket;
+    clients: {
+      [k: string]: Callback;
+    };
+    state: string | null;
+  };
 }
-const pool:Pool = {};
+const pool: Pool = {};
 
 const generateId = () => {
-  return `_${Math.random().toString(36).substr(2, 9)}${Math.random().toString(36).substr(2, 9)}`;
+  return `_${Math.random().toString(36).substr(2, 9)}${Math.random()
+    .toString(36)
+    .substr(2, 9)}`;
 };
 
-export const addClient = (url:string, onMessage:()=>void) => {
+export const addClient = (url: string, onMessage: () => void) => {
   let newPool = false;
   if (!pool[url]) {
-    pool[url] = { socket: new ReconnectingWebSocket(url), clients: {}, state: null };
+    pool[url] = {
+      socket: new ReconnectingWebSocket(url),
+      clients: {},
+      state: null,
+    };
     newPool = true;
   }
 
@@ -47,7 +53,7 @@ export const addClient = (url:string, onMessage:()=>void) => {
   return [id, pool[url].socket];
 };
 
-export const removeClient = (url:string, id:string) => {
+export const removeClient = (url: string, id: string) => {
   if (!pool[url]) {
     return;
   }

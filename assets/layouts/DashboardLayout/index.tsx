@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 const DashboardLayout = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-  const [isDrawerLoggerBarOpen, setDrawerLoggerBarOpen] = useState(true);
+  const [isDrawerLoggerBarOpen, setDrawerLoggerBarOpen] = useState(false);
 
   return (
     <div className={classes.root}>
@@ -56,7 +56,10 @@ const DashboardLayout = () => {
           </div>
         </div>
       </div>
-      <DrawerLoggerBar onClose={setDrawerLoggerBarOpen} open={isDrawerLoggerBarOpen} />
+      <DrawerLoggerBar
+        onClose={setDrawerLoggerBarOpen}
+        open={isDrawerLoggerBarOpen}
+      />
     </div>
   );
 };

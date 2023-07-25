@@ -29,28 +29,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReservationAdd = ({ onAdd, ...rest }:{onAdd:(id: string)=>void}) => {
+const ReservationAdd = ({
+  onAdd,
+  ...rest
+}: {
+  onAdd: (id: string) => void;
+}) => {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
-  const [services, setServices] = useState<{name: string}[]>([]);
+  const [services, setServices] = useState<{ name: string }[]>([]);
   const [serviceName, setServiceName] = useState('');
   const [serviceIndex, setServiceIndex] = useState(1);
   const [reservationName, setReservationName] = useState('');
   const { enqueueSnackbar } = useSnackbar();
 
   const createService = () => {
-    mutationAddReservation(
-      serviceName,
-      reservationName,
-      serviceIndex,
-    ).then((response) => {
-      if (response.message) {
-        enqueueSnackbar(response.message);
-        return;
-      }
-      setReservationName('');
-      onAdd(`${Date.now()}`);
-    });
+    mutationAddReservation(serviceName, reservationName, serviceIndex).then(
+      (response) => {
+        if (response.message) {
+          enqueueSnackbar(response.message);
+          return;
+        }
+        setReservationName('');
+        onAdd(`${Date.now()}`);
+      },
+    );
   };
 
   const loadServices = () => {
@@ -67,16 +70,14 @@ const ReservationAdd = ({ onAdd, ...rest }:{onAdd:(id: string)=>void}) => {
   }, []);
 
   return (
-    <Card
-      {...rest}
-    >
+    <Card {...rest}>
       <CardHeader
         title="Add Reservation"
-        action={(
+        action={
           <IconButton onClick={() => setOpen(!open)}>
             {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </IconButton>
-                  )}
+        }
       />
       <Collapse in={open} timeout="auto" unmountOnExit>
         <CardContent>
@@ -97,12 +98,14 @@ const ReservationAdd = ({ onAdd, ...rest }:{onAdd:(id: string)=>void}) => {
               label="Index"
               type="number"
               value={serviceIndex}
-              onChange={(event) => setServiceIndex(parseInt(event.target.value, 10))}
+              onChange={(event) =>
+                setServiceIndex(parseInt(event.target.value, 10))
+              }
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
               InputProps={{
-                inputProps: { min: 1, max: 100 }
+                inputProps: { min: 1, max: 100 },
               }}
             />
             <TextField

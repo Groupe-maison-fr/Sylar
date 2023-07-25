@@ -4,24 +4,29 @@ import {
   FailedMessage,
 } from '../../graphQL/Messenger/queryFailedMessage';
 
-const FlattenException = ({ exception, message }:{ exception:Exception, message:FailedMessage}) => {
+const FlattenException = ({
+  exception,
+  message,
+}: {
+  exception: Exception;
+  message: FailedMessage;
+}) => {
   if (!exception) {
     return null;
   }
   return (
     <ul>
       {exception.message !== message.exceptionMessage && (
-      <li>
-        Message:
-        {exception.message}
-      </li>
+        <li>
+          Message:
+          {exception.message}
+        </li>
       )}
-      {exception.class
-        && exception.class !== message.className && (
-          <li>
-            Class:
-            {exception.class}
-          </li>
+      {exception.class && exception.class !== message.className && (
+        <li>
+          Class:
+          {exception.class}
+        </li>
       )}
       {exception.headers && (
         <li>

@@ -10,11 +10,10 @@ import RawSvg from './components/LogoPicture';
 svgFavicon(RawSvg);
 
 ReactDOM.render(
-  (
-    <BrowserRouter>
-      <SnackbarProvider maxSnack={5}>
-        <App />
-      </SnackbarProvider>
-    </BrowserRouter>
-  ), document.getElementById('root')
+  <BrowserRouter>
+    <SnackbarProvider maxSnack={5}>
+      <App />
+    </SnackbarProvider>
+  </BrowserRouter>,
+  document.getElementById('root'),
 );

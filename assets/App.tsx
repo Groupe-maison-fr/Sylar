@@ -24,11 +24,12 @@ const App = () => {
         type: prefersDarkMode ? 'dark' : 'light',
       },
     });
-  }, [prefersDarkMode],);
+  }, [prefersDarkMode]);
 
   return (
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <PrefersDarkModeContext.Provider value={{ prefersDarkMode, setPrefersDarkMode }}>
+    <PrefersDarkModeContext.Provider
+      value={{ prefersDarkMode, setPrefersDarkMode }}
+    >
       <LogListProvider>
         <AppSnackbars />
         <ThemeProvider theme={theme}>

@@ -1,6 +1,8 @@
 import GraphQL from '../GraphQL';
 
-export default (masterName:string, instanceName:string) => GraphQL.query(`
+export default (masterName: string, instanceName: string) =>
+  GraphQL.query(
+    `
     mutation {
       stopService (input:{
         masterName: "${masterName}"
@@ -14,6 +16,7 @@ export default (masterName:string, instanceName:string) => GraphQL.query(`
           message
         } 
       } 
-    }`)
-  .then((response) => response.json())
-  .then((json) => json.data.stopService);
+    }`,
+  )
+    .then((response) => response.json())
+    .then((json) => json.data.stopService);

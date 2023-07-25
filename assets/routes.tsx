@@ -18,10 +18,18 @@ const routes = [
       { path: 'reservations', element: <ReservationsView /> },
       { path: 'system', element: <SystemView /> },
       { path: 'messenger', element: <MessengerView /> },
-      { path: 'graph/docker', element: <GraphView graphUrlId="pMEd7m0Mz/dockers" graphHeight={1300} /> },
-      { path: 'graph/host', element: <GraphView graphUrlId="rYdddlPWk/host" graphHeight={1300} /> },
-      { path: '*', element: <Navigate to="/404" /> }
-    ]
+      {
+        path: 'graph/docker',
+        element: (
+          <GraphView graphUrlId="pMEd7m0Mz/dockers" graphHeight={1300} />
+        ),
+      },
+      {
+        path: 'graph/host',
+        element: <GraphView graphUrlId="rYdddlPWk/host" graphHeight={1300} />,
+      },
+      { path: '*', element: <Navigate to="/404" /> },
+    ],
   },
   {
     path: '/',
@@ -29,9 +37,9 @@ const routes = [
     children: [
       { path: '404', element: <NotFoundView /> },
       { path: '/', element: <Navigate to="/app/services" /> },
-      { path: '*', element: <Navigate to="/404" /> }
-    ]
-  }
+      { path: '*', element: <Navigate to="/404" /> },
+    ],
+  },
 ];
 
 export default routes;

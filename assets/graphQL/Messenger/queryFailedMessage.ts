@@ -1,44 +1,46 @@
 import GraphQL from '../GraphQL';
 
-export interface ArgumentCall{
-  type: string
-  value?: string
+export interface ArgumentCall {
+  type: string;
+  value?: string;
 }
-export interface FunctionCall{
-  namespace: string
-  short_class: string
-  class: string
-  type: string
-  function: string
-  file: string
-  line: number
-  arguments: ArgumentCall|ArgumentCall[]
+export interface FunctionCall {
+  namespace: string;
+  short_class: string;
+  class: string;
+  type: string;
+  function: string;
+  file: string;
+  line: number;
+  arguments: ArgumentCall | ArgumentCall[];
 }
 
-export interface Exception{
-  message: string
-  code: string
-  previous: Exception
-  traceAsString: string
-  class: string
-  statusCode: string
-  statusText: string
-  headers: string
-  file: string
-  line: number
+export interface Exception {
+  message: string;
+  code: string;
+  previous: Exception;
+  traceAsString: string;
+  class: string;
+  statusCode: string;
+  statusText: string;
+  headers: string;
+  file: string;
+  line: number;
 }
 
 export interface FailedMessage {
-  id: number
-  className: string
-  message: string
-  exceptionMessage: string
-  backtrace: FunctionCall[]
-  flattenException: Exception
-  date: string
+  id: number;
+  className: string;
+  message: string;
+  exceptionMessage: string;
+  backtrace: FunctionCall[];
+  flattenException: Exception;
+  date: string;
 }
 
-export default (id: number): Promise<FailedMessage> => GraphQL.query(`
+export default (id: number): Promise<FailedMessage> =>
+  GraphQL.query(
+    `
     query {
         failedMessage(
             id: ${id}
@@ -81,6 +83,7 @@ export default (id: number): Promise<FailedMessage> => GraphQL.query(`
             date
         }
     }
-`)
-  .then((response) => response.json())
-  .then((responseAsJson) => responseAsJson.data.failedMessage);
+`,
+  )
+    .then((response) => response.json())
+    .then((responseAsJson) => responseAsJson.data.failedMessage);

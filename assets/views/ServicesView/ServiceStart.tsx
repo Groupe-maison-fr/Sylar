@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react';
 import {
   Button,
   Collapse,
-  IconButton, ListItemText,
+  IconButton,
+  ListItemText,
   makeStyles,
   MenuItem,
-  TextField, Typography
+  TextField,
+  Typography,
 } from '@material-ui/core';
 
 import Card from '@material-ui/core/Card';
@@ -39,34 +41,31 @@ const InstanceName = ({
   index,
   serviceName,
   instancesByService,
-  reservationsByService
-}:{
-  index: number|string,
-  serviceName:string,
-  instancesByService:indexesByServiceType,
-  reservationsByService:indexesByServiceType
+  reservationsByService,
+}: {
+  index: number | string;
+  serviceName: string;
+  instancesByService: indexesByServiceType;
+  reservationsByService: indexesByServiceType;
 }) => {
   if (index === 'auto') {
     return 'Auto';
   }
-  const instancesByServiceElement = instancesByService[`${serviceName}-${index}`];
+  const instancesByServiceElement =
+    instancesByService[`${serviceName}-${index}`];
   if (instancesByServiceElement) {
     return (
       <>
         <ListItemText>
           {`[${index}] `}
-          <i>
-            {instancesByServiceElement}
-            {' '}
-          </i>
+          <i>{instancesByServiceElement} </i>
         </ListItemText>
-        <Typography variant="body2">
-          Running
-        </Typography>
+        <Typography variant="body2">Running</Typography>
       </>
     );
   }
-  const reservationsByServiceElement = reservationsByService[`${serviceName}-${index}`];
+  const reservationsByServiceElement =
+    reservationsByService[`${serviceName}-${index}`];
   if (reservationsByServiceElement) {
     return (
       <>
@@ -74,9 +73,7 @@ const InstanceName = ({
           {`[${index}] `}
           <b>{reservationsByServiceElement}</b>
         </ListItemText>
-        <Typography variant="body2">
-          Reserved
-        </Typography>
+        <Typography variant="body2">Reserved</Typography>
       </>
     );
   }
@@ -88,12 +85,10 @@ const ServiceStart = ({ ...rest }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [services, setServices] = useState<{ name: string }[]>([]);
-  const [reservationsByService, setReservationsByService] = useState<
-    indexesByServiceType
-  >({});
-  const [instancesByService, setInstancesByService] = useState<
-    indexesByServiceType
-  >({});
+  const [reservationsByService, setReservationsByService] =
+    useState<indexesByServiceType>({});
+  const [instancesByService, setInstancesByService] =
+    useState<indexesByServiceType>({});
   const [serviceName, setServiceName] = useState('');
   const [serviceIndex, setServiceIndex] = useState<number | 'auto'>('auto');
   const [instanceName, setInstanceName] = useState('');
@@ -102,7 +97,7 @@ const ServiceStart = ({ ...rest }) => {
     mutationStartService(
       serviceName,
       serviceIndex === 'auto' ? null : serviceIndex,
-      instanceName
+      instanceName,
     ).then(() => {
       setInstanceName('');
     });
@@ -145,18 +140,19 @@ const ServiceStart = ({ ...rest }) => {
               return containersAccumulator;
             }, accumulator);
             return accumulator;
-          }, {})
+          }, {}),
         );
         setReservationsByService(
           reservations.reduce(
             (accumulator: indexesByServiceType, reservation) => {
-              accumulator[`${reservation.service}-${reservation.index}`] = reservation.name;
+              accumulator[`${reservation.service}-${reservation.index}`] =
+                reservation.name;
               return accumulator;
             },
-            {}
-          )
+            {},
+          ),
         );
-      }
+      },
     );
   };
 
@@ -178,11 +174,11 @@ const ServiceStart = ({ ...rest }) => {
     <Card {...rest}>
       <CardHeader
         title="Service start"
-        action={(
+        action={
           <IconButton onClick={() => setOpen(!open)}>
             {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </IconButton>
-        )}
+        }
       />
       <Collapse in={open} timeout="auto" unmountOnExit>
         <CardContent style={{ height: '7vw' }}>
@@ -206,7 +202,7 @@ const ServiceStart = ({ ...rest }) => {
               value={serviceIndex}
               onChange={(event) => onChangeIndex(event.target.value)}
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
             >
               {['auto', ...indexRange].map((index) => (
@@ -244,7 +240,7 @@ const ServiceStart = ({ ...rest }) => {
                 if (instancesByService[`${serviceName}-${serviceIndex}`]) {
                   mutationRestartService(
                     serviceName,
-                    instancesByService[`${serviceName}-${serviceIndex}`]
+                    instancesByService[`${serviceName}-${serviceIndex}`],
                   );
                   return;
                 }

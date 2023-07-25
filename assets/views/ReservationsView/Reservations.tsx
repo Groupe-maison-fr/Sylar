@@ -3,7 +3,8 @@ import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import {
-  Box, Button,
+  Box,
+  Button,
   Card,
   CardHeader,
   Divider,
@@ -12,24 +13,26 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
 } from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
 import DeleteIcon from '@material-ui/icons/Delete';
-import queryReservations, { Reservation } from '../../graphQL/Reservation/queryReservations';
+import queryReservations, {
+  Reservation,
+} from '../../graphQL/Reservation/queryReservations';
 import mutationDeleteReservation from '../../graphQL/Reservation/mutationDeleteReservation';
 
 const useStyles = makeStyles(() => ({
   root: {},
   value: {
-    display: 'inline-block'
+    display: 'inline-block',
   },
   actions: {
-    justifyContent: 'flex-end'
-  }
+    justifyContent: 'flex-end',
+  },
 }));
 
-const Reservations = ({ refresh, ...rest }:{refresh: string}) => {
+const Reservations = ({ refresh, ...rest }: { refresh: string }) => {
   const classes = useStyles();
   const [data, setData] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
@@ -42,9 +45,13 @@ const Reservations = ({ refresh, ...rest }:{refresh: string}) => {
     });
   };
 
-  const deleteReservation = (reservation:Reservation) => {
+  const deleteReservation = (reservation: Reservation) => {
     setLoading(true);
-    return mutationDeleteReservation(reservation.service, reservation.name, reservation.index).then(() => {
+    return mutationDeleteReservation(
+      reservation.service,
+      reservation.name,
+      reservation.index,
+    ).then(() => {
       setLoading(false);
       loadReservations().then(() => {});
     });
@@ -59,10 +66,7 @@ const Reservations = ({ refresh, ...rest }:{refresh: string}) => {
   }, [refresh]);
 
   return (
-    <Card
-      className={clsx(classes.root)}
-      {...rest}
-    >
+    <Card className={clsx(classes.root)} {...rest}>
       <CardHeader title="Reservations" />
       <Divider />
       <PerfectScrollbar>
@@ -82,10 +86,19 @@ const Reservations = ({ refresh, ...rest }:{refresh: string}) => {
             </TableHead>
             <TableBody>
               {data.map((reservation) => (
-                <TableRow hover key={`${reservation.service}-${reservation.name}`}>
-                  <TableCell style={{ verticalAlign: 'top' }}>{reservation.service}</TableCell>
-                  <TableCell style={{ verticalAlign: 'top' }}>{reservation.name}</TableCell>
-                  <TableCell style={{ verticalAlign: 'top' }}>{reservation.index}</TableCell>
+                <TableRow
+                  hover
+                  key={`${reservation.service}-${reservation.name}`}
+                >
+                  <TableCell style={{ verticalAlign: 'top' }}>
+                    {reservation.service}
+                  </TableCell>
+                  <TableCell style={{ verticalAlign: 'top' }}>
+                    {reservation.name}
+                  </TableCell>
+                  <TableCell style={{ verticalAlign: 'top' }}>
+                    {reservation.index}
+                  </TableCell>
                   <Button onClick={() => deleteReservation(reservation)}>
                     <DeleteIcon />
                   </Button>

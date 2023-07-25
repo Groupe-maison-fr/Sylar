@@ -1,39 +1,55 @@
 import { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import EventBus from './components/EventBus';
-import { LOG_LIST_ACTIONS, LogMessage, useLogList } from './Context/LogListContext';
+import {
+  LOG_LIST_ACTIONS,
+  LogMessage,
+  useLogList,
+} from './Context/LogListContext';
 
 const AppSnackbars = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { dispatchLogList } = useLogList();
 
   // @ts-ignore TS6133
-  const displayError = (eventName: string, arg: { message:string}) => {
+  const displayError = (eventName: string, arg: { message: string }) => {
     enqueueSnackbar(arg.message);
   };
 
-  // @ts-ignore TS6133
-  const displayFailedMessage = (eventName:string, arg: { message:string, exception: string}) => {
+  const displayFailedMessage = (
+    // @ts-ignore TS6133
+    eventName: string,
+    arg: { message: string; exception: string },
+  ) => {
     enqueueSnackbar(`${arg.message} (${arg.exception})`);
   };
 
-  // @ts-ignore TS6133
-  const displayStart = (eventName:string, arg: { masterName:string, instanceName: string}) => {
+  const displayStart = (
+    // @ts-ignore TS6133
+    eventName: string,
+    arg: { masterName: string; instanceName: string },
+  ) => {
     enqueueSnackbar(`Service ${arg.masterName}:${arg.instanceName} started`);
   };
 
-  // @ts-ignore TS6133
-  const displayStop = (eventName:string, arg: { masterName:string, instanceName: string}) => {
+  const displayStop = (
+    // @ts-ignore TS6133
+    eventName: string,
+    arg: { masterName: string; instanceName: string },
+  ) => {
     enqueueSnackbar(`Service ${arg.masterName}:${arg.instanceName} stopped`);
   };
 
   // @ts-ignore TS6133
-  const displayLogMessage = (eventName:string, logMessage: LogMessage) => {
-    dispatchLogList({ type: LOG_LIST_ACTIONS.ADD, payload:{logMessage} });
+  const displayLogMessage = (eventName: string, logMessage: LogMessage) => {
+    dispatchLogList({ type: LOG_LIST_ACTIONS.ADD, payload: { logMessage } });
   };
 
   // @ts-ignore TS6133
-  const displayLogMessages = (eventName:string, arg: { messages: LogMessage[]}) => {
+  const displayLogMessages = (
+    eventName: string,
+    arg: { messages: LogMessage[] },
+  ) => {
     arg.messages.forEach((message) => displayLogMessage(eventName, message));
   };
 

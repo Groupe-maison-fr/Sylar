@@ -3,7 +3,8 @@ import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import ReplayIcon from '@material-ui/icons/Replay';
 import {
-  Box, Button,
+  Box,
+  Button,
   Card,
   CardHeader,
   Divider,
@@ -12,20 +13,22 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
 } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import moment from 'moment';
-import queryFilesystem, { Filesystem } from '../../graphQL/ServiceCloner/queryFilesystem';
+import queryFilesystem, {
+  Filesystem,
+} from '../../graphQL/ServiceCloner/queryFilesystem';
 import mutationForceDestroyFilesystem from '../../graphQL/FileSystem/mutationForceDestroyFilesystem';
 import EventBus from '../../components/EventBus';
 
 const useStyles = makeStyles(() => ({
   root: {},
   actions: {
-    justifyContent: 'flex-end'
-  }
+    justifyContent: 'flex-end',
+  },
 }));
 
 const Filesystems = ({ ...rest }) => {
@@ -54,10 +57,7 @@ const Filesystems = ({ ...rest }) => {
   }, []);
 
   return (
-    <Card
-      className={clsx(classes.root)}
-      {...rest}
-    >
+    <Card className={clsx(classes.root)} {...rest}>
       <CardHeader title="Filesystems" />
       <Divider />
       <PerfectScrollbar>
@@ -65,7 +65,9 @@ const Filesystems = ({ ...rest }) => {
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell align="left">{loading ? 'Loading' : 'Name'}</TableCell>
+                <TableCell align="left">
+                  {loading ? 'Loading' : 'Name'}
+                </TableCell>
                 <TableCell align="left">MountPoint</TableCell>
                 <TableCell align="right">Available</TableCell>
                 <TableCell align="right">Used</TableCell>
@@ -80,23 +82,33 @@ const Filesystems = ({ ...rest }) => {
             </TableHead>
             <TableBody>
               {fileSystems.map((filesystem) => (
-                <TableRow
-                  hover
-                  key={filesystem.name}
-                >
+                <TableRow hover key={filesystem.name}>
                   <TableCell align="left">{filesystem.name}</TableCell>
                   <TableCell align="left">{filesystem.mountPoint}</TableCell>
-                  <TableCell align="right">{numberWithCommas(filesystem.available)}</TableCell>
-                  <TableCell align="right">{numberWithCommas(filesystem.used)}</TableCell>
-                  <TableCell align="right">{numberWithCommas(filesystem.usedByDataset)}</TableCell>
-                  <TableCell align="right">{moment(filesystem.creationTimestamp * 1000).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
+                  <TableCell align="right">
+                    {numberWithCommas(filesystem.available)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {numberWithCommas(filesystem.used)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {numberWithCommas(filesystem.usedByDataset)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {moment(filesystem.creationTimestamp * 1000).format(
+                      'DD/MM/YYYY HH:mm:ss',
+                    )}
+                  </TableCell>
                   <TableCell>
-                    {filesystem.origin !== '-'
-                            && (
-                            <Button onClick={() => mutationForceDestroyFilesystem(filesystem.name)}>
-                              <DeleteForeverIcon style={{ color: red[500] }} />
-                            </Button>
-                            )}
+                    {filesystem.origin !== '-' && (
+                      <Button
+                        onClick={() =>
+                          mutationForceDestroyFilesystem(filesystem.name)
+                        }
+                      >
+                        <DeleteForeverIcon style={{ color: red[500] }} />
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

@@ -5,12 +5,11 @@ const setInitialDarkMode = (prefersDarkMode) => {
 
 const initialDarkMode = () => {
   if (localStorage.getItem('prefersDarkMode') === null) {
-    setInitialDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    setInitialDarkMode(
+      window.matchMedia('(prefers-color-scheme: dark)').matches,
+    );
   }
   return JSON.parse(localStorage.getItem('prefersDarkMode') ?? '');
 };
 
-export {
-  initialDarkMode,
-  setInitialDarkMode
-};
+export { initialDarkMode, setInitialDarkMode };

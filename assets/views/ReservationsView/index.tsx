@@ -9,8 +9,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
-  }
+    paddingTop: theme.spacing(3),
+  },
 }));
 
 const Dashboard = () => {
@@ -18,9 +18,7 @@ const Dashboard = () => {
   const [refresh, setRefresh] = useState('');
   return (
     <div className={classes.root}>
-      <Page
-        title="Reservations"
-      >
+      <Page title="Reservations">
         <Container maxWidth={false}>
           <Grid container spacing={3}>
             <Grid item lg={12} md={12} xl={12} xs={12}>

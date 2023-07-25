@@ -1,6 +1,8 @@
 import GraphQL from '../GraphQL';
 
-export default (name:string) => GraphQL.query(`
+export default (name: string) =>
+  GraphQL.query(
+    `
     mutation {
       forceDestroyContainer (input:{
         name: "${name}"
@@ -13,6 +15,7 @@ export default (name:string) => GraphQL.query(`
           message
         }
       }
-    }`)
-  .then((response) => response.json())
-  .then((json) => json.data.forceDestroyContainer);
+    }`,
+  )
+    .then((response) => response.json())
+    .then((json) => json.data.forceDestroyContainer);

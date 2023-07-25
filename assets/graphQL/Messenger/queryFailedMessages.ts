@@ -1,13 +1,15 @@
 import GraphQL from '../GraphQL';
 
-export interface FailedMessageSummary{
-  id: number
-  className:string
-  exceptionMessage:string
-  date:string
-  checked: boolean
+export interface FailedMessageSummary {
+  id: number;
+  className: string;
+  exceptionMessage: string;
+  date: string;
+  checked: boolean;
 }
-export default (max:number):Promise<FailedMessageSummary[]> => GraphQL.query(`
+export default (max: number): Promise<FailedMessageSummary[]> =>
+  GraphQL.query(
+    `
     query {
         failedMessages(
             max: ${max}
@@ -17,6 +19,11 @@ export default (max:number):Promise<FailedMessageSummary[]> => GraphQL.query(`
             exceptionMessage
             date
         }
-    }`)
-  .then((response) => response.json())
-  .then((responseAsJson) => responseAsJson.data.failedMessages.map((failedMessage:any) => { return { ...failedMessage, checked: false }; }));
+    }`,
+  )
+    .then((response) => response.json())
+    .then((responseAsJson) =>
+      responseAsJson.data.failedMessages.map((failedMessage: any) => {
+        return { ...failedMessage, checked: false };
+      }),
+    );

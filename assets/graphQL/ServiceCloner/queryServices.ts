@@ -1,47 +1,49 @@
 import GraphQL from '../GraphQL';
 
 export interface Services {
-  name: string
-  image: string
-  command: string
-  labels : {
-    name: string
-    value: string
-  }[]
-  environments :{
-    name: string
-    value: string
-  }[]
-  ports :{
-    containerPort: string
-    hostPort: string
-    hostIp: string
-  }[]
-  containers :{
-    containerName: string
-    masterName: string
-    instanceName: string
-    instanceIndex: number
-    zfsFilesystemName: string
-    exposedPorts: string[]
-    time: number
-    dockerState: string
-    zfsFilesystem? : {
-      name: string
-      type: string
-      origin: string
-      mountPoint: string
-      available: number
-      used: number
-      usedByChild: number
-      usedByDataset: number
-      usedByRefreservation: number
-      usedBySnapshot: number
-      creationTimestamp: number
-    }
-  }[]
+  name: string;
+  image: string;
+  command: string;
+  labels: {
+    name: string;
+    value: string;
+  }[];
+  environments: {
+    name: string;
+    value: string;
+  }[];
+  ports: {
+    containerPort: string;
+    hostPort: string;
+    hostIp: string;
+  }[];
+  containers: {
+    containerName: string;
+    masterName: string;
+    instanceName: string;
+    instanceIndex: number;
+    zfsFilesystemName: string;
+    exposedPorts: string[];
+    time: number;
+    dockerState: string;
+    zfsFilesystem?: {
+      name: string;
+      type: string;
+      origin: string;
+      mountPoint: string;
+      available: number;
+      used: number;
+      usedByChild: number;
+      usedByDataset: number;
+      usedByRefreservation: number;
+      usedBySnapshot: number;
+      creationTimestamp: number;
+    };
+  }[];
 }
-export default ():Promise<Services[]> => GraphQL.query(`
+export default (): Promise<Services[]> =>
+  GraphQL.query(
+    `
   query {
     services {
         name
@@ -84,6 +86,7 @@ export default ():Promise<Services[]> => GraphQL.query(`
           }
         }
     }
-  }`)
-  .then((response) => response.json())
-  .then((json) => json.data.services);
+  }`,
+  )
+    .then((response) => response.json())
+    .then((json) => json.data.services);

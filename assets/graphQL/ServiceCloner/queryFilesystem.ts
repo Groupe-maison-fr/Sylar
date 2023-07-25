@@ -1,21 +1,22 @@
 import GraphQL from '../GraphQL';
 
-export interface Filesystem{
-  name: string
-  type: string
-  origin: string
-  mountPoint: string
-  available: number
-  refer: number
-  used: number
-  usedByChild: number
-  usedByDataset: number
-  usedByRefreservation: number
-  usedBySnapshot: number
-  creationTimestamp: number
-
+export interface Filesystem {
+  name: string;
+  type: string;
+  origin: string;
+  mountPoint: string;
+  available: number;
+  refer: number;
+  used: number;
+  usedByChild: number;
+  usedByDataset: number;
+  usedByRefreservation: number;
+  usedBySnapshot: number;
+  creationTimestamp: number;
 }
-export default ():Promise<Filesystem[]> => GraphQL.query(`
+export default (): Promise<Filesystem[]> =>
+  GraphQL.query(
+    `
     query {
       filesystems {
         name
@@ -31,8 +32,9 @@ export default ():Promise<Filesystem[]> => GraphQL.query(`
         usedBySnapshot
         creationTimestamp
       }
-    }`)
-  .then((response) => response.json())
-  .then((json) => {
-    return json.data.filesystems;
-  });
+    }`,
+  )
+    .then((response) => response.json())
+    .then((json) => {
+      return json.data.filesystems;
+    });

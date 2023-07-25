@@ -1,11 +1,9 @@
 import * as React from 'react';
-import {
-  FunctionCall
-} from '../../graphQL/Messenger/queryFailedMessage';
+import { FunctionCall } from '../../graphQL/Messenger/queryFailedMessage';
 import FunctionCallDisplay from './FunctionCallDisplay';
 import BackTraceArgument from './BackTraceArgument';
 
-const BackTraceDisplay = ({ backtrace }:{backtrace:FunctionCall[]}) => {
+const BackTraceDisplay = ({ backtrace }: { backtrace: FunctionCall[] }) => {
   if (!backtrace) {
     return null;
   }
@@ -13,9 +11,12 @@ const BackTraceDisplay = ({ backtrace }:{backtrace:FunctionCall[]}) => {
     <ul>
       {backtrace.map((call: FunctionCall, index) => {
         return (
-        // eslint-disable-next-line react/no-array-index-key
           <li key={`_${index}`}>
-            <a target="_blank" href={`${call.file}:${call.line}`} rel="noreferrer">
+            <a
+              target="_blank"
+              href={`${call.file}:${call.line}`}
+              rel="noreferrer"
+            >
               <FunctionCallDisplay call={call} />
             </a>
             {/* @ts-ignore */}

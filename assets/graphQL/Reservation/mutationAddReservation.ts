@@ -1,6 +1,8 @@
 import GraphQL from '../GraphQL';
 
-export default (service:string, name:string, index:number) => GraphQL.query(`
+export default (service: string, name: string, index: number) =>
+  GraphQL.query(
+    `
 mutation {
     addReservation(input:{
         service: "${service}"
@@ -15,6 +17,7 @@ mutation {
         }
     }
 }
-`)
-  .then((response) => response.json())
-  .then((json) => json.data.addReservation);
+`,
+  )
+    .then((response) => response.json())
+    .then((json) => json.data.addReservation);

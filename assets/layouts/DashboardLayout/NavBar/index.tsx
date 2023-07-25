@@ -6,7 +6,7 @@ import {
   Hidden,
   List,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import {
   BarChart as BarChartIcon,
@@ -21,52 +21,58 @@ const items = [
   {
     href: '/app/services',
     icon: BarChartIcon,
-    title: 'Services'
+    title: 'Services',
   },
   {
     href: '/app/reservations',
     icon: BookmarkIcon,
-    title: 'Reservations'
+    title: 'Reservations',
   },
   {
     href: '/app/system',
     icon: SettingsIcon,
-    title: 'System'
+    title: 'System',
   },
   {
     href: '/app/messenger',
     icon: FrammerIcon,
-    title: 'Errors'
+    title: 'Errors',
   },
   {
     href: '/app/graph/docker',
     icon: BarChart2Icon,
-    title: 'Dockers'
+    title: 'Dockers',
   },
   {
     href: '/app/graph/host',
     icon: BarChart2Icon,
-    title: 'Host'
-  }
+    title: 'Host',
+  },
 ];
 
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
-    width: 256
+    width: 256,
   },
   desktopDrawer: {
     width: 256,
     top: 64,
-    height: 'calc(100% - 64px)'
+    height: 'calc(100% - 64px)',
   },
   avatar: {
     cursor: 'pointer',
     width: 64,
-    height: 64
-  }
+    height: 64,
+  },
 }));
 
-const NavBar = ({ onMobileClose, openMobile }:{ onMobileClose:()=>void, openMobile:boolean }) => {
+const NavBar = ({
+  onMobileClose,
+  openMobile,
+}: {
+  onMobileClose: () => void;
+  openMobile: boolean;
+}) => {
   const classes = useStyles();
   const location = useLocation();
 
@@ -74,15 +80,10 @@ const NavBar = ({ onMobileClose, openMobile }:{ onMobileClose:()=>void, openMobi
     if (openMobile && onMobileClose) {
       onMobileClose();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   const content = (
-    <Box
-      height="100%"
-      display="flex"
-      flexDirection="column"
-    >
+    <Box height="100%" display="flex" flexDirection="column">
       <Box p={2}>
         <List>
           {items.map((item) => (
@@ -96,16 +97,8 @@ const NavBar = ({ onMobileClose, openMobile }:{ onMobileClose:()=>void, openMobi
         </List>
       </Box>
       <Box flexGrow={1} />
-      <Box
-        p={2}
-        m={2}
-        bgcolor="background.dark"
-      >
-        <Typography
-          align="center"
-          gutterBottom
-          variant="h4"
-        >
+      <Box p={2} m={2} bgcolor="background.dark">
+        <Typography align="center" gutterBottom variant="h4">
           &nbsp;
         </Typography>
       </Box>

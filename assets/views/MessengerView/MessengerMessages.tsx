@@ -17,13 +17,16 @@ import {
   Button,
   ButtonGroup,
   Container,
-  Grid, makeStyles,
-  TextField
+  Grid,
+  makeStyles,
+  TextField,
 } from '@material-ui/core';
 import Refresh from '@material-ui/icons/Refresh';
 
 import { useEffect, useState } from 'react';
-import queryFailedMessages, { FailedMessageSummary } from '../../graphQL/Messenger/queryFailedMessages';
+import queryFailedMessages, {
+  FailedMessageSummary,
+} from '../../graphQL/Messenger/queryFailedMessages';
 import queryFailedMessage, {
   FailedMessage,
 } from '../../graphQL/Messenger/queryFailedMessage';
@@ -43,7 +46,7 @@ const useStyles = makeStyles(() => ({
 const MessengerMessages = () => {
   const classes = useStyles();
   const [messages, setMessages] = useState<FailedMessageSummary[]>([]);
-  const [message, setMessage] = useState<FailedMessage|null>(null);
+  const [message, setMessage] = useState<FailedMessage | null>(null);
   const [showDetail, setShowDetail] = useState(false);
   const [filter, setFilter] = useState('');
   const [lowerFilter, setLowerFilter] = useState('');
@@ -51,33 +54,32 @@ const MessengerMessages = () => {
   const reload = () => {
     queryFailedMessages(50)
       .then((_messages) => {
-        setMessages(_messages.map((_message) => {
-          _message.checked = false;
-          return _message;
-        }));
-      }).then(() => null);
+        setMessages(
+          _messages.map((_message) => {
+            _message.checked = false;
+            return _message;
+          }),
+        );
+      })
+      .then(() => null);
   };
 
-  const reject = (ids:number[]) => {
-    return mutationRejectFailedMessage(
-      ids
-    ).then(reload);
+  const reject = (ids: number[]) => {
+    return mutationRejectFailedMessage(ids).then(reload);
   };
 
-  const retry = (id:number) => {
-    return mutationRetryFailedMessage(id)
-      .then(reload);
+  const retry = (id: number) => {
+    return mutationRetryFailedMessage(id).then(reload);
   };
 
   const loadMessage = (id: number) => {
     if (message && message.id === id) {
       return Promise.resolve(false);
     }
-    return queryFailedMessage(id)
-      .then((newMessage) => {
-        setShowDetail(true);
-        setMessage(newMessage);
-      });
+    return queryFailedMessage(id).then((newMessage) => {
+      setShowDetail(true);
+      setMessage(newMessage);
+    });
   };
 
   useEffect(() => {
@@ -95,15 +97,23 @@ const MessengerMessages = () => {
     EventBus.on('failedMessage:new', reload);
   }, []);
 
-  const numberOfMessagesSelected = messages.filter((_message) => _message.checked).length;
-  const allMessageAreChecked = numberOfMessagesSelected === Object.keys(messages).length;
-  const oneOfMessageIsChecked = numberOfMessagesSelected > 0 && !allMessageAreChecked;
+  const numberOfMessagesSelected = messages.filter(
+    (_message) => _message.checked,
+  ).length;
+  const allMessageAreChecked =
+    numberOfMessagesSelected === Object.keys(messages).length;
+  const oneOfMessageIsChecked =
+    numberOfMessagesSelected > 0 && !allMessageAreChecked;
 
   const changeCheckAll = () => {
-    setMessages(messages.map((_message) => {
-      _message.checked = oneOfMessageIsChecked ? false : !allMessageAreChecked;
-      return _message;
-    }, {}));
+    setMessages(
+      messages.map((_message) => {
+        _message.checked = oneOfMessageIsChecked
+          ? false
+          : !allMessageAreChecked;
+        return _message;
+      }, {}),
+    );
   };
 
   return (
@@ -111,28 +121,42 @@ const MessengerMessages = () => {
       <Grid container spacing={1}>
         <Grid item xs={showDetail ? 6 : 12}>
           <TableContainer component={Paper} style={{ overflow: 'auto' }}>
-            <Table className={classes.table} stickyHeader size="small" aria-label="simple table">
+            <Table
+              className={classes.table}
+              stickyHeader
+              size="small"
+              aria-label="simple table"
+            >
               <TableHead>
                 <TableRow>
                   <TableCell colSpan={2}>
-                    <Button
-                      onClick={reload}
-                    >
+                    <Button onClick={reload}>
                       <Refresh />
                     </Button>
                     <MuiTriStateCheckbox
                       edge="start"
                       tabIndex={-1}
-                      checked={oneOfMessageIsChecked ? null : allMessageAreChecked}
+                      checked={
+                        oneOfMessageIsChecked ? null : allMessageAreChecked
+                      }
                       color="primary"
-                      onClick={(event:Event) => {
+                      onClick={(event: Event) => {
                         changeCheckAll();
                         event.preventDefault();
                       }}
                     />
                     <Button
-                      disabled={messages.filter((_message) => _message.checked).length === 0}
-                      onClick={() => reject(messages.filter((_message) => _message.checked).map((_message) => _message.id))}
+                      disabled={
+                        messages.filter((_message) => _message.checked)
+                          .length === 0
+                      }
+                      onClick={() =>
+                        reject(
+                          messages
+                            .filter((_message) => _message.checked)
+                            .map((_message) => _message.id),
+                        )
+                      }
                     >
                       <DeleteForeverIcon />
                     </Button>
@@ -153,10 +177,17 @@ const MessengerMessages = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(filter === '' ? messages : messages.filter((item) => {
-                  return (item.exceptionMessage.toLowerCase().indexOf(lowerFilter) !== -1)
-                    || (item.className.toLowerCase().indexOf(lowerFilter) !== -1);
-                })).map((_message, index) => (
+                {(filter === ''
+                  ? messages
+                  : messages.filter((item) => {
+                      return (
+                        item.exceptionMessage
+                          .toLowerCase()
+                          .indexOf(lowerFilter) !== -1 ||
+                        item.className.toLowerCase().indexOf(lowerFilter) !== -1
+                      );
+                    })
+                ).map((_message, index) => (
                   <TableRow key={_message.id}>
                     <TableCell align="center">
                       <Button onClick={() => loadMessage(_message.id)}>
@@ -184,12 +215,20 @@ const MessengerMessages = () => {
                       }}
                     >
                       <div style={{ width: '100%', overflow: 'auto' }}>
-                        {showDetail ? _message.className.split('\\').pop() : _message.className}
+                        {showDetail
+                          ? _message.className.split('\\').pop()
+                          : _message.className}
                         {showDetail && <pre>{_message.exceptionMessage}</pre>}
                       </div>
                     </TableCell>
-                    {!showDetail && <TableCell align="left">{_message.date}</TableCell>}
-                    {!showDetail && <TableCell align="left">{_message.exceptionMessage}</TableCell>}
+                    {!showDetail && (
+                      <TableCell align="left">{_message.date}</TableCell>
+                    )}
+                    {!showDetail && (
+                      <TableCell align="left">
+                        {_message.exceptionMessage}
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>
@@ -199,15 +238,15 @@ const MessengerMessages = () => {
         <Grid item xs={showDetail ? 6 : false} style={{ overflow: 'auto' }}>
           {message && (
             <>
-              <ButtonGroup color="primary" aria-label="outlined primary button group">
+              <ButtonGroup
+                color="primary"
+                aria-label="outlined primary button group"
+              >
                 <Button onClick={() => retry(message.id)}>Retry</Button>
                 <Button onClick={() => reject([message.id])}>Delete</Button>
                 <Button onClick={() => setShowDetail(false)}>Close</Button>
                 <Typography variant="h6" component="div">
-                  [
-                  {message.id}
-                  ]
-                  {message.date}
+                  [{message.id}]{message.date}
                 </Typography>
               </ButtonGroup>
               <Typography variant="h6" component="div">
@@ -220,7 +259,10 @@ const MessengerMessages = () => {
                 {message.exceptionMessage}
               </Typography>
               <BackTraceDisplay backtrace={message.backtrace} />
-              <FlattenException exception={message.flattenException} message={message} />
+              <FlattenException
+                exception={message.flattenException}
+                message={message}
+              />
             </>
           )}
         </Grid>

@@ -5,10 +5,11 @@ const Page = ({
   children,
   title = '',
   ...rest
-}:{children:JSX.Element, title:string}) => (
-  <div
-    {...rest}
-  >
+}: {
+  children: JSX.Element;
+  title: string;
+}) => (
+  <div {...rest}>
     {/* @ts-ignore */}
     <Helmet>
       <title>{title}</title>

@@ -2,7 +2,12 @@ import React from 'react';
 import { SvgIcon } from '@material-ui/core';
 
 const Logo = () => (
-  <SvgIcon enableBackground="new 0 0 400 400" viewBox="0 0 400 400" width="400" height="400">
+  <SvgIcon
+    enableBackground="new 0 0 400 400"
+    viewBox="0 0 400 400"
+    width="400"
+    height="400"
+  >
     <g id="Landing" stroke="none" fill="none">
       <circle fill="white" cx="200" cy="200" r="200" />
       <g transform="scale(0.2,-0.2)  translate(00,-1600)">

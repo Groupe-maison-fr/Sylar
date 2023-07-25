@@ -1,6 +1,12 @@
 import GraphQL from '../GraphQL';
 
-export default (masterName:string, index:number|null, instanceName:string) => GraphQL.query(`
+export default (
+  masterName: string,
+  index: number | null,
+  instanceName: string,
+) =>
+  GraphQL.query(
+    `
     mutation {
       startService (input:{
         masterName: "${masterName}"
@@ -15,6 +21,7 @@ export default (masterName:string, index:number|null, instanceName:string) => Gr
           message
         } 
       } 
-    }`)
-  .then((response) => response.json())
-  .then((json) => json.data.startService);
+    }`,
+  )
+    .then((response) => response.json())
+    .then((json) => json.data.startService);
