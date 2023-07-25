@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from 'react';
 
+import { styled } from '@mui/material/styles';
+
 import {
   Button,
   Collapse,
   IconButton,
-  makeStyles,
   MenuItem,
   TextField,
-} from '@material-ui/core';
+} from '@mui/material';
 
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import SendIcon from '@material-ui/icons/Send';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import SendIcon from '@mui/icons-material/Send';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { useSnackbar } from 'notistack';
 import queryServiceList from '../../graphQL/ServiceCloner/queryServiceList';
 import mutationAddReservation from '../../graphQL/Reservation/mutationAddReservation';
 
-const useStyles = makeStyles((theme) => ({
-  form: {
+const PREFIX = 'ReservationAdd';
+
+const classes = {
+  form: `${PREFIX}-form`,
+};
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  [`& .${classes.form}`]: {
     '& > *': {
       margin: theme.spacing(1),
       width: '25ch',
@@ -35,7 +42,6 @@ const ReservationAdd = ({
 }: {
   onAdd: (id: string) => void;
 }) => {
-  const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [services, setServices] = useState<{ name: string }[]>([]);
   const [serviceName, setServiceName] = useState('');
@@ -70,11 +76,11 @@ const ReservationAdd = ({
   }, []);
 
   return (
-    <Card {...rest}>
+    <StyledCard {...rest}>
       <CardHeader
         title="Add Reservation"
         action={
-          <IconButton onClick={() => setOpen(!open)}>
+          <IconButton onClick={() => setOpen(!open)} size="large">
             {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </IconButton>
         }
@@ -125,7 +131,7 @@ const ReservationAdd = ({
           </form>
         </CardContent>
       </Collapse>
-    </Card>
+    </StyledCard>
   );
 };
 

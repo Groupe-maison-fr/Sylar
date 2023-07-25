@@ -1,13 +1,7 @@
 import React, { useEffect } from 'react';
+import { styled } from '@mui/material/styles';
 import { useLocation } from 'react-router-dom';
-import {
-  Box,
-  Drawer,
-  Hidden,
-  List,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, Drawer, Hidden, List, Typography } from '@mui/material';
 import {
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
@@ -16,6 +10,32 @@ import {
   Bookmark as BookmarkIcon,
 } from 'react-feather';
 import NavItem from './NavItem';
+
+const PREFIX = 'NavBar';
+
+const classes = {
+  mobileDrawer: `${PREFIX}-mobileDrawer`,
+  desktopDrawer: `${PREFIX}-desktopDrawer`,
+  avatar: `${PREFIX}-avatar`,
+};
+
+const Root = styled('div')(() => ({
+  [`& .${classes.mobileDrawer}`]: {
+    width: 180,
+  },
+
+  [`& .${classes.desktopDrawer}`]: {
+    width: 180,
+    top: 64,
+    height: 'calc(100% - 64px)',
+  },
+
+  [`& .${classes.avatar}`]: {
+    cursor: 'pointer',
+    width: 64,
+    height: 64,
+  },
+}));
 
 const items = [
   {
@@ -50,22 +70,6 @@ const items = [
   },
 ];
 
-const useStyles = makeStyles(() => ({
-  mobileDrawer: {
-    width: 256,
-  },
-  desktopDrawer: {
-    width: 256,
-    top: 64,
-    height: 'calc(100% - 64px)',
-  },
-  avatar: {
-    cursor: 'pointer',
-    width: 64,
-    height: 64,
-  },
-}));
-
 const NavBar = ({
   onMobileClose,
   openMobile,
@@ -73,7 +77,6 @@ const NavBar = ({
   onMobileClose: () => void;
   openMobile: boolean;
 }) => {
-  const classes = useStyles();
   const location = useLocation();
 
   useEffect(() => {
@@ -106,7 +109,7 @@ const NavBar = ({
   );
 
   return (
-    <>
+    <Root>
       {/* @ts-ignore */}
       <Hidden lgUp>
         <Drawer
@@ -120,7 +123,7 @@ const NavBar = ({
         </Drawer>
       </Hidden>
       {/* @ts-ignore */}
-      <Hidden mdDown>
+      <Hidden lgDown>
         <Drawer
           anchor="left"
           classes={{ paper: classes.desktopDrawer }}
@@ -130,7 +133,7 @@ const NavBar = ({
           {content}
         </Drawer>
       </Hidden>
-    </>
+    </Root>
   );
 };
 

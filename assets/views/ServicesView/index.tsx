@@ -1,11 +1,18 @@
 import React from 'react';
-import { Container, Grid, makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Container, Grid } from '@mui/material';
 import Page from '../../components/Page';
 import ServiceList from './ServiceList';
 import ServiceStart from './ServiceStart';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const PREFIX = 'Dashboard';
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
     backgroundColor: theme.palette.background.default,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
@@ -14,9 +21,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Dashboard = () => {
-  const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <Page title="Services">
         <Container maxWidth={false}>
           <Grid container spacing={3}>
@@ -29,7 +35,7 @@ const Dashboard = () => {
           </Grid>
         </Container>
       </Page>
-    </div>
+    </Root>
   );
 };
 

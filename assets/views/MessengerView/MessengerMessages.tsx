@@ -1,27 +1,20 @@
 import * as React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import TableCell from '@material-ui/core/TableCell';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableContainer from '@material-ui/core/TableContainer';
-import Typography from '@material-ui/core/Typography';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import { styled } from '@mui/material/styles';
+import Checkbox from '@mui/material/Checkbox';
+import TableCell from '@mui/material/TableCell';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import Typography from '@mui/material/Typography';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 // @ts-ignore
-import { MuiTriStateCheckbox } from 'mui-tri-state-checkbox';
-import {
-  Button,
-  ButtonGroup,
-  Container,
-  Grid,
-  makeStyles,
-  TextField,
-} from '@material-ui/core';
-import Refresh from '@material-ui/icons/Refresh';
+import { Button, ButtonGroup, Container, Grid, TextField } from '@mui/material';
+import Refresh from '@mui/icons-material/Refresh';
 
 import { useEffect, useState } from 'react';
 import queryFailedMessages, {
@@ -35,16 +28,22 @@ import mutationRetryFailedMessage from '../../graphQL/Messenger/mutationRetryFai
 import EventBus from '../../components/EventBus';
 import BackTraceDisplay from './BackTraceDisplay';
 import FlattenException from './FlattenException';
+import { TriStateCheckbox } from '../../components/TriStateCheckbox';
 
-const useStyles = makeStyles(() => ({
-  table: {
+const PREFIX = 'MessengerMessages';
+
+const classes = {
+  table: `${PREFIX}-table`,
+};
+
+const StyledContainer = styled(Container)(() => ({
+  [`& .${classes.table}`]: {
     width: '100%',
     overflow: 'auto',
   },
 }));
 
 const MessengerMessages = () => {
-  const classes = useStyles();
   const [messages, setMessages] = useState<FailedMessageSummary[]>([]);
   const [message, setMessage] = useState<FailedMessage | null>(null);
   const [showDetail, setShowDetail] = useState(false);
@@ -117,7 +116,7 @@ const MessengerMessages = () => {
   };
 
   return (
-    <Container>
+    <StyledContainer>
       <Grid container spacing={1}>
         <Grid item xs={showDetail ? 6 : 12}>
           <TableContainer component={Paper} style={{ overflow: 'auto' }}>
@@ -133,14 +132,14 @@ const MessengerMessages = () => {
                     <Button onClick={reload}>
                       <Refresh />
                     </Button>
-                    <MuiTriStateCheckbox
+                    <TriStateCheckbox
                       edge="start"
                       tabIndex={-1}
                       checked={
                         oneOfMessageIsChecked ? null : allMessageAreChecked
                       }
                       color="primary"
-                      onClick={(event: Event) => {
+                      onClick={(event) => {
                         changeCheckAll();
                         event.preventDefault();
                       }}
@@ -267,7 +266,7 @@ const MessengerMessages = () => {
           )}
         </Grid>
       </Grid>
-    </Container>
+    </StyledContainer>
   );
 };
 

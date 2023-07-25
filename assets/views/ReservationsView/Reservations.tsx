@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
@@ -8,32 +9,40 @@ import {
   Card,
   CardHeader,
   Divider,
-  makeStyles,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
-import ReplayIcon from '@material-ui/icons/Replay';
-import DeleteIcon from '@material-ui/icons/Delete';
+} from '@mui/material';
+import ReplayIcon from '@mui/icons-material/Replay';
+import DeleteIcon from '@mui/icons-material/Delete';
 import queryReservations, {
   Reservation,
 } from '../../graphQL/Reservation/queryReservations';
 import mutationDeleteReservation from '../../graphQL/Reservation/mutationDeleteReservation';
 
-const useStyles = makeStyles(() => ({
-  root: {},
-  value: {
+const PREFIX = 'Reservations';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  value: `${PREFIX}-value`,
+  actions: `${PREFIX}-actions`,
+};
+
+const StyledCard = styled(Card)(() => ({
+  [`&.${classes.root}`]: {},
+
+  [`& .${classes.value}`]: {
     display: 'inline-block',
   },
-  actions: {
+
+  [`& .${classes.actions}`]: {
     justifyContent: 'flex-end',
   },
 }));
 
 const Reservations = ({ refresh, ...rest }: { refresh: string }) => {
-  const classes = useStyles();
   const [data, setData] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -66,7 +75,7 @@ const Reservations = ({ refresh, ...rest }: { refresh: string }) => {
   }, [refresh]);
 
   return (
-    <Card className={clsx(classes.root)} {...rest}>
+    <StyledCard className={clsx(classes.root)} {...rest}>
       <CardHeader title="Reservations" />
       <Divider />
       <PerfectScrollbar>
@@ -108,7 +117,7 @@ const Reservations = ({ refresh, ...rest }: { refresh: string }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-    </Card>
+    </StyledCard>
   );
 };
 

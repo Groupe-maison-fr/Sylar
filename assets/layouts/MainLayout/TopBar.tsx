@@ -1,27 +1,33 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
-import { AppBar, Toolbar, makeStyles } from '@material-ui/core';
+import { AppBar, Toolbar } from '@mui/material';
 import Logo from '../../components/Logo';
 
-const useStyles = makeStyles({
-  root: {},
-  toolbar: {
+const PREFIX = 'TopBar';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  toolbar: `${PREFIX}-toolbar`,
+};
+
+const StyledAppBar = styled(AppBar)({
+  [`&.${classes.root}`]: {},
+  [`& .${classes.toolbar}`]: {
     height: 64,
   },
 });
 
 const TopBar = ({ ...rest }) => {
-  const classes = useStyles();
-
   return (
-    <AppBar className={clsx(classes.root)} elevation={0} {...rest}>
+    <StyledAppBar className={clsx(classes.root)} elevation={0} {...rest}>
       <Toolbar className={classes.toolbar}>
         <RouterLink to="/">
           <Logo />
         </RouterLink>
       </Toolbar>
-    </AppBar>
+    </StyledAppBar>
   );
 };
 

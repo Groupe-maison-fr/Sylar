@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import ReplayIcon from '@material-ui/icons/Replay';
+import ReplayIcon from '@mui/icons-material/Replay';
 import {
   Box,
   Button,
   Card,
   CardHeader,
   Divider,
-  makeStyles,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+} from '@mui/material';
+import { red } from '@mui/material/colors';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import moment from 'moment';
 import queryFilesystem, {
   Filesystem,
@@ -24,15 +24,22 @@ import queryFilesystem, {
 import mutationForceDestroyFilesystem from '../../graphQL/FileSystem/mutationForceDestroyFilesystem';
 import EventBus from '../../components/EventBus';
 
-const useStyles = makeStyles(() => ({
-  root: {},
-  actions: {
+const PREFIX = 'Filesystems';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  actions: `${PREFIX}-actions`,
+};
+
+const StyledCard = styled(Card)(() => ({
+  [`&.${classes.root}`]: {},
+
+  [`& .${classes.actions}`]: {
     justifyContent: 'flex-end',
   },
 }));
 
 const Filesystems = ({ ...rest }) => {
-  const classes = useStyles();
   const [fileSystems, setFileSystems] = useState<Filesystem[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -57,7 +64,7 @@ const Filesystems = ({ ...rest }) => {
   }, []);
 
   return (
-    <Card className={clsx(classes.root)} {...rest}>
+    <StyledCard className={clsx(classes.root)} {...rest}>
       <CardHeader title="Filesystems" />
       <Divider />
       <PerfectScrollbar>
@@ -116,7 +123,7 @@ const Filesystems = ({ ...rest }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-    </Card>
+    </StyledCard>
   );
 };
 

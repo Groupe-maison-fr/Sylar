@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import moment from 'moment';
 
@@ -9,35 +10,67 @@ import {
   CardHeader,
   Collapse,
   Divider,
-  makeStyles,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
-} from '@material-ui/core';
-import ReplayIcon from '@material-ui/icons/Replay';
-import DeleteIcon from '@material-ui/icons/Delete';
+} from '@mui/material';
+import ReplayIcon from '@mui/icons-material/Replay';
+import DeleteIcon from '@mui/icons-material/Delete';
 import queryService, {
   Services,
 } from '../../graphQL/ServiceCloner/queryServices';
 import mutationStopService from '../../graphQL/ServiceCloner/mutationStopService';
 import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
 import EventBus from '../../components/EventBus';
+import ago from '../../components/ago';
 
-const useStyles = makeStyles(() => ({
-  root: {},
-  value: {
-    display: 'inline-block',
+const PREFIX = 'ServiceList';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  name: `${PREFIX}-name`,
+  value: `${PREFIX}-value`,
+  actions: `${PREFIX}-actions`,
+};
+
+const StyledCard = styled(Card)(() => ({
+  [`& .${classes.root}`]: {},
+
+  [`& .${classes.name}`]: {
+    fontWeight: 'bold',
   },
-  actions: {
+
+  [`& .${classes.value}`]: {
+    display: 'inline-block',
+    marginLeft: '7px',
+  },
+
+  [`& .${classes.actions}`]: {
     justifyContent: 'flex-end',
   },
 }));
 
+const NameValueList = ({
+  data,
+}: {
+  data: { name: string; value: string }[];
+}) => {
+  return (
+    <ul style={{ padding: 0, margin: 0 }}>
+      {data.map((row) => (
+        <li key={row.name} style={{ lineHeight: '0.1' }}>
+          <span className={classes.name}>{row.name}</span>
+          <pre className={classes.value}>{row.value}</pre>
+        </li>
+      ))}
+    </ul>
+  );
+};
 const ServiceList = ({ ...rest }) => {
-  const classes = useStyles();
   const [data, setData] = useState<Services[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -83,7 +116,7 @@ const ServiceList = ({ ...rest }) => {
   }, []);
 
   return (
-    <Card {...rest}>
+    <StyledCard {...rest}>
       <CardHeader title="Services" />
       <Divider />
       <PerfectScrollbar>
@@ -113,28 +146,14 @@ const ServiceList = ({ ...rest }) => {
                       {service.image}
                     </TableCell>
                     <TableCell style={{ verticalAlign: 'top' }}>
-                      <ul>
-                        {service.environments
-                          .sort(sortBy('name'))
-                          .map((environment) => (
-                            <li key={environment.name}>
-                              {environment.name}:{' '}
-                              <pre className={classes.value}>
-                                {environment.value}
-                              </pre>
-                            </li>
-                          ))}
-                      </ul>
+                      <NameValueList
+                        data={service.environments.sort(sortBy('name'))}
+                      />
                     </TableCell>
                     <TableCell style={{ verticalAlign: 'top' }}>
-                      <ul>
-                        {service.labels.sort(sortBy('name')).map((label) => (
-                          <li key={label.name}>
-                            {label.name}:{' '}
-                            <pre className={classes.value}>{label.value}</pre>
-                          </li>
-                        ))}
-                      </ul>
+                      <NameValueList
+                        data={service.labels.sort(sortBy('name'))}
+                      />
                     </TableCell>
                     <TableCell />
                   </TableRow>
@@ -259,7 +278,7 @@ const ServiceList = ({ ...rest }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-    </Card>
+    </StyledCard>
   );
 };
 

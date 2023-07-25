@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import { Container, Grid, makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Container, Grid } from '@mui/material';
 import Page from '../../components/Page';
 import Reservations from './Reservations';
 import ReservationAdd from './ReservationAdd';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const PREFIX = 'Dashboard';
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
     backgroundColor: theme.palette.background.default,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
@@ -14,10 +21,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Dashboard = () => {
-  const classes = useStyles();
   const [refresh, setRefresh] = useState('');
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <Page title="Reservations">
         <Container maxWidth={false}>
           <Grid container spacing={3}>
@@ -30,7 +36,7 @@ const Dashboard = () => {
           </Grid>
         </Container>
       </Page>
-    </div>
+    </Root>
   );
 };
 

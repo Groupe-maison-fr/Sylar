@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Chip, Grid, styled } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
+import { Box, Chip, Grid, styled } from '@mui/material';
+import Paper from '@mui/material/Paper';
 import { useLogList } from '../../Context/LogListContext';
 import { LogColor } from '../../components/Logging';
 

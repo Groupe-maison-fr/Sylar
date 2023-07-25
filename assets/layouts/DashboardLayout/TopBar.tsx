@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
-import Brightness3Icon from '@material-ui/icons/Brightness3';
-import LoggerOpenedIcon from '@material-ui/icons/BorderVerticalOutlined';
-import LoggerClosedIcon from '@material-ui/icons/BorderVertical';
+import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
+import Brightness3Icon from '@mui/icons-material/Brightness3';
+import LoggerOpenedIcon from '@mui/icons-material/BorderVerticalOutlined';
+import LoggerClosedIcon from '@mui/icons-material/BorderVertical';
 import {
   AppBar,
   Badge,
@@ -12,7 +12,7 @@ import {
   IconButton,
   Toolbar,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 import Logo from '../../components/Logo';
 import { useDarkMode } from '../../Context/PrefersDarkModeContext';
 import { setInitialDarkMode } from '../../components/DarkMode';
@@ -29,7 +29,7 @@ const TopBar = ({
   const { prefersDarkMode, setPrefersDarkMode } = useDarkMode();
   const { logListContextData } = useLogList();
   return (
-    <AppBar elevation={0}>
+    <AppBar elevation={0} style={{ backgroundColor: 'rgb(25, 118, 210)' }}>
       <Toolbar>
         <RouterLink to="/">
           <Logo />
@@ -40,7 +40,7 @@ const TopBar = ({
           </Typography>
         </Box>
         {/* @ts-ignore */}
-        <Hidden mdDown>
+        <Hidden lgDown>
           <IconButton
             color="inherit"
             onClick={() => {
@@ -48,6 +48,7 @@ const TopBar = ({
               setPrefersDarkMode(newDarkMode);
               setInitialDarkMode(newDarkMode);
             }}
+            size="large"
           >
             {prefersDarkMode ? <Brightness3Icon /> : <BrightnessHighIcon />}
           </IconButton>
@@ -56,6 +57,7 @@ const TopBar = ({
             onClick={() => {
               setDrawerLoggerBarOpen(!isDrawerLoggerBarOpen);
             }}
+            size="large"
           >
             <Badge
               badgeContent={logListContextData.list.length}

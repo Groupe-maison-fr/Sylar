@@ -1,15 +1,24 @@
 import React from 'react';
-import { Box, Container, Typography, makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, Container, Typography } from '@mui/material';
 import Page from '../components/Page';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const PREFIX = 'NotFoundView';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  image: `${PREFIX}-image`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
     backgroundColor: theme.palette.background.default,
     height: '100%',
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
-  image: {
+
+  [`& .${classes.image}`]: {
     marginTop: 50,
     display: 'inline-block',
     maxWidth: '100%',
@@ -18,10 +27,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NotFoundView = () => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <Page title="404">
         <Box
           display="flex"
@@ -40,7 +47,7 @@ const NotFoundView = () => {
           </Container>
         </Box>
       </Page>
-    </div>
+    </Root>
   );
 };
 

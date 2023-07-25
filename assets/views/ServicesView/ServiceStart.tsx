@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
 
+import { styled } from '@mui/material/styles';
+
 import {
   Button,
   Collapse,
   IconButton,
   ListItemText,
-  makeStyles,
   MenuItem,
   TextField,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import SendIcon from '@material-ui/icons/Send';
-import RestartIcon from '@material-ui/icons/Loop';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import SendIcon from '@mui/icons-material/Send';
+import RestartIcon from '@mui/icons-material/Loop';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import queryServiceList from '../../graphQL/ServiceCloner/queryServiceList';
 import mutationStartService from '../../graphQL/ServiceCloner/mutationStartService';
@@ -25,16 +26,23 @@ import EventBus from '../../components/EventBus';
 import queryReservations from '../../graphQL/Reservation/queryReservations';
 import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
 
-const indexRange = [...Array(30).keys()].map((index) => index + 1);
+const PREFIX = 'ServiceStart';
 
-const useStyles = makeStyles((theme) => ({
-  form: {
+const classes = {
+  form: `${PREFIX}-form`,
+};
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  [`& .${classes.form}`]: {
     '& > *': {
       margin: theme.spacing(1),
       width: '25ch',
     },
   },
 }));
+
+const indexRange = [...Array(30).keys()].map((index) => index + 1);
+
 type indexesByServiceType = { [serviceAndIndex: string]: string };
 
 const InstanceName = ({
@@ -82,7 +90,6 @@ const InstanceName = ({
 };
 
 const ServiceStart = ({ ...rest }) => {
-  const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [services, setServices] = useState<{ name: string }[]>([]);
   const [reservationsByService, setReservationsByService] =
@@ -171,11 +178,11 @@ const ServiceStart = ({ ...rest }) => {
   }, []);
 
   return (
-    <Card {...rest}>
+    <StyledCard {...rest}>
       <CardHeader
         title="Service start"
         action={
-          <IconButton onClick={() => setOpen(!open)}>
+          <IconButton onClick={() => setOpen(!open)} size="large">
             {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </IconButton>
         }
@@ -254,7 +261,7 @@ const ServiceStart = ({ ...rest }) => {
           </form>
         </CardContent>
       </Collapse>
-    </Card>
+    </StyledCard>
   );
 };
 

@@ -1,10 +1,17 @@
 import React from 'react';
-import { Container, Grid, makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Container, Grid } from '@mui/material';
 import Page from '../../components/Page';
 import MessengerMessages from './MessengerMessages';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const PREFIX = 'MessengerView';
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
     backgroundColor: theme.palette.background.default,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
@@ -13,9 +20,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MessengerView = () => {
-  const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <Page title="Messenger">
         <Container maxWidth={false}>
           <Grid container spacing={3}>
@@ -25,7 +31,7 @@ const MessengerView = () => {
           </Grid>
         </Container>
       </Page>
-    </div>
+    </Root>
   );
 };
 

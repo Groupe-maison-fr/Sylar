@@ -1,25 +1,36 @@
 import * as React from 'react';
-import { makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 import { FunctionCall } from '../../graphQL/Messenger/queryFailedMessage';
 
-const useStyles = makeStyles(() => ({
-  backtraceNamespace: {
+const PREFIX = 'FunctionCallDisplay';
+
+const classes = {
+  backtraceNamespace: `${PREFIX}-backtraceNamespace`,
+  backtraceShortClass: `${PREFIX}-backtraceShortClass`,
+  backtraceFunction: `${PREFIX}-backtraceFunction`,
+  backtraceLine: `${PREFIX}-backtraceLine`,
+};
+
+const Root = styled('div')(() => ({
+  [`& .${classes.backtraceNamespace}`]: {
     color: 'red',
   },
-  backtraceShortClass: {
+
+  [`& .${classes.backtraceShortClass}`]: {
     color: 'cyan',
     whiteSpace: 'nowrap',
   },
-  backtraceFunction: {
+
+  [`& .${classes.backtraceFunction}`]: {
     color: 'green',
   },
-  backtraceLine: {
+
+  [`& .${classes.backtraceLine}`]: {
     color: 'purple',
   },
 }));
 
 function FunctionCallDisplay({ call }: { call: FunctionCall }) {
-  const classes = useStyles();
   if (
     call.namespace === '' &&
     call.short_class === '' &&
@@ -29,7 +40,7 @@ function FunctionCallDisplay({ call }: { call: FunctionCall }) {
     return `${call.file.split('/').pop()} (${call.line})`;
   }
   return (
-    <>
+    <Root>
       {call.namespace && (
         <span className={classes.backtraceNamespace}>{call.namespace}\</span>
       )}
@@ -42,9 +53,8 @@ function FunctionCallDisplay({ call }: { call: FunctionCall }) {
       {call.function && (
         <span className={classes.backtraceFunction}>{call.function}</span>
       )}
-      &nbsp;
       <span className={classes.backtraceLine}>({call.line})</span>
-    </>
+    </Root>
   );
 }
 export default FunctionCallDisplay;

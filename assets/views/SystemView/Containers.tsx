@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
@@ -7,17 +8,16 @@ import {
   Card,
   CardHeader,
   Divider,
-  makeStyles,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
-import DeleteIcon from '@material-ui/icons/Delete';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import ReplayIcon from '@material-ui/icons/Replay';
+} from '@mui/material';
+import { red } from '@mui/material/colors';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ReplayIcon from '@mui/icons-material/Replay';
 import moment from 'moment';
 import mutationStopService from '../../graphQL/ServiceCloner/mutationStopService';
 import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
@@ -27,15 +27,22 @@ import queryContainers, {
 import EventBus from '../../components/EventBus';
 import mutationForceDestroyContainer from '../../graphQL/Container/mutationForceDestroyContainer';
 
-const useStyles = makeStyles(() => ({
-  root: {},
-  actions: {
+const PREFIX = 'Containers';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  actions: `${PREFIX}-actions`,
+};
+
+const StyledCard = styled(Card)(() => ({
+  [`&.${classes.root}`]: {},
+
+  [`& .${classes.actions}`]: {
     justifyContent: 'flex-end',
   },
 }));
 
 const Containers = ({ ...rest }) => {
-  const classes = useStyles();
   const [containers, setContainers] = useState<Container[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -70,7 +77,7 @@ const Containers = ({ ...rest }) => {
   }, []);
 
   return (
-    <Card className={clsx(classes.root)} {...rest}>
+    <StyledCard className={clsx(classes.root)} {...rest}>
       <CardHeader title="Containers by services" />
       <Divider />
       <PerfectScrollbar>
@@ -143,7 +150,7 @@ const Containers = ({ ...rest }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-    </Card>
+    </StyledCard>
   );
 };
 

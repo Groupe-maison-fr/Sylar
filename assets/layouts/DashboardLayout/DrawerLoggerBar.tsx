@@ -1,9 +1,16 @@
 import React from 'react';
-import { Drawer, makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Drawer } from '@mui/material';
 import LogList from './LogList';
 
-const useStyles = makeStyles(() => ({
-  desktopDrawer: {
+const PREFIX = 'DrawerLoggerBar';
+
+const classes = {
+  desktopDrawer: `${PREFIX}-desktopDrawer`,
+};
+
+const StyledDrawer = styled(Drawer)(() => ({
+  [`& .${classes.desktopDrawer}`]: {
     width: 400,
     top: 64,
     height: 'calc(100% - 64px)',
@@ -17,10 +24,8 @@ const DrawerLoggerBar = ({
   onClose: (_open: boolean) => void;
   open: boolean;
 }) => {
-  const classes = useStyles();
-
   return (
-    <Drawer
+    <StyledDrawer
       anchor="right"
       classes={{ paper: classes.desktopDrawer }}
       onClose={onClose}
@@ -28,7 +33,7 @@ const DrawerLoggerBar = ({
       variant="persistent"
     >
       <LogList />
-    </Drawer>
+    </StyledDrawer>
   );
 };
 
