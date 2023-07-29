@@ -7,6 +7,7 @@ export interface Container {
   instanceIndex: number;
   zfsFilesystemName: string;
   time: number;
+  uptime: number;
   dockerState: string;
 }
 export default (): Promise<Container[]> =>
@@ -20,9 +21,10 @@ export default (): Promise<Container[]> =>
         instanceIndex
         zfsFilesystemName
         time
+        uptime
         dockerState
       }
-    }`,
+    }`
   )
     .then((response) => response.json())
     .then((json) => {

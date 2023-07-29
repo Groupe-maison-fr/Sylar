@@ -13,6 +13,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Tooltip
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -22,24 +23,25 @@ import moment from 'moment';
 import mutationStopService from '../../graphQL/ServiceCloner/mutationStopService';
 import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
 import queryContainers, {
-  Container,
+  Container
 } from '../../graphQL/ServiceCloner/queryContainers';
 import EventBus from '../../components/EventBus';
 import mutationForceDestroyContainer from '../../graphQL/Container/mutationForceDestroyContainer';
+import ago from '../../components/ago';
 
 const PREFIX = 'Containers';
 
 const classes = {
   root: `${PREFIX}-root`,
-  actions: `${PREFIX}-actions`,
+  actions: `${PREFIX}-actions`
 };
 
 const StyledCard = styled(Card)(() => ({
   [`&.${classes.root}`]: {},
 
   [`& .${classes.actions}`]: {
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end'
+  }
 }));
 
 const Containers = ({ ...rest }) => {
@@ -100,25 +102,31 @@ const Containers = ({ ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {containers.map((service) => (
-                <TableRow hover key={service.containerName}>
-                  <TableCell>{service.containerName}</TableCell>
-                  <TableCell>{service.masterName}</TableCell>
-                  <TableCell>{service.instanceName}</TableCell>
-                  <TableCell>{service.instanceIndex}</TableCell>
-                  <TableCell>{service.zfsFilesystemName}</TableCell>
+              {containers.map((container) => (
+                <TableRow hover key={container.containerName}>
+                  <TableCell>{container.containerName}</TableCell>
+                  <TableCell>{container.masterName}</TableCell>
+                  <TableCell>{container.instanceName}</TableCell>
+                  <TableCell>{container.instanceIndex}</TableCell>
+                  <TableCell>{container.zfsFilesystemName}</TableCell>
                   <TableCell>
-                    {moment(service.time * 1000).format('DD/MM/YYYY HH:mm:ss')}
+                    <Tooltip title={ago(container.uptime)}>
+                      <span>
+                        {moment(container.time * 1000).format(
+                          'DD/MM/YYYY HH:mm:ss'
+                        )}
+                      </span>
+                    </Tooltip>
                   </TableCell>
-                  <TableCell>{service.dockerState}</TableCell>
+                  <TableCell>{container.dockerState}</TableCell>
                   <TableCell>
-                    {service.instanceName !== 'master' && (
+                    {container.instanceName !== 'master' && (
                       <>
                         <Button
                           onClick={() =>
                             stopService(
-                              service.masterName,
-                              service.instanceName,
+                              container.masterName,
+                              container.instanceName
                             )
                           }
                         >
@@ -126,7 +134,9 @@ const Containers = ({ ...rest }) => {
                         </Button>
                         <Button
                           onClick={() =>
-                            mutationForceDestroyContainer(service.containerName)
+                            mutationForceDestroyContainer(
+                              container.containerName
+                            )
                           }
                         >
                           <DeleteForeverIcon style={{ color: red[500] }} />
@@ -134,8 +144,8 @@ const Containers = ({ ...rest }) => {
                         <Button
                           onClick={() =>
                             restartService(
-                              service.masterName,
-                              service.instanceName,
+                              container.masterName,
+                              container.instanceName
                             )
                           }
                         >

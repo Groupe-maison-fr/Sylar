@@ -59,6 +59,10 @@ host-test-tsc:
 host-test-eslint:
 	docker-compose exec builder sh -c "yarn run eslint assets/"
 
+.PHONY: host-test-jest
+host-test-jest:
+	docker-compose exec builder sh -c "yarn run jest assets"
+
 .PHONY: host-test-php
 host-test-php:
 	$(MAKE) host-test-install
@@ -70,6 +74,7 @@ host-test-php:
 host-test-ts:
 	$(MAKE) host-test-tsc
 	$(MAKE) host-test-eslint
+	$(MAKE) host-test-jest
 
 .PHONY: host-test
 host-test:

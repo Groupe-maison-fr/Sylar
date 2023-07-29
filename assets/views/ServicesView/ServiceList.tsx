@@ -232,10 +232,18 @@ const ServiceList = ({ ...rest }) => {
                                       <TableCell>
                                         {container.dockerState}
                                       </TableCell>
-                                      <TableCell>
+                                      <TableCell
+                                        style={{ whiteSpace: 'nowrap' }}
+                                      >
                                         {moment(container.time * 1000).format(
                                           'DD/MM/YYYY HH:mm:ss',
                                         )}
+                                        <br />
+                                        <Tooltip title={ago(container.uptime)}>
+                                          <span>
+                                            {ago(container.uptime, 2)}
+                                          </span>
+                                        </Tooltip>
                                       </TableCell>
                                       <TableCell>
                                         {container.instanceName !==

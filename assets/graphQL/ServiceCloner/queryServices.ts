@@ -25,6 +25,7 @@ export interface Services {
     zfsFilesystemName: string;
     exposedPorts: string[];
     time: number;
+    uptime: number;
     dockerState: string;
     zfsFilesystem?: {
       name: string;
@@ -70,6 +71,7 @@ export default (): Promise<Services[]> =>
           zfsFilesystemName
           exposedPorts
           time
+          uptime
           dockerState
           zfsFilesystem{
             name

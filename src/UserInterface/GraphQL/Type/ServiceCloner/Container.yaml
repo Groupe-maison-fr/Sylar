@@ -21,5 +21,7 @@ Container:
         type: String!
       time:
         type: Int!
+      uptime:
+        type: Int!
       zfsFilesystem:
         type: Filesystem

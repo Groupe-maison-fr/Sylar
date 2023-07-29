@@ -41,6 +41,8 @@ final readonly class ContainerResolver implements QueryInterface
                 return $state->getZfsFilesystem();
             case 'time':
                 return $state->getCreatedAt();
+            case 'uptime':
+                return time() - $state->getCreatedAt();
         }
         throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
