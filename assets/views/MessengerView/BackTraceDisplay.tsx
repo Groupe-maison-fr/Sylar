@@ -1,15 +1,20 @@
 import * as React from 'react';
-import { FunctionCall } from '../../graphQL/Messenger/queryFailedMessage';
 import FunctionCallDisplay from './FunctionCallDisplay';
 import BackTraceArgument from './BackTraceArgument';
+import { ArrElement } from '../../components/Helper';
+import { FailedMessageQuery } from '../../gql/graphql';
 
-const BackTraceDisplay = ({ backtrace }: { backtrace: FunctionCall[] }) => {
+const BackTraceDisplay = ({
+  backtrace,
+}: {
+  backtrace: ArrElement<FailedMessageQuery['failedMessage']['backtrace']>[];
+}) => {
   if (!backtrace) {
     return null;
   }
   return (
     <ul>
-      {backtrace.map((call: FunctionCall, index) => {
+      {backtrace.map((call, index) => {
         return (
           <li key={`_${index}`}>
             <a
@@ -20,7 +25,7 @@ const BackTraceDisplay = ({ backtrace }: { backtrace: FunctionCall[] }) => {
               <FunctionCallDisplay call={call} />
             </a>
             {/* @ts-ignore */}
-            <BackTraceArgument argument={JSON.parse(call.arguments)} />
+            <BackTraceArgument argument={call.arguments} />
           </li>
         );
       })}

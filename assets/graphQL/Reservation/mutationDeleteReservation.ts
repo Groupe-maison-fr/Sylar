@@ -1,23 +1,26 @@
-import GraphQL from '../GraphQL';
+import { mutation } from '../GraphQL';
+import { graphql } from '../../gql/gql';
 
 export default (service: string, name: string, index: number) =>
-  GraphQL.query(
-    `
-mutation {
-    deleteReservation(input:{
-        service: "${service}"
-        name: "${name}"
-        index: ${index}
-    }) {
-        ...on SuccessOutput{
+  mutation(
+    graphql(`
+      mutation MutationDeleteReservation(
+        $service: String!
+        $name: String!
+        $index: Int!
+      ) {
+        deleteReservation(
+          input: { service: $service, index: $index, name: $name }
+        ) {
+          ... on SuccessOutput {
             success
-        }
-        ...on FailedOutput{
+          }
+          ... on FailedOutput {
+            code
             message
+          }
         }
-    }
-}
-`,
-  )
-    .then((response) => response.json())
-    .then((json) => json.data.deleteReservation);
+      }
+    `),
+    { service, name, index },
+  ).then((data) => data.deleteReservation);

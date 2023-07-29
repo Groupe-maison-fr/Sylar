@@ -17,18 +17,16 @@ import { Button, ButtonGroup, Container, Grid, TextField } from '@mui/material';
 import Refresh from '@mui/icons-material/Refresh';
 
 import { useEffect, useState } from 'react';
-import queryFailedMessages, {
-  FailedMessageSummary,
-} from '../../graphQL/Messenger/queryFailedMessages';
-import queryFailedMessage, {
-  FailedMessage,
-} from '../../graphQL/Messenger/queryFailedMessage';
+import queryFailedMessages from '../../graphQL/Messenger/queryFailedMessages';
+import queryFailedMessage from '../../graphQL/Messenger/queryFailedMessage';
 import mutationRejectFailedMessage from '../../graphQL/Messenger/mutationRejectFailedMessage';
 import mutationRetryFailedMessage from '../../graphQL/Messenger/mutationRetryFailedMessage';
 import EventBus from '../../components/EventBus';
 import BackTraceDisplay from './BackTraceDisplay';
 import FlattenException from './FlattenException';
 import { TriStateCheckbox } from '../../components/TriStateCheckbox';
+import { FailedMessageQuery, FailedMessagesQuery } from '../../gql/graphql';
+import { ArrElement } from '../../components/Helper';
 
 const PREFIX = 'MessengerMessages';
 
@@ -44,8 +42,12 @@ const StyledContainer = styled(Container)(() => ({
 }));
 
 const MessengerMessages = () => {
-  const [messages, setMessages] = useState<FailedMessageSummary[]>([]);
-  const [message, setMessage] = useState<FailedMessage | null>(null);
+  const [messages, setMessages] = useState<
+    (ArrElement<FailedMessagesQuery['failedMessages']> & { checked: boolean })[]
+  >([]);
+  const [message, setMessage] = useState<
+    FailedMessageQuery['failedMessage'] | null
+  >(null);
   const [showDetail, setShowDetail] = useState(false);
   const [filter, setFilter] = useState('');
   const [lowerFilter, setLowerFilter] = useState('');
@@ -54,25 +56,25 @@ const MessengerMessages = () => {
     queryFailedMessages(50)
       .then((_messages) => {
         setMessages(
-          _messages.map((_message) => {
-            _message.checked = false;
-            return _message;
-          }),
+          _messages.map((_message) => ({
+            ..._message,
+            checked: false,
+          })),
         );
       })
       .then(() => null);
   };
 
-  const reject = (ids: number[]) => {
+  const reject = (ids: string[]) => {
     return mutationRejectFailedMessage(ids).then(reload);
   };
 
-  const retry = (id: number) => {
+  const retry = (id: string) => {
     return mutationRetryFailedMessage(id).then(reload);
   };
 
-  const loadMessage = (id: number) => {
-    if (message && message.id === id) {
+  const loadMessage = (id: string) => {
+    if (message?.id === id) {
       return Promise.resolve(false);
     }
     return queryFailedMessage(id).then((newMessage) => {
@@ -181,7 +183,7 @@ const MessengerMessages = () => {
                   : messages.filter((item) => {
                       return (
                         item.exceptionMessage
-                          .toLowerCase()
+                          ?.toLowerCase()
                           .indexOf(lowerFilter) !== -1 ||
                         item.className.toLowerCase().indexOf(lowerFilter) !== -1
                       );

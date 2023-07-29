@@ -18,11 +18,10 @@ import {
 import { red } from '@mui/material/colors';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import moment from 'moment';
-import queryFilesystem, {
-  Filesystem,
-} from '../../graphQL/ServiceCloner/queryFilesystem';
+import queryFilesystem from '../../graphQL/ServiceCloner/queryFilesystem';
 import mutationForceDestroyFilesystem from '../../graphQL/FileSystem/mutationForceDestroyFilesystem';
 import EventBus from '../../components/EventBus';
+import { FilesystemsQuery } from '../../gql/graphql';
 
 const PREFIX = 'Filesystems';
 
@@ -40,7 +39,9 @@ const StyledCard = styled(Card)(() => ({
 }));
 
 const Filesystems = ({ ...rest }) => {
-  const [fileSystems, setFileSystems] = useState<Filesystem[]>([]);
+  const [fileSystems, setFileSystems] = useState<
+    FilesystemsQuery['filesystems']
+  >([]);
   const [loading, setLoading] = useState(false);
 
   const loadFilesystem = () => {

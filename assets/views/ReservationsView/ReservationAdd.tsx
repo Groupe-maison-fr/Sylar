@@ -52,7 +52,7 @@ const ReservationAdd = ({
   const createService = () => {
     mutationAddReservation(serviceName, reservationName, serviceIndex).then(
       (response) => {
-        if (response.message) {
+        if (response.__typename === 'FailedOutput') {
           enqueueSnackbar(response.message);
           return;
         }

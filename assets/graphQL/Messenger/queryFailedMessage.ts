@@ -1,89 +1,52 @@
-import GraphQL from '../GraphQL';
+import { query } from '../GraphQL';
+import { graphql } from '../../gql/gql';
 
-export interface ArgumentCall {
-  type: string;
-  value?: string;
-}
-export interface FunctionCall {
-  namespace: string;
-  short_class: string;
-  class: string;
-  type: string;
-  function: string;
-  file: string;
-  line: number;
-  arguments: ArgumentCall | ArgumentCall[];
-}
-
-export interface Exception {
-  message: string;
-  code: string;
-  previous: Exception;
-  traceAsString: string;
-  class: string;
-  statusCode: string;
-  statusText: string;
-  headers: string;
-  file: string;
-  line: number;
-}
-
-export interface FailedMessage {
-  id: number;
-  className: string;
-  message: string;
-  exceptionMessage: string;
-  backtrace: FunctionCall[];
-  flattenException: Exception;
-  date: string;
-}
-
-export default (id: number): Promise<FailedMessage> =>
-  GraphQL.query(
-    `
-    query {
-        failedMessage(
-            id: ${id}
-        ) {
-            id
-            className
-            message
-            exceptionMessage
-            backtrace {
-              namespace
-              short_class
-              class
+export default (id: string) =>
+  query(
+    graphql(`
+      query FailedMessage($id: Int!) {
+        failedMessage(id: $id) {
+          id
+          className
+          message
+          exceptionMessage
+          backtrace {
+            namespace
+            short_class
+            class
+            type
+            function
+            file
+            line
+            arguments {
               type
-              function
+              value
+            }
+          }
+          flattenException {
+            message
+            code
+            previous {
+              message
+              code
+              class
+              statusCode
+              statusText
+              headers
               file
               line
-              arguments
             }
-            flattenException{
-                message
-                code
-                previous{
-                    message
-                    code
-                    class
-                    statusCode
-                    statusText
-                    headers
-                    file
-                    line
-                }
-                traceAsString
-                class
-                statusCode
-                statusText
-                headers
-                file
-                line
-            }
-            date
+            traceAsString
+            class
+            statusCode
+            statusText
+            headers
+            file
+            line
+          }
+          date
         }
-    }
-`,
-  )
-    .then((response) => response.json())
-    .then((responseAsJson) => responseAsJson.data.failedMessage);
+      }
+    `),
+    { id: parseInt(id, 10) },
+  ).then((data) => data.failedMessage);

@@ -16,7 +16,7 @@ Container:
       dockerState:
         type: String
       exposedPorts:
-        type: '[Int]'
+        type: '[Int!]!'
       zfsFilesystemName:
         type: String!
       time:

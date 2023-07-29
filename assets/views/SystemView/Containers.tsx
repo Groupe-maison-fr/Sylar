@@ -13,7 +13,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -22,30 +22,31 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import moment from 'moment';
 import mutationStopService from '../../graphQL/ServiceCloner/mutationStopService';
 import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
-import queryContainers, {
-  Container
-} from '../../graphQL/ServiceCloner/queryContainers';
+import queryContainers from '../../graphQL/ServiceCloner/queryContainers';
 import EventBus from '../../components/EventBus';
 import mutationForceDestroyContainer from '../../graphQL/Container/mutationForceDestroyContainer';
 import ago from '../../components/ago';
+import { ContainersQuery } from '../../gql/graphql';
 
 const PREFIX = 'Containers';
 
 const classes = {
   root: `${PREFIX}-root`,
-  actions: `${PREFIX}-actions`
+  actions: `${PREFIX}-actions`,
 };
 
 const StyledCard = styled(Card)(() => ({
   [`&.${classes.root}`]: {},
 
   [`& .${classes.actions}`]: {
-    justifyContent: 'flex-end'
-  }
+    justifyContent: 'flex-end',
+  },
 }));
 
 const Containers = ({ ...rest }) => {
-  const [containers, setContainers] = useState<Container[]>([]);
+  const [containers, setContainers] = useState<ContainersQuery['containers']>(
+    [],
+  );
   const [loading, setLoading] = useState(false);
 
   const loadContainers = () => {
@@ -113,7 +114,7 @@ const Containers = ({ ...rest }) => {
                     <Tooltip title={ago(container.uptime)}>
                       <span>
                         {moment(container.time * 1000).format(
-                          'DD/MM/YYYY HH:mm:ss'
+                          'DD/MM/YYYY HH:mm:ss',
                         )}
                       </span>
                     </Tooltip>
@@ -126,7 +127,7 @@ const Containers = ({ ...rest }) => {
                           onClick={() =>
                             stopService(
                               container.masterName,
-                              container.instanceName
+                              container.instanceName,
                             )
                           }
                         >
@@ -135,7 +136,7 @@ const Containers = ({ ...rest }) => {
                         <Button
                           onClick={() =>
                             mutationForceDestroyContainer(
-                              container.containerName
+                              container.containerName,
                             )
                           }
                         >
@@ -145,7 +146,7 @@ const Containers = ({ ...rest }) => {
                           onClick={() =>
                             restartService(
                               container.masterName,
-                              container.instanceName
+                              container.instanceName,
                             )
                           }
                         >

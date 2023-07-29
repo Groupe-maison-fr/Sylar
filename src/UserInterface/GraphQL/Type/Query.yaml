@@ -4,16 +4,16 @@ QueryUserInterface:
   config:
     fields:
       services:
-        type: "[Service]"
+        type: "[Service!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver::resolve")'
       containers:
-        type: "[Container]"
+        type: "[Container!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ContainerResolver::resolve")'
       filesystems:
-        type: "[Filesystem]"
+        type: "[Filesystem!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver::resolve")'
       commands:
-        type: "[Command]"
+        type: "[Command!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolve")'
       commandByName:
         type: Command
@@ -21,6 +21,6 @@ QueryUserInterface:
         args:
           commandName: String!
       reservations:
-        type: "[Reservation]"
+        type: "[Reservation!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ReservationResolver::resolve")'
 

@@ -8,7 +8,7 @@ use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
-use stdClass;
+use Throwable;
 
 final class DebugTraceCallResolver implements QueryInterface
 {
@@ -33,7 +33,14 @@ final class DebugTraceCallResolver implements QueryInterface
             case 'line':
                 return $debugTraceCall['line'];
             case 'arguments':
-                return json_encode($this->createArgumentsTree($debugTraceCall['args']));
+                try {
+                    return $this->createArgumentsTree($debugTraceCall['args']);
+                } catch (Throwable $e) {
+                    return [new DebugTraceCallArgumentDTO(
+                        'Error on decoding arguments',
+                        $e->getMessage(),
+                    )];
+                }
         }
         throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
@@ -45,17 +52,16 @@ final class DebugTraceCallResolver implements QueryInterface
         }
 
         if (count($arguments) === 2 && in_array($arguments[0], ['incomplete-object', 'object', 'null', 'boolean', 'integer', 'float', 'resource', 'string'])) {
-            $output = new stdClass();
-            $output->type = $arguments[0];
-            $output->value = $this->createArgumentsTree($arguments[1]);
-
-            return $output;
+            return new DebugTraceCallArgumentDTO(
+                $arguments[0],
+                $this->createArgumentsTree($arguments[1]),
+            );
         }
 
         if (count($arguments) === 2 && $arguments[0] === 'array') {
-            return array_map(fn (array $argument) => $this->createArgumentsTree($argument), $arguments[1]);
+            return array_map($this->createArgumentsTree(...), $arguments[1]);
         }
 
-        return array_map(fn ($argument) => $this->createArgumentsTree($argument), $arguments);
+        return array_map($this->createArgumentsTree(...), $arguments);
     }
 }

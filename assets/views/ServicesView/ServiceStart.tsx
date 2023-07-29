@@ -91,7 +91,7 @@ const InstanceName = ({
 
 const ServiceStart = ({ ...rest }) => {
   const [open, setOpen] = useState(true);
-  const [services, setServices] = useState<{ name: string }[]>([]);
+  const [services, setServices] = useState<string[]>([]);
   const [reservationsByService, setReservationsByService] =
     useState<indexesByServiceType>({});
   const [instancesByService, setInstancesByService] =
@@ -134,12 +134,12 @@ const ServiceStart = ({ ...rest }) => {
   const loadServices = () => {
     Promise.all([queryServiceList(), queryReservations()]).then(
       ([serviceList, reservations]) => {
-        setServices(serviceList);
+        setServices(serviceList.map((service) => service.name));
         if (serviceList.length) {
           setServiceName(serviceList[0].name);
         }
         setInstancesByService(
-          serviceList.reduce((accumulator: indexesByServiceType, service) => {
+          serviceList?.reduce((accumulator: indexesByServiceType, service) => {
             service.containers.reduce((containersAccumulator, container) => {
               containersAccumulator[
                 `${service.name}-${container.instanceIndex}`
@@ -188,7 +188,7 @@ const ServiceStart = ({ ...rest }) => {
         }
       />
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <CardContent style={{ height: '7vw' }}>
+        <CardContent style={{ minHeight: '100px' }}>
           <form className={classes.form} noValidate autoComplete="off">
             <TextField
               label="Service"
@@ -197,8 +197,8 @@ const ServiceStart = ({ ...rest }) => {
               onChange={(event) => setServiceName(event.target.value)}
             >
               {services.map((service) => (
-                <MenuItem key={service.name} value={service.name}>
-                  {service.name}
+                <MenuItem key={service} value={service}>
+                  {service}
                 </MenuItem>
               ))}
             </TextField>

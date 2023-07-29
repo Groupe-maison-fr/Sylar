@@ -1,32 +1,21 @@
-import GraphQL from '../GraphQL';
+import { query } from '../GraphQL';
+import { graphql } from '../../gql/gql';
 
-export interface Container {
-  containerName: string;
-  masterName: string;
-  instanceName: string;
-  instanceIndex: number;
-  zfsFilesystemName: string;
-  time: number;
-  uptime: number;
-  dockerState: string;
-}
-export default (): Promise<Container[]> =>
-  GraphQL.query(
-    `
-    query {
-      containers {
-        containerName
-        masterName
-        instanceName
-        instanceIndex
-        zfsFilesystemName
-        time
-        uptime
-        dockerState
+export default () =>
+  query(
+    graphql(`
+      query containers {
+        containers {
+          containerName
+          masterName
+          instanceName
+          instanceIndex
+          zfsFilesystemName
+          time
+          uptime
+          dockerState
+        }
       }
-    }`
-  )
-    .then((response) => response.json())
-    .then((json) => {
-      return json.data.containers;
-    });
+    `),
+    {},
+  ).then((data) => data.containers);

@@ -17,10 +17,10 @@ import {
 } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import DeleteIcon from '@mui/icons-material/Delete';
-import queryReservations, {
-  Reservation,
-} from '../../graphQL/Reservation/queryReservations';
+import queryReservations from '../../graphQL/Reservation/queryReservations';
 import mutationDeleteReservation from '../../graphQL/Reservation/mutationDeleteReservation';
+import { ReservationsQuery } from '../../gql/graphql';
+import { ArrElement } from '../../components/Helper';
 
 const PREFIX = 'Reservations';
 
@@ -43,7 +43,7 @@ const StyledCard = styled(Card)(() => ({
 }));
 
 const Reservations = ({ refresh, ...rest }: { refresh: string }) => {
-  const [data, setData] = useState<Reservation[]>([]);
+  const [data, setData] = useState<ReservationsQuery['reservations']>([]);
   const [loading, setLoading] = useState(false);
 
   const loadReservations = () => {
@@ -54,7 +54,9 @@ const Reservations = ({ refresh, ...rest }: { refresh: string }) => {
     });
   };
 
-  const deleteReservation = (reservation: Reservation) => {
+  const deleteReservation = (
+    reservation: ArrElement<ReservationsQuery['reservations']>,
+  ) => {
     setLoading(true);
     return mutationDeleteReservation(
       reservation.service,

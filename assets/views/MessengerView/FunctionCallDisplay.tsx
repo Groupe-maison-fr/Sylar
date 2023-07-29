@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import { FunctionCall } from '../../graphQL/Messenger/queryFailedMessage';
+import { ArrElement } from '../../components/Helper';
+import { FailedMessageQuery } from '../../gql/graphql';
 
 const PREFIX = 'FunctionCallDisplay';
 
@@ -30,14 +31,18 @@ const Root = styled('div')(() => ({
   },
 }));
 
-function FunctionCallDisplay({ call }: { call: FunctionCall }) {
+function FunctionCallDisplay({
+  call,
+}: {
+  call: ArrElement<FailedMessageQuery['failedMessage']['backtrace']>;
+}) {
   if (
     call.namespace === '' &&
     call.short_class === '' &&
     call.function === '' &&
     call.type === ''
   ) {
-    return `${call.file.split('/').pop()} (${call.line})`;
+    return `${call.file?.split('/').pop()} (${call.line})`;
   }
   return (
     <Root>

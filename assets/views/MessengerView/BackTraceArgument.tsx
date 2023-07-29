@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { ArgumentCall } from '../../graphQL/Messenger/queryFailedMessage';
+import { DebugTraceCallArgument } from '../../gql/graphql';
 
-// @ts-ignore
 const BackTraceArgument = ({
   argument,
 }: {
-  argument: ArgumentCall | ArgumentCall[];
+  argument: DebugTraceCallArgument | DebugTraceCallArgument[];
 }) => {
   if (argument === undefined) {
     return 'undefined';
@@ -13,10 +12,10 @@ const BackTraceArgument = ({
   if (Array.isArray(argument)) {
     return (
       <ul>
-        {argument.map((_argument: ArgumentCall, index: number) => {
+        {argument.map((_argument: DebugTraceCallArgument, index: number) => {
           return (
             <BackTraceArgument
-              key={`_${_argument.value}_${_argument.type}_${index}`}
+              key={`_${_argument?.value}_${_argument.type}_${index}`}
               argument={_argument}
             />
           );

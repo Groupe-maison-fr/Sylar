@@ -6,6 +6,6 @@ Command:
       name:
         type: String!
       subCommands:
-        type: '[String]'
+        type: '[String!]!'
       output:
-        type: '[CommandExecutorResult]'
+        type: '[CommandExecutorResult!]!'

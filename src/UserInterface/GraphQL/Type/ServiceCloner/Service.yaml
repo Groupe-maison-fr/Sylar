@@ -10,10 +10,10 @@ Service:
       command:
         type: String
       labels:
-        type: '[Label]'
+        type: '[Label!]!'
       environments:
-        type: '[Environment]'
+        type: '[Environment!]!'
       ports:
-        type: '[Port]'
+        type: '[Port!]!'
       containers:
-        type: '[Container]'
+        type: '[Container!]!'

@@ -1,21 +1,19 @@
-import GraphQL from '../GraphQL';
+import { mutation } from '../GraphQL';
+import { graphql } from '../../gql/gql';
 
 export default (name: string) =>
-  GraphQL.query(
-    `
-    mutation {
-      forceDestroyContainer (input:{
-        name: "${name}"
-      }){
-        ... on SuccessOutput{
-          success
-        }
-        ... on FailedOutput{
-          code
-          message
+  mutation(
+    graphql(`
+      mutation MutationForceDestroyContainer($name: String!) {
+        forceDestroyContainer(input: { name: $name }) {
+          ... on SuccessOutput {
+            success
+          }
+          ... on FailedOutput {
+            code
+          }
         }
       }
-    }`,
-  )
-    .then((response) => response.json())
-    .then((json) => json.data.forceDestroyContainer);
+    `),
+    { name },
+  ).then((data) => data.forceDestroyContainer);

@@ -1,15 +1,12 @@
 import * as React from 'react';
-import {
-  Exception,
-  FailedMessage,
-} from '../../graphQL/Messenger/queryFailedMessage';
+import { FailedMessageQuery } from '../../gql/graphql';
 
 const FlattenException = ({
   exception,
   message,
 }: {
-  exception: Exception;
-  message: FailedMessage;
+  exception: FailedMessageQuery['failedMessage']['flattenException'];
+  message: FailedMessageQuery['failedMessage'];
 }) => {
   if (!exception) {
     return null;
@@ -46,7 +43,7 @@ const FlattenException = ({
           {exception.line}
         </li>
       )}
-      {exception.code !== '' && (
+      {exception.code !== null && (
         <li>
           Code:
           {exception.code}

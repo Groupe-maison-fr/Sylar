@@ -1,15 +1,14 @@
-import GraphQL from '../GraphQL';
+import { mutation } from '../GraphQL';
+import { graphql } from '../../gql/gql';
 
-export default (id: number) =>
-  GraphQL.mutation(
-    `
-    mutation {
-        retryFailedMessage(input:{
-            id: ${JSON.stringify(id)}
-        }) {
-            success
+export default (id: string) =>
+  mutation(
+    graphql(`
+      mutation MutationRetryFailedMessage($id: ID!) {
+        retryFailedMessage(input: { id: $id }) {
+          success
         }
-}`,
-  )
-    .then((response) => response.json())
-    .then((responseAsJson) => responseAsJson.data.retryFailedMessage);
+      }
+    `),
+    { id: parseInt(id, 10) },
+  ).then((data) => data.retryFailedMessage);

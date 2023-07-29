@@ -1,27 +1,34 @@
-import GraphQL from '../GraphQL';
+import { mutation } from '../GraphQL';
+import { graphql } from '../../gql/gql';
 
 export default (
   masterName: string,
   index: number | null,
   instanceName: string,
 ) =>
-  GraphQL.query(
-    `
-    mutation {
-      startService (input:{
-        masterName: "${masterName}"
-        index: ${index}
-        instanceName: "${instanceName}"
-      }){ 
-        ... on SuccessOutput{
-          success
-        } 
-        ... on FailedOutput{
-          code
-          message
-        } 
-      } 
-    }`,
-  )
-    .then((response) => response.json())
-    .then((json) => json.data.startService);
+  mutation(
+    graphql(`
+      mutation MutationStartService(
+        $masterName: String!
+        $index: Int
+        $instanceName: String!
+      ) {
+        startService(
+          input: {
+            masterName: $masterName
+            index: $index
+            instanceName: $instanceName
+          }
+        ) {
+          ... on SuccessOutput {
+            success
+          }
+          ... on FailedOutput {
+            code
+            message
+          }
+        }
+      }
+    `),
+    { masterName, index, instanceName },
+  ).then((data) => data.startService);

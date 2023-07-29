@@ -9,6 +9,7 @@
 data/database/
 /sqlite
 tsconfig.tsbuildinfo
+graphql.config.yml
 tests/Core/ServiceCloner/Reservation/database/
 ###< symfony/framework-bundle ###
 

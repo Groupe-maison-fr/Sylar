@@ -1,23 +1,26 @@
-import GraphQL from '../GraphQL';
+import { mutation } from '../GraphQL';
+import { graphql } from '../../gql/gql';
 
 export default (service: string, name: string, index: number) =>
-  GraphQL.query(
-    `
-mutation {
-    addReservation(input:{
-        service: "${service}"
-        name: "${name}"
-        index: ${index}
-    }) {
-        ...on SuccessOutput{
+  mutation(
+    graphql(`
+      mutation MutationAddReservation(
+        $service: String!
+        $index: Int!
+        $name: String!
+      ) {
+        addReservation(
+          input: { service: $service, index: $index, name: $name }
+        ) {
+          ... on SuccessOutput {
             success
-        }
-        ...on FailedOutput{
+          }
+          ... on FailedOutput {
+            code
             message
+          }
         }
-    }
-}
-`,
-  )
-    .then((response) => response.json())
-    .then((json) => json.data.addReservation);
+      }
+    `),
+    { service, index, name },
+  ).then((data) => data.addReservation);

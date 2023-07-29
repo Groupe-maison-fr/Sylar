@@ -1,42 +1,14 @@
-const query = (queryPayload: any, headers = []) =>
-  fetch('/graphql/', {
-    method: 'post',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-      ...headers,
-    },
-    body: JSON.stringify({ query: queryPayload }),
-  });
+import { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import request, { RequestDocument, Variables } from 'graphql-request';
 
-const mutation = (mutationPayload: any, headers = [], files = []) => {
-  if (files.length === 0) {
-    return fetch('/graphql/', {
-      method: 'post',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        ...headers,
-      },
-      body: JSON.stringify({ query: mutationPayload }),
-    });
-  }
+export const GRAPHQL_ROOT_URL: string = '/graphql/';
 
-  const data = new FormData();
-  data.append('query', mutationPayload);
-  files.forEach((file) => data.append('files[]', file));
+export const query = <T>(
+  queryPayload: RequestDocument | TypedDocumentNode<T, Variables>,
+  args: Variables,
+) => request<T>(GRAPHQL_ROOT_URL, queryPayload, args);
 
-  return fetch('/graphql/', {
-    method: 'post',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      ...headers,
-    },
-    body: data,
-  });
-};
-
-export default {
-  query,
-  mutation,
-};
+export const mutation = <T>(
+  queryPayload: RequestDocument | TypedDocumentNode<T, Variables>,
+  args: Variables,
+) => request<T>(GRAPHQL_ROOT_URL, queryPayload, args);

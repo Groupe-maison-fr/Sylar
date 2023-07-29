@@ -20,13 +20,12 @@ import {
 } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import DeleteIcon from '@mui/icons-material/Delete';
-import queryService, {
-  Services,
-} from '../../graphQL/ServiceCloner/queryServices';
+import queryService from '../../graphQL/ServiceCloner/queryServices';
 import mutationStopService from '../../graphQL/ServiceCloner/mutationStopService';
 import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
 import EventBus from '../../components/EventBus';
 import ago from '../../components/ago';
+import { ServicesQuery } from '../../gql/graphql';
 
 const PREFIX = 'ServiceList';
 
@@ -59,19 +58,31 @@ const NameValueList = ({
 }: {
   data: { name: string; value: string }[];
 }) => {
+  const [collapsed, setCollapsed] = useState<boolean>(true);
+  if (collapsed) {
+    return (
+      <span>
+        <Button onClick={() => setCollapsed(false)}>...</Button>
+      </span>
+    );
+  }
+
   return (
-    <ul style={{ padding: 0, margin: 0 }}>
-      {data.map((row) => (
-        <li key={row.name} style={{ lineHeight: '0.1' }}>
-          <span className={classes.name}>{row.name}</span>
-          <pre className={classes.value}>{row.value}</pre>
-        </li>
-      ))}
-    </ul>
+    <Collapse in={!collapsed}>
+      <ul style={{ padding: 0, margin: 0 }}>
+        {data.map((row) => (
+          <li key={row.name} style={{ lineHeight: '0.1' }}>
+            <span className={classes.name}>{row.name}</span>
+            <pre className={classes.value}>{row.value}</pre>
+          </li>
+        ))}
+      </ul>
+      <Button onClick={() => setCollapsed(true)}>...</Button>
+    </Collapse>
   );
 };
 const ServiceList = ({ ...rest }) => {
-  const [data, setData] = useState<Services[]>([]);
+  const [data, setData] = useState<ServicesQuery['services']>([]);
   const [loading, setLoading] = useState(false);
 
   const loadServices = () => {
