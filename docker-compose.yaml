@@ -64,9 +64,13 @@ services:
     restart: unless-stopped
     working_dir: /app
     environment:
-      NODE_OPTIONS: '--openssl-legacy-provider'
+      - NODE_OPTIONS=--openssl-legacy-provider
+      - SUPERVISORD_PASSWORD=adminpassword
+      - SUPERVISORD_URL=http://127.0.0.1:9001/RPC2
+      - SUPERVISORD_USER=admin
     volumes:
       - ./:/app
+      - ./.docker/builder/etc/supervisord.conf:/etc/supervisord.conf:ro
       - builder-build:/app/public/build
       - node-modules-builder:/app/node_modules
 
