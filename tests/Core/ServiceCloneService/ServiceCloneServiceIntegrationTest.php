@@ -18,7 +18,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
      */
     public function it_should_load_configuration_service_with_specific_path(): void
     {
-        $this->setConfigurationDependentServices('specific_configuration');
+        $this->setConfigurationDependentServices(__DIR__, 'specific_configuration');
         $config = $this->configurationService->getConfiguration()->getServiceByName('unit-test-mysql_specific_configuration');
         self::assertSame('ABCDEFGH', $config->labels[1]->value);
     }
@@ -28,7 +28,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
      */
     public function it_should_load_configuration_service_with_commands(): void
     {
-        $this->setConfigurationDependentServices('commands');
+        $this->setConfigurationDependentServices(__DIR__, 'commands');
         self::assertCount(2, $this->configurationService->getConfiguration()->commands);
         self::assertCount(2, $this->configurationService->getConfiguration()->getCommandByName('test1')->subCommands);
         self::assertCount(3, $this->configurationService->getConfiguration()->getCommandByName('test2')->subCommands);
@@ -41,7 +41,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
      */
     public function it_should_load_configuration_service_with_network(): void
     {
-        $this->setConfigurationDependentServices('network');
+        $this->setConfigurationDependentServices(__DIR__, 'network');
         $this->serviceCloneService->startMaster('unit-test-go-static-webserver');
         $this->serviceCloneService->startService('unit-test-go-static-webserver', '02', 2);
         $dockerInspectionMaster = json_decode($this->process->run('docker', 'inspect', 'unit-test-go-static-webserver')->getStdOutput(), true);
@@ -57,7 +57,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
      */
     public function it_should_not_retrieve_configuration_for_non_existing_service(): void
     {
-        $this->setConfigurationDependentServices('specific_configuration');
+        $this->setConfigurationDependentServices(__DIR__, 'specific_configuration');
         $config = $this->configurationService->getConfiguration()->getServiceByName('not_existing_service_name');
         self::assertNull($config);
     }
@@ -67,7 +67,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
      */
     public function it_should_create_a_container_and_run_lifecycles_hooks(): void
     {
-        $this->setConfigurationDependentServices('lifecycle_hooks');
+        $this->setConfigurationDependentServices(__DIR__, 'lifecycle_hooks');
         $this->resetBufferedLoggerHandler();
 
         $dockerName = $this->configurationService->getConfiguration()->services[0]->name;
@@ -91,7 +91,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
      */
     public function it_should_create_a_container_and_run_lifecycles_hooks_(): void
     {
-        $this->setConfigurationDependentServices('when_disabling_all_lifecycle_hooks');
+        $this->setConfigurationDependentServices(__DIR__, 'when_disabling_all_lifecycle_hooks');
         $this->resetBufferedLoggerHandler();
 
         $dockerName = $this->configurationService->getConfiguration()->services[0]->name;
@@ -112,7 +112,7 @@ final class ServiceCloneServiceIntegrationTest extends AbstractServiceCloneServi
      */
     public function it_should_start_master_and_clones_and_can_not_stop_master_if_clone_is_running(): void
     {
-        $this->setConfigurationDependentServices('network');
+        $this->setConfigurationDependentServices(__DIR__, 'network');
         $this->serviceCloneService->startMaster('unit-test-go-static-webserver');
         $this->serviceCloneService->startService('unit-test-go-static-webserver', 'instance_01', 1);
         $this->serviceCloneService->startService('unit-test-go-static-webserver', 'instance_02', 2);

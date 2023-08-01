@@ -8,6 +8,7 @@
 /vendor/
 data/database/
 /sqlite
+/build
 tsconfig.tsbuildinfo
 graphql.config.yml
 tests/Core/ServiceCloner/Reservation/database/

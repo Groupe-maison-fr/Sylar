@@ -17,7 +17,7 @@ final class ServiceClonerStateServiceIntegrationTest extends AbstractServiceClon
      */
     public function it_should_get_service_states(): void
     {
-        $this->setConfigurationDependentServices('network');
+        $this->setConfigurationDependentServices(__DIR__, 'network');
         $serviceClonerStateService = $this->getService(ServiceClonerStateServiceInterface::class);
         $this->serviceCloneService->startMaster('unit-test-go-static-webserver');
         $this->serviceCloneService->startService('unit-test-go-static-webserver', 'instance_01', 1);

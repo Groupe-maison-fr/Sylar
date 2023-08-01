@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 abstract class AbstractIntegrationTestCase extends KernelTestCase
 {
+    use IntegrationTestTrait;
+
     protected function setUp(): void
     {
         $kernel = self::bootKernel();
@@ -17,22 +19,5 @@ abstract class AbstractIntegrationTestCase extends KernelTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-    }
-
-    /**
-     * @template T
-     *
-     * @param T $serviceName
-     *
-     * @return T
-     */
-    protected function getService($serviceName)
-    {
-        return static::getContainer()->get($serviceName);
-    }
-
-    protected function setService($serviceId, $service)
-    {
-        return static::getContainer()->set($serviceId, $service);
     }
 }

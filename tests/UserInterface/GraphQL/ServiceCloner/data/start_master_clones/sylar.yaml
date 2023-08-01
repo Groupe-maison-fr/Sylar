@@ -1,0 +1,50 @@
+stateRoot: '/app/data'
+zpoolName: 'sylar'
+zpoolRoot: '/sylar'
+services:
+  - name: unit-test-mysql-start-master-clones
+    image: 'library/mariadb:10.5.3'
+    labels:
+      - name: environment
+        value: unit-test
+    environments:
+    - name: MYSQL_ROOT_PASSWORD
+      value: root_password
+    - name: MYSQL_USER
+      value: user
+    - name: MYSQL_PASSWORD
+      value: password
+    - name: MYSQL_DATABASE
+      value: roketto
+    - name: MYSQL_INITDB_SKIP_TZINFO
+      value: '1'
+    - name: CLONE_NAME
+      value: '=containerParameter.getName()'
+    - name: CLONE_INDEX
+      value: '=containerParameter.getIndex()'
+    - name: CLONE_REPLICATED_FILESYSTEM
+      value: '=containerParameter.getReplicatedFilesystem()'
+    ports:
+      - hostPort: '=(3506+containerParameter.getIndex())~"/tcp"'
+        containerPort: '3306/tcp'
+    lifeCycleHooks:
+      preStartCommands:
+        - executionEnvironment: host
+          command: ['ls','/']
+      postStartWaiters:
+        - type: logMatch
+          expression: '!Server socket created on IP!'
+          timeout: 30
+      postStartCommands:
+        - executionEnvironment: host
+          command: ['ls','/']
+      postDestroyCommands:
+        - executionEnvironment: host
+          command: ['ls','/']
+    mounts:
+      - source: '=containerParameter.getReplicatedFilesystem()'
+        target: /var/lib/mysql
+      - source: '=configurationRoot'
+        target: /app
+      - source: '=configurationRoot~"/mysql/etc/mysql/conf.d"'
+        target: /etc/mysql/conf.d

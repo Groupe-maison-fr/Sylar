@@ -20,6 +20,7 @@ RUN LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php ;\
         php8.2-curl \
         php8.2-fpm \
         php8.2-mbstring \
+        php8.2-pcov \
         php8.2-sqlite3 \
         php8.2-xml \
         php8.2-redis \

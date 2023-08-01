@@ -5,32 +5,27 @@ declare(strict_types=1);
 namespace Tests\Core\ServiceCloner\Reservation;
 
 use App\Core\ServiceCloner\Reservation\Object\Reservation;
-use App\Core\ServiceCloner\Reservation\ReservationRepository;
 use Micoli\Elql\Exception\NonUniqueException;
-use Micoli\Elql\Metadata\MetadataManager;
 use Tests\AbstractIntegrationTestCase;
+use Tests\ReservationsTestTrait;
 
 /**
  * @internal
  */
 class ServiceReservationRepositoryTest extends AbstractIntegrationTestCase
 {
-    private string $databasePath;
-    private ReservationRepository $reservationRepository;
+    use ReservationsTestTrait;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->databasePath = sprintf('/tmp/test-%s', uniqid());
-        $this->cleanupFilesystem();
-        $this->reservationRepository = new ReservationRepository($this->databasePath);
-        $this->initializeDatabase();
+        $this->reservationsTestSetUp();
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        $this->cleanupFilesystem();
+        $this->reservationTearDown();
     }
 
     public function testItShouldGetReservedIndexes(): void
@@ -63,45 +58,5 @@ class ServiceReservationRepositoryTest extends AbstractIntegrationTestCase
             );
         }
         self::assertSame([2, 4], $this->reservationRepository->getReservationIndexesByService('mysql'));
-    }
-
-    private function initializeDatabase(): void
-    {
-        file_put_contents(
-            $this->getReservationYamlPath(),
-            <<<BAZ
-                -
-                    service: mysql
-                    name: test2
-                    index: 2
-                -
-                    service: mysql
-                    name: test4
-                    index: 4
-                -
-                    service: pgsql
-                    name: test1
-                    index: 1
-                BAZ
-        );
-    }
-
-    private function getReservationYamlPath(): string
-    {
-        return sprintf(
-            '%s/%s.yaml',
-            $this->databasePath,
-            (new MetadataManager())->tableNameExtractor(Reservation::class),
-        );
-    }
-
-    private function cleanupFilesystem(): void
-    {
-        if (file_exists($this->getReservationYamlPath())) {
-            unlink($this->getReservationYamlPath());
-        }
-        if (file_exists($this->databasePath)) {
-            rmdir($this->databasePath);
-        }
     }
 }

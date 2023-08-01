@@ -16,7 +16,7 @@ final class ServiceCloneServiceScenarioIntegrationTest extends AbstractServiceCl
      */
     public function it_should_start_mysql_master_and_can_query_on_it(): void
     {
-        $this->setConfigurationDependentServices('start_master');
+        $this->setConfigurationDependentServices(__DIR__, 'start_master');
         $this->serviceCloneService->startMaster('unit-test-mysql-start-master');
         $tableNames = explode(PHP_EOL, $this->containerExecMysql('unit-test-mysql-start-master', 'select TABLE_NAME from information_schema.TABLES'));
         $slowQueryVariables = explode(PHP_EOL, $this->containerExecMysql('unit-test-mysql-start-master', 'show variables like \'slow_query_log_file\''));
@@ -34,7 +34,7 @@ final class ServiceCloneServiceScenarioIntegrationTest extends AbstractServiceCl
      */
     public function it_should_start_master_and_clones(): void
     {
-        $this->setConfigurationDependentServices('start_master_clones');
+        $this->setConfigurationDependentServices(__DIR__, 'start_master_clones');
         $this->serviceCloneService->startMaster('unit-test-mysql-start-master-clones');
         $this->containerExecMysql('unit-test-mysql-start-master-clones', 'create database testdb;');
         $this->containerExecMysql('unit-test-mysql-start-master-clones', <<<EOS
