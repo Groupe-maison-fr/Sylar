@@ -8,6 +8,8 @@
         "ext-json": "*",
         "ext-pcntl": "*",
         "ext-redis": "*",
+        "brick/varexporter": "*",
+        "coduo/php-matcher": "*",
         "composer/package-versions-deprecated": "1.11.99.1",
         "doctrine/annotations": "^2.0.1",
         "doctrine/collections": "^1.6",
@@ -75,7 +77,8 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "App\\Common\\": "lib/Common/src"
+            "App\\Common\\": "lib/Common/src",
+            "Micoli\\Trail\\": "lib/Trail/src"
         }
     },
     "autoload-dev": {
@@ -83,7 +86,8 @@
             "App\\": "src/",
             "App\\Common\\": "lib/Common/src",
             "Tests\\": "tests/",
-            "Tests\\Common\\": "lib/Common/tests/"
+            "Tests\\Common\\": "lib/Common/tests/",
+            "Micoli\\Trail\\tests\\": "lib/Trail/tests"
         }
     },
 
