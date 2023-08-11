@@ -11,11 +11,11 @@
           href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto+Slab|Roboto:300,400,500,700"/>
     <title>{% block title %}Sylar Dashboard{% endblock %}</title>
 {% block stylesheets %}
-{#    {{ vite_entry_link_tags('app.css') }}#}
+{#    {{ vite_asset('app.css') }}#}
 {% endblock %}
 
     {% block javascripts %}
-        {{ vite_entry_script_tags('index.tsx') }}
+        {{ vite_asset('index.tsx') }}
     {% endblock %}
 </head>
 

@@ -35,21 +35,6 @@ Service cloner for development purpose
 
 5. GUI can be accessed on `http://xxx.xxx.xxx.xxx:8080/app/services`
 
-## Development
-
-1. Install source and start the stack
-
-    ```
-    cd ~/src
-    git clone https://github.com/Groupe-maison-fr/Sylar.git
-    cd sylar
-    make host-dev-up host-vagrant-init-docker-compose
-    ```
-   this can take a while
-2. Open the app the your browser
-   - http://192.168.xxx.xxx/app/system
-
-
 ## Development Virtual Machine setup
 
 ### Initial system setup
@@ -68,6 +53,9 @@ sudo reboot
 sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
+```
+
+```bash
 sudo apt install -y apt-transport-https ca-certificates curl software-properties-common zfsutils-linux jq make
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 sudo bash -c 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null '
@@ -113,7 +101,7 @@ make docker-compose-up-dev-amd64
 sudo apt-get install -y mariadb-client postgresql-client
 docker-compose  -f tests/test-env/docker-compose.yaml up -d
 sleep 5
-tests/test-env/init-mysql.sh
+cd tests/test-env; ./init-mysql.sh --force
 ```
 
 ### Test environment setup (sylar master on replication to mysql-primary)

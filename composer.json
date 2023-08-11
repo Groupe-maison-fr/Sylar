@@ -22,7 +22,6 @@
         "micoli/elql": "*",
         "mockery/mockery": "^1.4",
         "overblog/graphql-bundle": "^0.15.2",
-        "pentatrion/vite-bundle": "^3.1",
         "php-http/guzzle7-adapter": "1.0.0",
         "php-http/logger-plugin": "^1.2",
         "php-http/socket-client": "*",
