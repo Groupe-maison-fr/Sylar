@@ -12,6 +12,7 @@ data/database/
 /assets/build
 tsconfig.tsbuildinfo
 graphql.config.yml
+config/jwt/
 tests/Core/ServiceCloner/Reservation/database/
 ###< symfony/framework-bundle ###
 
@@ -53,3 +54,7 @@ mutagen.yml.lock
 /node_modules/
 /public/build/
 ###< pentatrion/vite-bundle ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

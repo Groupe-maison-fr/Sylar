@@ -8,6 +8,7 @@ use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\Configuration\Object\Service;
 use App\Core\ServiceCloner\ServiceClonerStateServiceInterface;
 use App\Core\ServiceCloner\ServiceClonerStatusDTO;
+use App\UserInterface\GraphQL\Security\FieldVisibility;
 use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
@@ -18,6 +19,7 @@ final readonly class ServiceResolver implements QueryInterface
     public function __construct(
         private ConfigurationServiceInterface $configurationService,
         private ServiceClonerStateServiceInterface $serviceClonerStateService,
+        private FieldVisibility $fieldVisibility,
     ) {
     }
 
@@ -31,11 +33,11 @@ final readonly class ServiceResolver implements QueryInterface
             case 'command':
                 return $service->command;
             case 'labels':
-                return $service->labels;
+                return $this->fieldVisibility->emptyOnAnyRole($service->labels, ['ROLE_ADMIN', 'ROLE_USER'], []);
             case 'ports':
                 return $service->ports;
             case 'environments':
-                return $service->environments;
+                return $this->fieldVisibility->emptyOnAnyRole($service->environments, ['ROLE_ADMIN', 'ROLE_USER'], []);
             case 'containers':
                 return array_filter(
                     $this->serviceClonerStateService->getStates(),

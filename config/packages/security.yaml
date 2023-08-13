@@ -1,0 +1,53 @@
+security:
+    enable_authenticator_manager: true
+
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    providers:
+        chain_users:
+            chain:
+                providers: [ elql_user_provider, jwt ]
+
+        elql_user_provider:
+            id: App\Infrastructure\Security\UserProvider
+        jwt:
+            lexik_jwt:
+              class: App\Infrastructure\Security\Models\User
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
+
+    firewalls:
+        login:
+            provider: chain_users
+            pattern: ^/api/login
+            stateless: true
+            json_login:
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        graphql:
+            provider: chain_users
+            pattern: ^/graphql
+            stateless: true
+            lazy: true
+            jwt:
+                authenticator: lexik_jwt_authentication.security.jwt_authenticator
+
+        main:
+            lazy: true
+            provider: chain_users
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    access_control:
+    # - { path: ^/admin, roles: ROLE_ADMIN }
+    # - { path: ^/profile, roles: ROLE_USER }

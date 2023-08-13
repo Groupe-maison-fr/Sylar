@@ -7,15 +7,19 @@ QueryUserInterface:
         type: "[Service!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver::resolve")'
       containers:
+        access: "@=hasAnyRole(['ROLE_USER'])"
         type: "[Container!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ContainerResolver::resolve")'
       filesystems:
+        access: "@=hasAnyRole(['ROLE_USER'])"
         type: "[Filesystem!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver::resolve")'
       commands:
+        access: "@=hasAnyRole(['ROLE_USER'])"
         type: "[Command!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolve")'
       commandByName:
+        access: "@=hasAnyRole(['ROLE_USER'])"
         type: Command
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolveByName",[args["commandName"]])'
         args:

@@ -1,0 +1,8 @@
+parameters:
+    env(LEXIK_JWT_TOKEN_TTL): '172800'
+
+lexik_jwt_authentication:
+    secret_key: '%kernel.project_dir%/config/jwt/private.pem'
+    public_key: '%kernel.project_dir%/config/jwt/public.pem'
+    pass_phrase: ''
+    token_ttl: '%env(int:LEXIK_JWT_TOKEN_TTL)%'
