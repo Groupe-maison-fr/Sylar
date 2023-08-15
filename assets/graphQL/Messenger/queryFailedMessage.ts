@@ -1,34 +1,43 @@
-import { query } from '../GraphQL';
 import { graphql } from '../../gql/gql';
+import { authenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
-export default (id: string) =>
-  query(
-    graphql(`
-      query FailedMessage($id: Int!) {
-        failedMessage(id: $id) {
-          id
-          className
-          message
-          exceptionMessage
-          backtrace {
-            namespace
-            short_class
-            class
-            type
-            function
-            file
-            line
-            arguments {
-              type
-              value
-            }
-          }
-          flattenException {
+export default (client: authenticatedClient, id: string) =>
+  client
+    .query(
+      graphql(`
+        query FailedMessage($id: Int!) {
+          failedMessage(id: $id) {
+            id
+            className
             message
-            code
-            previous {
+            exceptionMessage
+            backtrace {
+              namespace
+              short_class
+              class
+              type
+              function
+              file
+              line
+              arguments {
+                type
+                value
+              }
+            }
+            flattenException {
               message
               code
+              previous {
+                message
+                code
+                class
+                statusCode
+                statusText
+                headers
+                file
+                line
+              }
+              traceAsString
               class
               statusCode
               statusText
@@ -36,17 +45,10 @@ export default (id: string) =>
               file
               line
             }
-            traceAsString
-            class
-            statusCode
-            statusText
-            headers
-            file
-            line
+            date
           }
-          date
         }
-      }
-    `),
-    { id: parseInt(id, 10) },
-  ).then((data) => data.failedMessage);
+      `),
+      { id: parseInt(id, 10) },
+    )
+    .then((data) => data.failedMessage);

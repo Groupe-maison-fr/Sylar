@@ -20,6 +20,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useSnackbar } from 'notistack';
 import queryServiceList from '../../graphQL/ServiceCloner/queryServiceList';
 import mutationAddReservation from '../../graphQL/Reservation/mutationAddReservation';
+import { useAuthenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
 const PREFIX = 'ReservationAdd';
 
@@ -48,22 +49,26 @@ const ReservationAdd = ({
   const [serviceIndex, setServiceIndex] = useState(1);
   const [reservationName, setReservationName] = useState('');
   const { enqueueSnackbar } = useSnackbar();
+  const { client } = useAuthenticatedClient();
 
   const createService = () => {
-    mutationAddReservation(serviceName, reservationName, serviceIndex).then(
-      (response) => {
-        if (response.__typename === 'FailedOutput') {
-          enqueueSnackbar(response.message);
-          return;
-        }
-        setReservationName('');
-        onAdd(`${Date.now()}`);
-      },
-    );
+    mutationAddReservation(
+      client,
+      serviceName,
+      reservationName,
+      serviceIndex,
+    ).then((response) => {
+      if (response.__typename === 'FailedOutput') {
+        enqueueSnackbar(response.message, { variant: 'error' });
+        return;
+      }
+      setReservationName('');
+      onAdd(`${Date.now()}`);
+    });
   };
 
   const loadServices = () => {
-    queryServiceList().then((serviceList) => {
+    queryServiceList(client).then((serviceList) => {
       setServices(serviceList);
       if (serviceList.length) {
         setServiceName(serviceList[0].name);

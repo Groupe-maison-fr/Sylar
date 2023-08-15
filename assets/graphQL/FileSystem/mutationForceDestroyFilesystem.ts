@@ -1,20 +1,22 @@
-import { mutation } from '../GraphQL';
 import { graphql } from '../../gql/gql';
+import { authenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
-export default (name: string) =>
-  mutation(
-    graphql(`
-      mutation MutationForceDestroyFilesystem($name: String!) {
-        forceDestroyFilesystem(input: { name: $name }) {
-          ... on SuccessOutput {
-            success
-          }
-          ... on FailedOutput {
-            code
-            message
+export default (client: authenticatedClient, name: string) =>
+  client
+    .mutation(
+      graphql(`
+        mutation MutationForceDestroyFilesystem($name: String!) {
+          forceDestroyFilesystem(input: { name: $name }) {
+            ... on SuccessOutput {
+              success
+            }
+            ... on FailedOutput {
+              code
+              message
+            }
           }
         }
-      }
-    `),
-    { name },
-  ).then((data) => data.forceDestroyFilesystem);
+      `),
+      { name },
+    )
+    .then((data) => data.forceDestroyFilesystem);

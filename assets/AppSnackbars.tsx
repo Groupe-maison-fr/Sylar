@@ -13,7 +13,7 @@ const AppSnackbars = () => {
 
   // @ts-ignore TS6133
   const displayError = (eventName: string, arg: { message: string }) => {
-    enqueueSnackbar(arg.message);
+    enqueueSnackbar(arg.message, { variant: 'error' });
   };
 
   const displayFailedMessage = (
@@ -21,7 +21,7 @@ const AppSnackbars = () => {
     eventName: string,
     arg: { message: string; exception: string },
   ) => {
-    enqueueSnackbar(`${arg.message} (${arg.exception})`);
+    enqueueSnackbar(`${arg.message} (${arg.exception})`, { variant: 'error' });
   };
 
   const displayStart = (
@@ -29,7 +29,9 @@ const AppSnackbars = () => {
     eventName: string,
     arg: { masterName: string; instanceName: string },
   ) => {
-    enqueueSnackbar(`Service ${arg.masterName}:${arg.instanceName} started`);
+    enqueueSnackbar(`Service ${arg.masterName}:${arg.instanceName} started`, {
+      variant: 'info',
+    });
   };
 
   const displayStop = (
@@ -37,7 +39,9 @@ const AppSnackbars = () => {
     eventName: string,
     arg: { masterName: string; instanceName: string },
   ) => {
-    enqueueSnackbar(`Service ${arg.masterName}:${arg.instanceName} stopped`);
+    enqueueSnackbar(`Service ${arg.masterName}:${arg.instanceName} stopped`, {
+      variant: 'info',
+    });
   };
 
   // @ts-ignore TS6133

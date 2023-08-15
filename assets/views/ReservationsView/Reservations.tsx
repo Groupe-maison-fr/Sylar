@@ -21,6 +21,7 @@ import queryReservations from '../../graphQL/Reservation/queryReservations';
 import mutationDeleteReservation from '../../graphQL/Reservation/mutationDeleteReservation';
 import { ReservationsQuery } from '../../gql/graphql';
 import { ArrElement } from '../../components/Helper';
+import { useAuthenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
 const PREFIX = 'Reservations';
 
@@ -45,10 +46,11 @@ const StyledCard = styled(Card)(() => ({
 const Reservations = ({ refresh, ...rest }: { refresh: string }) => {
   const [data, setData] = useState<ReservationsQuery['reservations']>([]);
   const [loading, setLoading] = useState(false);
+  const { client } = useAuthenticatedClient();
 
   const loadReservations = () => {
     setLoading(true);
-    return queryReservations().then((result) => {
+    return queryReservations(client).then((result) => {
       setData(result);
       setLoading(false);
     });
@@ -59,6 +61,7 @@ const Reservations = ({ refresh, ...rest }: { refresh: string }) => {
   ) => {
     setLoading(true);
     return mutationDeleteReservation(
+      client,
       reservation.service,
       reservation.name,
       reservation.index,

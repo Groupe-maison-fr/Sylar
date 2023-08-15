@@ -27,6 +27,7 @@ import FlattenException from './FlattenException';
 import { TriStateCheckbox } from '../../components/TriStateCheckbox';
 import { FailedMessageQuery, FailedMessagesQuery } from '../../gql/graphql';
 import { ArrElement } from '../../components/Helper';
+import { useAuthenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
 const PREFIX = 'MessengerMessages';
 
@@ -51,9 +52,10 @@ const MessengerMessages = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [filter, setFilter] = useState('');
   const [lowerFilter, setLowerFilter] = useState('');
+  const { client } = useAuthenticatedClient();
 
   const reload = () => {
-    queryFailedMessages(50)
+    queryFailedMessages(client, 50)
       .then((_messages) => {
         setMessages(
           _messages.map((_message) => ({
@@ -66,18 +68,18 @@ const MessengerMessages = () => {
   };
 
   const reject = (ids: string[]) => {
-    return mutationRejectFailedMessage(ids).then(reload);
+    return mutationRejectFailedMessage(client, ids).then(reload);
   };
 
   const retry = (id: string) => {
-    return mutationRetryFailedMessage(id).then(reload);
+    return mutationRetryFailedMessage(client, id).then(reload);
   };
 
   const loadMessage = (id: string) => {
     if (message?.id === id) {
       return Promise.resolve(false);
     }
-    return queryFailedMessage(id).then((newMessage) => {
+    return queryFailedMessage(client, id).then((newMessage) => {
       setShowDetail(true);
       setMessage(newMessage);
     });

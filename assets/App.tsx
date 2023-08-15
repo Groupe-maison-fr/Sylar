@@ -10,6 +10,7 @@ import { initialDarkMode } from './components/DarkMode';
 import EventBus from './components/EventBus';
 import AppSnackbars from './AppSnackbars';
 import { LogListProvider } from './Context/LogListContext';
+import { AuthenticationProvider } from './Context/Authentication/AuthenticationProvider';
 
 EventBus.handleEventSource('/.well-known/mercure?topic=sylar');
 
@@ -29,13 +30,15 @@ const App = () => {
     <PrefersDarkModeContext.Provider
       value={{ prefersDarkMode, setPrefersDarkMode }}
     >
-      <LogListProvider>
-        <AppSnackbars />
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {routing}
-        </ThemeProvider>
-      </LogListProvider>
+      <AuthenticationProvider>
+        <LogListProvider>
+          <AppSnackbars />
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            {routing}
+          </ThemeProvider>
+        </LogListProvider>
+      </AuthenticationProvider>
     </PrefersDarkModeContext.Provider>
   );
 };

@@ -26,6 +26,7 @@ import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartS
 import EventBus from '../../components/EventBus';
 import ago from '../../components/ago';
 import { ServicesQuery } from '../../gql/graphql';
+import { useAuthenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
 const PREFIX = 'ServiceList';
 
@@ -84,10 +85,10 @@ const NameValueList = ({
 const ServiceList = ({ ...rest }) => {
   const [data, setData] = useState<ServicesQuery['services']>([]);
   const [loading, setLoading] = useState(false);
-
+  const { client } = useAuthenticatedClient();
   const loadServices = () => {
     setLoading(true);
-    return queryService().then((result) => {
+    return queryService(client).then((result) => {
       setLoading(false);
       setData(result);
     });
@@ -99,14 +100,14 @@ const ServiceList = ({ ...rest }) => {
 
   const stopService = (masterName: string, instanceName: string) => {
     setLoading(true);
-    return mutationStopService(masterName, instanceName).then(() => {
+    return mutationStopService(client, masterName, instanceName).then(() => {
       loadServices();
     });
   };
 
   const restartService = (masterName: string, instanceName: string) => {
     setLoading(true);
-    return mutationRestartService(masterName, instanceName).then(() => {
+    return mutationRestartService(client, masterName, instanceName).then(() => {
       loadServices();
     });
   };

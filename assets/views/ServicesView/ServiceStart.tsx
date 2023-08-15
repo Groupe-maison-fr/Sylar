@@ -25,6 +25,7 @@ import mutationStartService from '../../graphQL/ServiceCloner/mutationStartServi
 import EventBus from '../../components/EventBus';
 import queryReservations from '../../graphQL/Reservation/queryReservations';
 import mutationRestartService from '../../graphQL/ServiceCloner/mutationRestartService';
+import { useAuthenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
 const PREFIX = 'ServiceStart';
 
@@ -99,9 +100,10 @@ const ServiceStart = ({ ...rest }) => {
   const [serviceName, setServiceName] = useState('');
   const [serviceIndex, setServiceIndex] = useState<number | 'auto'>('auto');
   const [instanceName, setInstanceName] = useState('');
-
+  const { client } = useAuthenticatedClient();
   const createService = () => {
     mutationStartService(
+      client,
       serviceName,
       serviceIndex === 'auto' ? null : serviceIndex,
       instanceName,
@@ -132,7 +134,7 @@ const ServiceStart = ({ ...rest }) => {
   };
 
   const loadServices = () => {
-    Promise.all([queryServiceList(), queryReservations()]).then(
+    Promise.all([queryServiceList(client), queryReservations(client)]).then(
       ([serviceList, reservations]) => {
         setServices(serviceList.map((service) => service.name));
         if (serviceList.length) {
@@ -246,6 +248,7 @@ const ServiceStart = ({ ...rest }) => {
               onClick={() => {
                 if (instancesByService[`${serviceName}-${serviceIndex}`]) {
                   mutationRestartService(
+                    client,
                     serviceName,
                     instancesByService[`${serviceName}-${serviceIndex}`],
                   );

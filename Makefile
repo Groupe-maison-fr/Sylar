@@ -93,6 +93,11 @@ host-docker-loki-logs:
 host-restart-worker:
 	docker-compose exec runner supervisorctl restart php-worker
 
+.PHONY: host-restart-builder
+host-restart-builder:
+	docker-compose exec builder supervisorctl restart typescript-watch
+	docker-compose exec builder supervisorctl restart codegen-watch
+
 docker-compose-up:
 	docker-compose -f docker-compose.yaml up -d --build
 

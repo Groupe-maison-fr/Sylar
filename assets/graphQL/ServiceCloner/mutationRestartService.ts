@@ -1,25 +1,31 @@
-import { mutation } from '../GraphQL';
 import { graphql } from '../../gql/gql';
+import { authenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
-export default (masterName: string, instanceName: string) =>
-  mutation(
-    graphql(`
-      mutation MutationRestartService(
-        $masterName: String!
-        $instanceName: String!
-      ) {
-        restartService(
-          input: { masterName: $masterName, instanceName: $instanceName }
+export default (
+  client: authenticatedClient,
+  masterName: string,
+  instanceName: string,
+) =>
+  client
+    .mutation(
+      graphql(`
+        mutation MutationRestartService(
+          $masterName: String!
+          $instanceName: String!
         ) {
-          ... on SuccessOutput {
-            success
-          }
-          ... on FailedOutput {
-            code
-            message
+          restartService(
+            input: { masterName: $masterName, instanceName: $instanceName }
+          ) {
+            ... on SuccessOutput {
+              success
+            }
+            ... on FailedOutput {
+              code
+              message
+            }
           }
         }
-      }
-    `),
-    { masterName, instanceName },
-  ).then((data) => data.restartService);
+      `),
+      { masterName, instanceName },
+    )
+    .then((data) => data.restartService);

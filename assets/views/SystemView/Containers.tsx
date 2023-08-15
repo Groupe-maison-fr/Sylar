@@ -27,6 +27,7 @@ import EventBus from '../../components/EventBus';
 import mutationForceDestroyContainer from '../../graphQL/Container/mutationForceDestroyContainer';
 import ago from '../../components/ago';
 import { ContainersQuery } from '../../gql/graphql';
+import { useAuthenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
 const PREFIX = 'Containers';
 
@@ -44,6 +45,7 @@ const StyledCard = styled(Card)(() => ({
 }));
 
 const Containers = ({ ...rest }) => {
+  const { client } = useAuthenticatedClient();
   const [containers, setContainers] = useState<ContainersQuery['containers']>(
     [],
   );
@@ -51,7 +53,7 @@ const Containers = ({ ...rest }) => {
 
   const loadContainers = () => {
     setLoading(true);
-    return queryContainers().then((result) => {
+    return queryContainers(client).then((result) => {
       setLoading(false);
       setContainers(result);
     });
@@ -59,14 +61,14 @@ const Containers = ({ ...rest }) => {
 
   const stopService = (masterName: string, instanceName: string) => {
     setLoading(true);
-    return mutationStopService(masterName, instanceName).then(() => {
+    return mutationStopService(client, masterName, instanceName).then(() => {
       loadContainers();
     });
   };
 
   const restartService = (masterName: string, instanceName: string) => {
     setLoading(true);
-    return mutationRestartService(masterName, instanceName).then(() => {
+    return mutationRestartService(client, masterName, instanceName).then(() => {
       loadContainers();
     });
   };
@@ -136,6 +138,7 @@ const Containers = ({ ...rest }) => {
                         <Button
                           onClick={() =>
                             mutationForceDestroyContainer(
+                              client,
                               container.containerName,
                             )
                           }

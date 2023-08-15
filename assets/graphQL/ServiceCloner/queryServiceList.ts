@@ -1,19 +1,21 @@
 import { graphql } from '../../gql/gql';
-import { query } from '../GraphQL';
+import { authenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
-export default () =>
-  query(
-    graphql(`
-      query ServicesAndInstances {
-        services {
-          name
-          containers {
-            containerName
-            instanceName
-            instanceIndex
+export default (client: authenticatedClient) =>
+  client
+    .query(
+      graphql(`
+        query ServicesAndInstances {
+          services {
+            name
+            containers {
+              containerName
+              instanceName
+              instanceIndex
+            }
           }
         }
-      }
-    `),
-    {},
-  ).then((data) => data.services);
+      `),
+      {},
+    )
+    .then((data) => data.services);

@@ -1,53 +1,55 @@
-import { query } from '../GraphQL';
 import { graphql } from '../../gql/gql';
+import { authenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
-export default () =>
-  query(
-    graphql(`
-      query Services {
-        services {
-          name
-          image
-          command
-          labels {
+export default (client: authenticatedClient) =>
+  client
+    .query(
+      graphql(`
+        query Services {
+          services {
             name
-            value
-          }
-          environments {
-            name
-            value
-          }
-          ports {
-            containerPort
-            hostPort
-            hostIp
-          }
-          containers {
-            containerName
-            masterName
-            instanceName
-            instanceIndex
-            zfsFilesystemName
-            exposedPorts
-            time
-            uptime
-            dockerState
-            zfsFilesystem {
+            image
+            command
+            labels {
               name
-              type
-              origin
-              mountPoint
-              available
-              used
-              usedByChild
-              usedByDataset
-              usedByRefreservation
-              usedBySnapshot
-              creationTimestamp
+              value
+            }
+            environments {
+              name
+              value
+            }
+            ports {
+              containerPort
+              hostPort
+              hostIp
+            }
+            containers {
+              containerName
+              masterName
+              instanceName
+              instanceIndex
+              zfsFilesystemName
+              exposedPorts
+              time
+              uptime
+              dockerState
+              zfsFilesystem {
+                name
+                type
+                origin
+                mountPoint
+                available
+                used
+                usedByChild
+                usedByDataset
+                usedByRefreservation
+                usedBySnapshot
+                creationTimestamp
+              }
             }
           }
         }
-      }
-    `),
-    {},
-  ).then((data) => data.services);
+      `),
+      {},
+    )
+    .then((data) => data.services);

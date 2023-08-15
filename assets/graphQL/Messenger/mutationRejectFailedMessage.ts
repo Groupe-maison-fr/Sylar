@@ -1,14 +1,16 @@
-import { mutation } from '../GraphQL';
 import { graphql } from '../../gql/gql';
+import { authenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
-export default (ids: string[]) =>
-  mutation(
-    graphql(`
-      mutation MutationRejectFailedMessage($ids: [ID!]) {
-        rejectFailedMessage(input: { ids: $ids }) {
-          success
+export default (client: authenticatedClient, ids: string[]) =>
+  client
+    .mutation(
+      graphql(`
+        mutation MutationRejectFailedMessage($ids: [ID!]) {
+          rejectFailedMessage(input: { ids: $ids }) {
+            success
+          }
         }
-      }
-    `),
-    { ids: ids.map((id: string) => parseInt(id, 10)) },
-  ).then((data) => data.rejectFailedMessage);
+      `),
+      { ids: ids.map((id: string) => parseInt(id, 10)) },
+    )
+    .then((data) => data.rejectFailedMessage);

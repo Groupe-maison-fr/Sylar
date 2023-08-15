@@ -22,6 +22,7 @@ import queryFilesystem from '../../graphQL/ServiceCloner/queryFilesystem';
 import mutationForceDestroyFilesystem from '../../graphQL/FileSystem/mutationForceDestroyFilesystem';
 import EventBus from '../../components/EventBus';
 import { FilesystemsQuery } from '../../gql/graphql';
+import { useAuthenticatedClient } from '../../Context/Authentication/AuthenticatedClient';
 
 const PREFIX = 'Filesystems';
 
@@ -43,10 +44,11 @@ const Filesystems = ({ ...rest }) => {
     FilesystemsQuery['filesystems']
   >([]);
   const [loading, setLoading] = useState(false);
+  const { client } = useAuthenticatedClient();
 
   const loadFilesystem = () => {
     setLoading(true);
-    queryFilesystem().then((result) => {
+    queryFilesystem(client).then((result) => {
       setLoading(false);
       setFileSystems(result);
     });
@@ -111,7 +113,10 @@ const Filesystems = ({ ...rest }) => {
                     {filesystem.origin !== '-' && (
                       <Button
                         onClick={() =>
-                          mutationForceDestroyFilesystem(filesystem.name)
+                          mutationForceDestroyFilesystem(
+                            client,
+                            filesystem.name,
+                          )
                         }
                       >
                         <DeleteForeverIcon style={{ color: red[500] }} />
