@@ -1,5 +1,7 @@
 parameters:
     service_are_public: false
+    env(SECURITY_ENABLED): 'false'
+    security_enabled: '%env(bool:SECURITY_ENABLED)%'
 
     sylar_data_path_default: /app/data
     sylar_data_path: '%env(default:sylar_data_path_default:SYLAR_DATA_PATH)%'
