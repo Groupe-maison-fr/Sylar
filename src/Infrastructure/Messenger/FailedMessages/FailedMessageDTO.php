@@ -10,7 +10,7 @@ use Symfony\Component\ErrorHandler\Exception\FlattenException;
 final class FailedMessageDTO
 {
     public function __construct(
-        private string $id,
+        private int $id,
         private string $className,
         private string $message,
         private ?DateTimeInterface $dateTime,
@@ -19,7 +19,7 @@ final class FailedMessageDTO
     ) {
     }
 
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }

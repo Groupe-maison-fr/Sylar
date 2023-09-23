@@ -5,6 +5,7 @@ volumes:
   node-modules-builder: {}
   vendor-sylar: {}
   var-runner: {}
+  sqlite-runner: {}
   prometheus-db: {}
   grafana-db: {}
   redis-data: {}
@@ -25,7 +26,7 @@ services:
       - DOCKER_HOST=tcp://docker-socket-proxy:2375
       - APP_ENV=dev
       - APP_SECRET='secretf0rt3st'
-      - DATABASE_URL=sqlite:///%kernel.project_dir%/var/app.db
+      - DATABASE_URL=sqlite:///%kernel.project_dir%/sqlite/app.db
       - KERNEL_CLASS='App\Kernel'
       - MERCURE_JWT_SECRET=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
       - MERCURE_PUBLIC_URL=http://sylar-mercure/.well-known/mercure
@@ -46,6 +47,7 @@ services:
       - ./:/app
       - builder-build:/app/public/build
       - var-runner:/app/var
+      - sqlite-runner:/app/sqlite
       - /dev/zfs:/dev/zfs:rw
       - /sylar:/sylar:shared
 
