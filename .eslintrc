@@ -1,5 +1,4 @@
 {
-  "parser": "babel-eslint",
   "env": {
     "es6": true,
     "browser": true
@@ -9,21 +8,59 @@
     "airbnb/hooks",
     "eslint:recommended"
   ],
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "paths": [
-          "src"
-        ],
-        "extensions": [
-          ".js",
-          ".jsx"
-        ]
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": [
+    "prefer-arrow-functions"
+
+  ],
+  "overrides": [
+    {
+      "files": ["assets/*.ts", "assets/*.tsx","assets/*.js", "assets/*.jsx"],
+      "excludedFiles": "*.test.js",
+      "rules": {
+        "quotes": ["error", "single"]
       }
     }
-  },
+  ],
   "rules": {
-    "arrow-body-style": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never",
+        "": "never"
+      }
+    ],
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "no-unused-vars": "off",
+    "max-len": ["error", { "code": 180 }],
+    "prefer-arrow-functions/prefer-arrow-functions": [
+      "warn",
+      {
+        "classPropertiesAllowed": false,
+        "disallowPrototype": false,
+        "returnStyle": "unchanged",
+        "singleReturnOnly": false
+      }
+    ],
+    "arrow-body-style": ["off"],
     "comma-dangle": "off",
     "import/no-unresolved": "off",
     "jsx-a11y/anchor-is-valid": "off",
