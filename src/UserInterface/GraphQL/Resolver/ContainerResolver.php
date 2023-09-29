@@ -11,17 +11,14 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class ContainerResolver implements QueryInterface
+final readonly class ContainerResolver implements QueryInterface
 {
-    private ServiceClonerStateService $serviceClonerStateService;
-
     public function __construct(
-        ServiceClonerStateService $serviceClonerStateService
+        private ServiceClonerStateService $serviceClonerStateService,
     ) {
-        $this->serviceClonerStateService = $serviceClonerStateService;
     }
 
-    public function __invoke(ResolveInfo $info, ServiceClonerStatusDTO $state, Argument $args)
+    public function __invoke(ResolveInfo $info, ServiceClonerStatusDTO $state, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'containerName':
@@ -44,10 +41,15 @@ final class ContainerResolver implements QueryInterface
                 return $state->getZfsFilesystem();
             case 'time':
                 return $state->getCreatedAt();
+            case 'uptime':
+                return time() - $state->getCreatedAt();
         }
         throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
+    /**
+     * @return ServiceClonerStatusDTO[]
+     */
     public function resolve(): array
     {
         return $this->serviceClonerStateService->getStates();

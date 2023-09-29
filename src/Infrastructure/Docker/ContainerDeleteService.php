@@ -11,22 +11,17 @@ use Psr\Log\LoggerInterface;
 
 final class ContainerDeleteService implements ContainerDeleteServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-
     public function __construct(
-        Docker $dockerReadWrite,
-        LoggerInterface $logger
+        private Docker $dockerReadWrite,
+        private LoggerInterface $logger,
     ) {
-        $this->docker = $dockerReadWrite;
-        $this->logger = $logger;
     }
 
     public function delete(
-        string $containerName
+        string $containerName,
     ): void {
         try {
-            $this->docker->containerDelete($containerName);
+            $this->dockerReadWrite->containerDelete($containerName);
         } catch (Exception $exception) {
             $this->logger->error(sprintf('DeleteDocker: %s', $exception->getMessage()));
             throw $exception;

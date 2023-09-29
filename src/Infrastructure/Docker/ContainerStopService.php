@@ -9,15 +9,10 @@ use Docker\Docker;
 
 final class ContainerStopService implements ContainerStopServiceInterface
 {
-    private Docker $docker;
-    private ContainerFinderServiceInterface $dockerFinderService;
-
     public function __construct(
-        Docker $dockerReadWrite,
-        ContainerFinderServiceInterface $dockerFinderService
+        private Docker $dockerReadWrite,
+        private ContainerFinderServiceInterface $dockerFinderService,
     ) {
-        $this->docker = $dockerReadWrite;
-        $this->dockerFinderService = $dockerFinderService;
     }
 
     public function stop(string $dockerName, string ...$arguments): void
@@ -27,6 +22,6 @@ final class ContainerStopService implements ContainerStopServiceInterface
             return;
         }
 
-        $this->docker->containerStop($container->getId());
+        $this->dockerReadWrite->containerStop($container->getId());
     }
 }

@@ -6,6 +6,9 @@ namespace App\Infrastructure\PostContainerDumpActions;
 
 final class PostContainerDumpService implements PostContainerDumpServiceInterface
 {
+    /**
+     * @var PostContainerDumpServiceInterface[]
+     */
     private array $actions;
 
     public function __construct(PostContainerDumpServiceInterface ...$actions)

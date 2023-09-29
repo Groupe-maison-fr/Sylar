@@ -10,12 +10,9 @@ use Symfony\Component\Process\Process as SymfonyProcess;
 
 final class Process implements ProcessInterface
 {
-    private LoggerInterface $logger;
-
     public function __construct(
-        LoggerInterface $logger
+        private LoggerInterface $logger,
     ) {
-        $this->logger = $logger;
     }
 
     public function exec(CommandDTO $command): ExecutionResultDTO
@@ -41,7 +38,7 @@ final class Process implements ProcessInterface
                 '"%s" failed with exitCode "%d", %s',
                 implode(' ', $command->getArguments()),
                 $process->getExitCode(),
-                $errorOutput
+                $errorOutput,
             ));
         }
 
@@ -58,7 +55,12 @@ final class Process implements ProcessInterface
         return $this->exec(new CommandDTO($arguments, false, true));
     }
 
-    private function flattenArguments(...$argumentList): array
+    /**
+     * @param string|string[]|null $argumentList
+     *
+     * @return string[]
+     */
+    private function flattenArguments(null|string|array ...$argumentList): array
     {
         return array_reduce($argumentList, function (array $arguments, $argument) {
             if (is_array($argument)) {

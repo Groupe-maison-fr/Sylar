@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Common\Tests;
@@ -7,10 +8,11 @@ use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
+use Monolog\LogRecord;
 
 final class BufferedLoggerHandler extends AbstractProcessingHandler
 {
-    private $logs = [];
+    private array $logs = [];
 
     public function __construct(bool $bubble = true)
     {
@@ -18,7 +20,7 @@ final class BufferedLoggerHandler extends AbstractProcessingHandler
         $this->reset();
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->logs = [];
     }
@@ -28,12 +30,12 @@ final class BufferedLoggerHandler extends AbstractProcessingHandler
         return $this->logs;
     }
 
-    public function isHandling(array $record): bool
+    public function isHandling(LogRecord $record): bool
     {
         return parent::isHandling($record);
     }
 
-    public function handle(array $record): bool
+    public function handle(LogRecord $record): bool
     {
         return parent::handle($record);
     }
@@ -43,8 +45,8 @@ final class BufferedLoggerHandler extends AbstractProcessingHandler
         return new LineFormatter();
     }
 
-    protected function write(array $record): void
+    protected function write(LogRecord $record): void
     {
-        $this->logs[]=$record;
+        $this->logs[] = $record;
     }
 }

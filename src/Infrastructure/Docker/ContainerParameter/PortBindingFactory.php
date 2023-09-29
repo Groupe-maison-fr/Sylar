@@ -7,27 +7,24 @@ namespace App\Infrastructure\Docker\ContainerParameter;
 use App\Core\ServiceCloner\Configuration\Object\Port;
 use Docker\API\Model\PortBinding;
 
-final class PortBindingFactory implements PortBindingFactoryInterface
+final readonly class PortBindingFactory implements PortBindingFactoryInterface
 {
-    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
-
     public function __construct(
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
-        $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }
 
     public function createFromConfiguration(ContainerParameterDTO $containerParameter, Port $port): PortBinding
     {
         $portBinding = new PortBinding();
-        if ($port->getHostIp() !== null) {
+        if ($port->hostIp !== null) {
             $portBinding->setHostIp(
-                $this->configurationExpressionGenerator->generate($containerParameter, $port->getHostIp())
+                $this->configurationExpressionGenerator->generate($containerParameter, $port->hostIp),
             );
         }
-        if ($port->getHostPort() !== null) {
+        if ($port->hostPort !== null) {
             $portBinding->setHostPort(
-                $this->configurationExpressionGenerator->generate($containerParameter, $port->getHostPort())
+                $this->configurationExpressionGenerator->generate($containerParameter, $port->hostPort),
             );
         }
 

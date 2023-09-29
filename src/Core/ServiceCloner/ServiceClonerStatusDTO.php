@@ -8,40 +8,40 @@ use App\Infrastructure\Filesystem\FilesystemDTO;
 
 final class ServiceClonerStatusDTO
 {
-    private string $masterName;
-    private string $instanceName;
-    private int $index;
-    private string $containerName;
-    private string $zfsFilesystemName;
-    private string $zfsFilesystemPath;
-    private ?int $createdAt;
     private bool $isMaster;
+    /**
+     * @var string[]|int[]
+     */
     private array $exposedPorts;
     private ?FilesystemDTO $zfsFilesystem;
     private ?string $dockerState;
 
     public function __construct(
-        string $masterName,
-        string $instanceName,
-        int $index,
-        string $containerName,
-        string $zfsFilesystemName,
-        string $zfsFilesystemPath,
-        int $createdAt
+        private string $masterName,
+        private string $instanceName,
+        private int $index,
+        private string $containerName,
+        private string $zfsFilesystemName,
+        private string $zfsFilesystemPath,
+        private ?int $createdAt,
     ) {
-        $this->masterName = $masterName;
-        $this->instanceName = $instanceName;
-        $this->index = $index;
-        $this->containerName = $containerName;
-        $this->zfsFilesystemName = $zfsFilesystemName;
-        $this->zfsFilesystemPath = $zfsFilesystemPath;
-        $this->createdAt = $createdAt;
-        $this->isMaster = $instanceName == 'master';
+        $this->isMaster = $instanceName == ServiceClonerNamingServiceInterface::MASTER_NAME;
         $this->zfsFilesystem = null;
         $this->dockerState = null;
         $this->exposedPorts = [];
     }
 
+    /**
+     * @return array{
+     *     sylar-masterName: string,
+     *     sylar-instanceName: string,
+     *     sylar-index: numeric-string,
+     *     sylar-containerName: string,
+     *     sylar-zfsFilesystemName: string,
+     *     sylar-zfsFilesystemPath: string,
+     *     sylar-createdAt: numeric-string
+     * }
+     */
     public function toArray(): array
     {
         return [
@@ -55,6 +55,17 @@ final class ServiceClonerStatusDTO
         ];
     }
 
+    /**
+     * @param array{
+     *     sylar-masterName: string,
+     *     sylar-instanceName: string,
+     *     sylar-index: numeric-string,
+     *     sylar-containerName: string,
+     *     sylar-zfsFilesystemName: string,
+     *     sylar-zfsFilesystemPath: string,
+     *     sylar-createdAt: numeric-string
+     * } $data
+     */
     public static function createFromArray(array $data): self
     {
         return new self(
@@ -64,7 +75,7 @@ final class ServiceClonerStatusDTO
             $data['sylar-containerName'],
             $data['sylar-zfsFilesystemName'],
             $data['sylar-zfsFilesystemPath'],
-            (int) $data['sylar-createdAt']
+            (int) $data['sylar-createdAt'],
         );
     }
 
@@ -113,11 +124,17 @@ final class ServiceClonerStatusDTO
         $this->dockerState = $dockerState;
     }
 
+    /**
+     * @return string[]|int[]
+     */
     public function getExposedPorts(): array
     {
         return $this->exposedPorts;
     }
 
+    /**
+     * @param string[]|int[] $exposedPorts
+     */
     public function setExposedPorts(array $exposedPorts): void
     {
         $this->exposedPorts = $exposedPorts;

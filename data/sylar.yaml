@@ -14,8 +14,6 @@ services:
       value: sylar_user
     - name: MYSQL_PASSWORD
       value: sylar_password
-#    - name: MYSQL_DATABASE
-#      value: roketto
     - name: MYSQL_INITDB_SKIP_TZINFO
       value: '1'
     - name: CLONE_NAME
@@ -42,10 +40,42 @@ services:
         - executionEnvironment: host
           command: ['ls','/']
     mounts:
-      - source: '=containerParameter.getReplicatedFilesystem()~"/data"'
+      - source: '=containerParameter.getReplicatedFilesystem()'
         target: /var/lib/mysql
-      - source: '=(configurationRoot)~"/"~((containerParameter.getIndex() === 0)?"mysql-master/etc/mysql/conf.d":"mysql-replicate/etc/mysql/conf.d")'
-        target: /etc/mysql/conf.d
+      - source: '=(configurationRoot)~"/"~((containerParameter.getIndex() === 0)?"mysql-master/etc/mysql/my.cnf":"mysql-replicate/etc/mysql/my.cnf")'
+        target: /etc/mysql/my.cnf
+
+  - name: postgresql
+    image: 'postgres:14.8-alpine3.18'
+    environments:
+    - name: POSTGRES_PASSWORD
+      value: password
+    - name: PGDATA
+      value: /var/lib/postgresql/data/pgdata
+    - name: CLONE_NAME
+      value: '=containerParameter.getName()'
+    - name: CLONE_INDEX
+      value: '=containerParameter.getIndex()'
+    - name: CLONE_REPLICATED_FILESYSTEM
+      value: '=containerParameter.getReplicatedFilesystem()'
+    ports:
+      - hostPort: '=(25432+containerParameter.getIndex())~"/tcp"'
+        containerPort: '5432/tcp'
+    lifeCycleHooks:
+      preStartCommands:
+        - executionEnvironment: host
+          when: '=containerParameter.getIndex() !== 0'
+          command: ['rm','=containerParameter.getReplicatedFilesystem() ~ "/pgdata/postgresql.auto.conf"']
+        - executionEnvironment: host
+          when: '=containerParameter.getIndex() !== 0'
+          command: ['rm','=containerParameter.getReplicatedFilesystem() ~ "/pgdata/standby.signal"']
+      postStartWaiters:
+        - type: logMatch
+          expression: '!database system is ready to accept connections!'
+          timeout: 10
+    mounts:
+      - source: '=containerParameter.getReplicatedFilesystem()'
+        target: /var/lib/postgresql/data
 commands:
   - name: test1
     subCommands:

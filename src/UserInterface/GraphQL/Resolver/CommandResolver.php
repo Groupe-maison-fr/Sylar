@@ -7,33 +7,26 @@ namespace App\UserInterface\GraphQL\Resolver;
 use App\Core\ServiceCloner\CommandExecutor\CommandExecutorInterface;
 use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\Configuration\Object\Command;
-use Doctrine\Common\Collections\Collection;
 use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class CommandResolver implements QueryInterface
+final readonly class CommandResolver implements QueryInterface
 {
-    private ConfigurationServiceInterface $configurationService;
-
-    private CommandExecutorInterface $commandExecutor;
-
     public function __construct(
-        ConfigurationServiceInterface $configurationService,
-        CommandExecutorInterface $commandExecutor
+        private ConfigurationServiceInterface $configurationService,
+        private CommandExecutorInterface $commandExecutor,
     ) {
-        $this->configurationService = $configurationService;
-        $this->commandExecutor = $commandExecutor;
     }
 
-    public function __invoke(ResolveInfo $info, Command $command, Argument $args)
+    public function __invoke(ResolveInfo $info, Command $command, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'subCommands':
-                return $command->getSubCommands();
+                return $command->subCommands;
             case 'name':
-                return $command->getName();
+                return $command->name;
             case 'output':
                 return $this->commandExecutor->run($command);
         }
@@ -45,8 +38,11 @@ final class CommandResolver implements QueryInterface
         return $this->configurationService->getConfiguration()->getCommandByName($commandName);
     }
 
-    public function resolve(): Collection
+    /**
+     * @return Command[]
+     */
+    public function resolve(): array
     {
-        return $this->configurationService->getConfiguration()->getCommands();
+        return $this->configurationService->getConfiguration()->commands;
     }
 }

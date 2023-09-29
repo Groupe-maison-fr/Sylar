@@ -9,16 +9,13 @@ use App\UserInterface\Cli\RestartSupervisordWorkersCommand;
 
 final class RestartSupervisorMessengerConsumer implements PostContainerDumpServiceInterface
 {
-    private Process $process;
-
     public function __construct(
-        Process $process
+        // private Process $process,
     ) {
-        $this->process = $process;
     }
 
     public function execute(): void
     {
-        //$this->process->run('bin/console', RestartSupervisordWorkersCommand::TOOLS_RESTART_WORKER_COMMAND);
+        // $this->process->run('bin/console', RestartSupervisordWorkersCommand::TOOLS_RESTART_WORKER_COMMAND);
     }
 }

@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Messenger\FailedMessages\Graphql\Resolver;
 
+use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
-use stdClass;
+use Throwable;
 
 final class DebugTraceCallResolver implements QueryInterface
 {
-    public function __invoke(ResolveInfo $info, array $debugTraceCall, Argument $args)
+    /**
+     * @param mixed[] $debugTraceCall
+     */
+    public function __invoke(ResolveInfo $info, array $debugTraceCall, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'namespace':
@@ -29,32 +33,35 @@ final class DebugTraceCallResolver implements QueryInterface
             case 'line':
                 return $debugTraceCall['line'];
             case 'arguments':
-                return json_encode($this->createArgumentsTree($debugTraceCall['args']));
+                try {
+                    return $this->createArgumentsTree($debugTraceCall['args']);
+                } catch (Throwable $e) {
+                    return [new DebugTraceCallArgumentDTO(
+                        'Error on decoding arguments',
+                        $e->getMessage(),
+                    )];
+                }
         }
+        throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
-    private function createArgumentsTree($arguments)
+    private function createArgumentsTree(mixed $arguments): mixed
     {
         if (!is_array($arguments)) {
             return $arguments;
         }
 
         if (count($arguments) === 2 && in_array($arguments[0], ['incomplete-object', 'object', 'null', 'boolean', 'integer', 'float', 'resource', 'string'])) {
-            $output = new stdClass();
-            $output->type = $arguments[0];
-            $output->value = $this->createArgumentsTree($arguments[1]);
-
-            return $output;
+            return new DebugTraceCallArgumentDTO(
+                $arguments[0],
+                $this->createArgumentsTree($arguments[1]),
+            );
         }
 
         if (count($arguments) === 2 && $arguments[0] === 'array') {
-            return array_map(function (array $argument) {
-                return $this->createArgumentsTree($argument);
-            }, $arguments[1]);
+            return array_map($this->createArgumentsTree(...), $arguments[1]);
         }
 
-        return array_map(function ($argument) {
-            return $this->createArgumentsTree($argument);
-        }, $arguments);
+        return array_map($this->createArgumentsTree(...), $arguments);
     }
 }

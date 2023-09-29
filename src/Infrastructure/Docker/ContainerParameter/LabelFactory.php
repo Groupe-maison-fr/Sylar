@@ -6,21 +6,18 @@ namespace App\Infrastructure\Docker\ContainerParameter;
 
 use App\Core\ServiceCloner\Configuration\Object\Label;
 
-final class LabelFactory implements LabelFactoryInterface
+final readonly class LabelFactory implements LabelFactoryInterface
 {
-    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
-
     public function __construct(
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
-        $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }
 
     public function createFromConfiguration(ContainerParameterDTO $containerParameter, Label $label): array
     {
         return [
-            $this->configurationExpressionGenerator->generate($containerParameter, $label->getName()),
-            $this->configurationExpressionGenerator->generate($containerParameter, $label->getValue()),
+            $this->configurationExpressionGenerator->generate($containerParameter, $label->name),
+            $this->configurationExpressionGenerator->generate($containerParameter, $label->value),
         ];
     }
 }

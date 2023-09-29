@@ -9,31 +9,27 @@ use Docker\API\Exception\ContainerListBadRequestException;
 use Docker\API\Exception\ContainerListInternalServerErrorException;
 use Docker\API\Model\ContainerSummaryItem;
 use Docker\Docker;
+use Exception;
 use Psr\Log\LoggerInterface;
 
 final class ContainerFinderService implements ContainerFinderServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-
     public function __construct(
-        Docker $dockerReadOnly,
-        LoggerInterface $logger
+        private Docker $dockerReadOnly,
+        private LoggerInterface $logger,
     ) {
-        $this->docker = $dockerReadOnly;
-        $this->logger = $logger;
     }
 
     public function getDockerByName(string $dockerName): ?ContainerSummaryItem
     {
         try {
-            $containers = $this->docker->containerList([
+            $containers = $this->dockerReadOnly->containerList([
                 'filters' => json_encode([
                     'name' => [$dockerName],
                 ]),
                 'all' => true,
             ]);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->logger->error(sprintf('Can not get DockerByName "%s" because "%s"', $dockerName, $exception->getMessage()));
 
             return null;
@@ -45,9 +41,7 @@ final class ContainerFinderService implements ContainerFinderServiceInterface
 
         $filteredContainers = array_filter(
             $containers,
-            function (ContainerSummaryItem $containerSummeryItem) use ($dockerName) {
-                return $containerSummeryItem->getNames()[0] === '/' . $dockerName;
-            }
+            fn (ContainerSummaryItem $containerSummeryItem) => $containerSummeryItem->getNames()[0] === '/' . $dockerName,
         );
 
         if (empty($filteredContainers)) {
@@ -60,17 +54,17 @@ final class ContainerFinderService implements ContainerFinderServiceInterface
     public function getDockersByLabel(string $labelKey, string $labelValue): array
     {
         try {
-            $containers = $this->docker->containerList([
+            $containers = $this->dockerReadOnly->containerList([
                 'filters' => json_encode([
                     'label' => [sprintf('%s=%s', $labelKey, $labelValue)],
                 ]),
                 'all' => true,
             ]);
-        } catch (ContainerListBadRequestException | ContainerListInternalServerErrorException $exception) {
+        } catch (ContainerListBadRequestException|ContainerListInternalServerErrorException $exception) {
             $this->logger->error(sprintf('Can not get getDockersByLabel "%s:%s" because "%s"', $labelKey, $labelValue, $exception->getErrorResponse()->getMessage()));
 
             return [];
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->logger->error(sprintf('Can not get getDockersByLabel "%s:%s" because "%s"', $labelKey, $labelValue, $exception->getMessage()));
 
             return [];

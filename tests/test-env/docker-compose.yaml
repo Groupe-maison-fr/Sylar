@@ -1,0 +1,48 @@
+version: '3.3'
+services:
+  mariadb:
+    image: library/mariadb:10.5.13
+    command:
+      - --log-bin
+      - --server-id=999
+      - --binlog-format=mixed
+      - --skip-name-resolve=1
+    container_name: mysql-master-test
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '13306:3306'
+    expose:
+      - '13306'
+    volumes:
+      - test-mariadb-db:/var/lib/mysql
+    networks:
+      - test-network
+  postgresql:
+    image: postgres:14.8-alpine3.18
+    container_name: postgresql-master-test
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: replicated
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - '15432:5432'
+    expose:
+      - '15432'
+    volumes:
+      - test-postgresql-db:/var/lib/postgresql/data
+      - ./test-postgresql/etc/postgresql/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./test-postgresql/etc/postgresql/pg_hba.conf:/etc/postgresql/pg_hba.conf
+
+    networks:
+      - test-network
+volumes:
+  test-mariadb-db:
+  test-postgresql-db:
+networks:
+  test-network:

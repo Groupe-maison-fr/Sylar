@@ -17,46 +17,46 @@ use App\Infrastructure\Docker\ContainerWaitUntilLogServiceInterface;
 use App\Infrastructure\Process\ProcessInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleHookServiceInterface
+final readonly class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleHookServiceInterface
 {
-    private ContainerWaitUntilLogServiceInterface $dockerWaitUntilLogService;
-    private ContainerExecServiceInterface $containerExecService;
-    private ProcessInterface $process;
-    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
-
     public function __construct(
-        ContainerWaitUntilLogServiceInterface $dockerWaitUntilLogService,
-        ContainerExecServiceInterface $containerExecService,
-        ProcessInterface $process,
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        private ContainerWaitUntilLogServiceInterface $dockerWaitUntilLogService,
+        private ContainerExecServiceInterface $containerExecService,
+        private ProcessInterface $process,
+        private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
-        $this->dockerWaitUntilLogService = $dockerWaitUntilLogService;
-        $this->containerExecService = $containerExecService;
-        $this->process = $process;
-        $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }
 
-    private function processArray(ContainerParameterDTO $containerParameter, ArrayCollection $arguments): array
+    /**
+     * @param string[] $arguments
+     *
+     * @return string[]
+     */
+    private function processArray(ContainerParameterDTO $containerParameter, array $arguments): array
     {
-        return $arguments->map(function (string $argument) use ($containerParameter) {
-            return $this->configurationExpressionGenerator->generate($containerParameter, $argument);
-        })->toArray();
+        return array_map(
+            fn (string $argument) => $this->configurationExpressionGenerator->generate($containerParameter, $argument),
+            $arguments,
+        );
     }
 
     public function preStart(Service $dockerConfiguration, ContainerParameterDTO $containerParameter): void
     {
-        if ($dockerConfiguration->getLifeCycleHooks() === null) {
+        if ($dockerConfiguration->lifeCycleHooks === null) {
             return;
         }
-        $dockerConfiguration->getLifeCycleHooks()->getPreStartCommands()->map(function (PreStartCommand $command) use ($containerParameter): void {
-            $arguments = $this->processArray($containerParameter, $command->getCommand());
-            if ($command->getExecutionEnvironment() === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_HOST) {
+        (new ArrayCollection($dockerConfiguration->lifeCycleHooks->preStartCommands))->map(function (PreStartCommand $command) use ($containerParameter): void {
+            if ($this->isSkipped($command, $containerParameter)) {
+                return;
+            }
+            $arguments = $this->processArray($containerParameter, $command->command);
+            if ($command->executionEnvironment === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_HOST) {
                 $this->process->run(...$arguments);
 
                 return;
             }
-            if ($command->getExecutionEnvironment() === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_CLONE_CONTAINER && $containerParameter->getIndex() !== 0) {
-                $this->containerExecService->exec($containerParameter->getName(), ...$arguments);
+            if ($command->executionEnvironment === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_CLONE_CONTAINER && $containerParameter->index !== 0) {
+                $this->containerExecService->exec($containerParameter->name, ...$arguments);
 
                 return;
             }
@@ -65,30 +65,36 @@ final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleH
 
     public function postStartWaiter(Service $dockerConfiguration, ContainerParameterDTO $containerParameter): void
     {
-        if ($dockerConfiguration->getLifeCycleHooks() === null) {
+        if ($dockerConfiguration->lifeCycleHooks === null) {
             return;
         }
-        $dockerConfiguration->getLifeCycleHooks()->getPostStartWaiters()->map(function (PostStartWaiter $waiter) use ($containerParameter): void {
-            if ($waiter->getType() === TreeBuilderConfiguration::POST_START_WAITER_LOG_MATCH) {
-                $this->dockerWaitUntilLogService->wait($containerParameter, $waiter->getExpression(), $waiter->getTimeout());
+        (new ArrayCollection($dockerConfiguration->lifeCycleHooks->postStartWaiters))->map(function (PostStartWaiter $waiter) use ($containerParameter): void {
+            if ($this->isSkipped($waiter, $containerParameter)) {
+                return;
+            }
+            if ($waiter->type === TreeBuilderConfiguration::POST_START_WAITER_LOG_MATCH) {
+                $this->dockerWaitUntilLogService->wait($containerParameter, $waiter->expression, $waiter->timeout);
             }
         });
     }
 
     public function postStart(Service $dockerConfiguration, ContainerParameterDTO $containerParameter): void
     {
-        if ($dockerConfiguration->getLifeCycleHooks() === null) {
+        if ($dockerConfiguration->lifeCycleHooks === null) {
             return;
         }
-        $dockerConfiguration->getLifeCycleHooks()->getPostStartCommands()->map(function (PostStartCommand $command) use ($containerParameter): void {
-            $arguments = $this->processArray($containerParameter, $command->getCommand());
-            if ($command->getExecutionEnvironment() === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_HOST) {
+        (new ArrayCollection($dockerConfiguration->lifeCycleHooks->postStartCommands))->map(function (PostStartCommand $command) use ($containerParameter): void {
+            if ($this->isSkipped($command, $containerParameter)) {
+                return;
+            }
+            $arguments = $this->processArray($containerParameter, $command->command);
+            if ($command->executionEnvironment === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_HOST) {
                 $this->process->run(...$arguments);
 
                 return;
             }
-            if ($command->getExecutionEnvironment() === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_CLONE_CONTAINER) {
-                $this->containerExecService->exec($containerParameter->getName(), ...$arguments);
+            if ($command->executionEnvironment === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_CLONE_CONTAINER) {
+                $this->containerExecService->exec($containerParameter->name, ...$arguments);
 
                 return;
             }
@@ -97,16 +103,30 @@ final class ServiceClonerLifeCycleHookService implements ServiceClonerLifeCycleH
 
     public function postDestroy(Service $dockerConfiguration, ContainerParameterDTO $containerParameter): void
     {
-        if ($dockerConfiguration->getLifeCycleHooks() === null) {
+        if ($dockerConfiguration->lifeCycleHooks === null) {
             return;
         }
-        $dockerConfiguration->getLifeCycleHooks()->getPostDestroyCommands()->map(function (PostDestroyCommand $command) use ($containerParameter): void {
-            $arguments = $this->processArray($containerParameter, $command->getCommand());
-            if ($command->getExecutionEnvironment() === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_HOST) {
+        (new ArrayCollection($dockerConfiguration->lifeCycleHooks->postDestroyCommands))->map(function (PostDestroyCommand $command) use ($containerParameter): void {
+            if ($this->isSkipped($command, $containerParameter)) {
+                return;
+            }
+            $arguments = $this->processArray($containerParameter, $command->command);
+            if ($command->executionEnvironment === TreeBuilderConfiguration::EXECUTION_ENVIRONMENT_HOST) {
                 $this->process->run(...$arguments);
 
                 return;
             }
         });
+    }
+
+    private function isSkipped(
+        PreStartCommand|PostStartCommand|PostStartWaiter|PostDestroyCommand $hook,
+        ContainerParameterDTO $containerParameter,
+    ): bool {
+        if ($hook->when === null) {
+            return false;
+        }
+
+        return !$this->configurationExpressionGenerator->evaluate($containerParameter, $hook->when);
     }
 }

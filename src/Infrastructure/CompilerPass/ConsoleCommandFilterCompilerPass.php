@@ -9,8 +9,14 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 final class ConsoleCommandFilterCompilerPass implements CompilerPassInterface
 {
+    /**
+     * @var string[]
+     */
     private array $excluded;
 
+    /**
+     * @var string[]
+     */
     private array $whitelisted;
 
     public function __construct()
@@ -23,13 +29,16 @@ final class ConsoleCommandFilterCompilerPass implements CompilerPassInterface
     {
         foreach ($container->findTaggedServiceIds('console.command') as $id => $attributes) {
             $class = $container->getDefinition($id)->getClass();
-            if ($this->pregMatchPatternArray($this->excluded, $class) &&
-                !$this->pregMatchPatternArray($this->whitelisted, $class)) {
+            if ($this->pregMatchPatternArray($this->excluded, $class)
+                && !$this->pregMatchPatternArray($this->whitelisted, $class)) {
                 $this->removeCommand($container, $id);
             }
         }
     }
 
+    /**
+     * @param string[] $regularExpressions
+     */
     private function pregMatchPatternArray(array $regularExpressions, string $className): bool
     {
         foreach ($regularExpressions as $regularExpression) {
@@ -41,7 +50,7 @@ final class ConsoleCommandFilterCompilerPass implements CompilerPassInterface
         return false;
     }
 
-    private function removeCommand(ContainerBuilder $container, $id): void
+    private function removeCommand(ContainerBuilder $container, string $id): void
     {
         $definition = $container->getDefinition($id);
         $tags = $definition->getTags();

@@ -6,5 +6,5 @@ namespace App\Core\ServiceCloner;
 
 interface IndexManagerServiceInterface
 {
-    public function getNextAvailable(): int;
+    public function getNextAvailable(string $serviceName): int;
 }

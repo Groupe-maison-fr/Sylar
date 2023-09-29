@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+  cadvisor:
+    container_name: sylar-cadvisor
+    image: unibaktr/cadvisor
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - '8084:8080'

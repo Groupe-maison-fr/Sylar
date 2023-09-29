@@ -10,13 +10,18 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto+Slab|Roboto:300,400,500,700"/>
     <title>{% block title %}Sylar Dashboard{% endblock %}</title>
-    {{ encore_entry_link_tags('index') }}
+{% block stylesheets %}
+{#    {{ vite_asset('app.css') }}#}
+{% endblock %}
+
+    {% block javascripts %}
+        {{ vite_asset('index.tsx') }}
+    {% endblock %}
 </head>
 
 <body>
 <div id="root"></div>
 
-{{ encore_entry_script_tags('index') }}
 <noscript>You need to enable JavaScript to run this app.</noscript>
 </body>
 

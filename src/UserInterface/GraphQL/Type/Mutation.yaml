@@ -3,39 +3,52 @@ MutationUserInterface:
   decorator: true
   config:
     fields:
-      loginUser:
-        type: LoginUserOutput!
-        resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\LoginUserMutation", args["input"]["username"], args["input"]["password"])'
-        args:
-          input:
-            type: LoginUserInput!
       startService:
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_USER'])"
         type: StartServiceOutput!
         resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\StartServiceMutation", args["input"]["masterName"], args["input"]["instanceName"], args["input"]["index"])'
         args:
           input:
             type: StartServiceInput!
       restartService:
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_USER'])"
         type: RestartServiceOutput!
         resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\RestartServiceMutation", args["input"]["masterName"], args["input"]["instanceName"], args["input"]["index"])'
         args:
           input:
             type: RestartServiceInput!
       stopService:
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_USER'])"
         type: StopServiceOutput!
         resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\StopServiceMutation", args["input"]["masterName"], args["input"]["instanceName"])'
         args:
           input:
             type: StopServiceInput!
       forceDestroyFilesystem:
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_ADMIN'])"
         type: ForceDestroyFilesystemOutput!
         resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\ForceDestroyFilesystemMutation", args["input"]["name"])'
         args:
           input:
             type: ForceDestroyFilesystemInput!
       forceDestroyContainer:
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_ADMIN'])"
         type: ForceDestroyContainerOutput!
         resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\ForceDestroyContainerMutation", args["input"]["name"])'
         args:
           input:
             type: ForceDestroyContainerInput!
+      addReservation:
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_ADMIN'])"
+        type: AddReservationOutput!
+        resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\AddReservationMutation", args["input"]["service"], args["input"]["name"], args["input"]["index"])'
+        args:
+          input:
+            type: AddReservationInput!
+      deleteReservation:
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_ADMIN'])"
+        type: DeleteReservationOutput!
+        resolve: '@=mutation("App\\UserInterface\\GraphQL\\Mutation\\DeleteReservationMutation", args["input"]["service"], args["input"]["name"], args["input"]["index"])'
+        args:
+          input:
+            type: DeleteReservationInput!

@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\UserInterface\GraphQL\Map;
 
-final class SuccessOutputDTO
+final readonly class SuccessOutputDTO
 {
-    private bool $success;
-
-    public function __construct(bool $success)
-    {
-        $this->success = $success;
+    public function __construct(
+        private bool $success,
+    ) {
     }
 
     public function isSuccess(): bool

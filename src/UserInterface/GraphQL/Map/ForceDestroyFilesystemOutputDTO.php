@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\UserInterface\GraphQL\Map;
 
-final class ForceDestroyFilesystemOutputDTO
-{
-    private bool $success;
+use App\UserInterface\GraphQL\ResolverMap\ResolvedAs;
 
-    public function __construct(bool $success)
-    {
-        $this->success = $success;
+#[ResolvedAs('ForceDestroyFilesystemOutput')]
+final readonly class ForceDestroyFilesystemOutputDTO
+{
+    public function __construct(
+        private bool $success,
+    ) {
     }
 
     public function isSuccess(): bool

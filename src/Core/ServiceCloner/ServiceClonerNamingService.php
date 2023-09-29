@@ -9,27 +9,20 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class ServiceClonerNamingService implements ServiceClonerNamingServiceInterface
 {
-    private const MASTER_NAME = 'master';
-
-    private SluggerInterface $slugger;
-    private ConfigurationServiceInterface $dockerConfiguration;
-
     public function __construct(
-        ConfigurationServiceInterface $dockerConfiguration,
-        SluggerInterface $slugger
+        private ConfigurationServiceInterface $dockerConfiguration,
+        private SluggerInterface $slugger,
     ) {
-        $this->dockerConfiguration = $dockerConfiguration;
-        $this->slugger = $slugger;
     }
 
     public function getZfsFilesystemName(string $masterName, string $instanceName): string
     {
-        return sprintf('%s/%s', $this->dockerConfiguration->getConfiguration()->getZpoolName(), $this->getFullName($masterName, $instanceName, '@'));
+        return sprintf('%s/%s', $this->dockerConfiguration->getConfiguration()->zpoolName, $this->getFullName($masterName, $instanceName, '@'));
     }
 
     public function getZfsFilesystemPath(string $masterName, string $instanceName): string
     {
-        return sprintf('%s/%s', $this->dockerConfiguration->getConfiguration()->getZpoolRoot(), $this->getFullName($masterName, $instanceName, '-'));
+        return sprintf('%s/%s', $this->dockerConfiguration->getConfiguration()->zpoolRoot, $this->getFullName($masterName, $instanceName, '-'));
     }
 
     public function getFullName(string $masterName, string $instanceName, string $separator): string

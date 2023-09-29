@@ -6,36 +6,28 @@ declare(ticks=1);
 namespace App\Infrastructure\Docker;
 
 use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
-use App\Infrastructure\Docker\Endpoint\ContainerLogsUntil;
-use App\Infrastructure\Docker\Stream\DockerRawStreamUntil;
 use Docker\Docker;
+use Docker\Endpoint\ContainerLogsUntil;
+use Docker\Stream\DockerRawStreamUntil;
 use Psr\Log\LoggerInterface;
 
 final class ContainerWaitUntilLogService implements ContainerWaitUntilLogServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-    private ContainerFinderServiceInterface $containerFinderService;
-
     public function __construct(
-        Docker $dockerReadWrite,
-        LoggerInterface $logger,
-        ContainerFinderServiceInterface $containerFinderService
+        private Docker $dockerReadWrite,
+        private LoggerInterface $logger,
+        private ContainerFinderServiceInterface $containerFinderService,
     ) {
-        $this->docker = $dockerReadWrite;
-        $this->logger = $logger;
-        $this->containerFinderService = $containerFinderService;
     }
 
     public function wait(ContainerParameterDTO $containerParameter, string $expression, int $timeout): void
     {
-        $container = $this->containerFinderService->getDockerByName($containerParameter->getName());
+        $container = $this->containerFinderService->getDockerByName($containerParameter->name);
         if ($container === null) {
             return;
         }
-
         /** @var DockerRawStreamUntil $logsStream */
-        $logsStream = $this->docker->executePsr7Endpoint(new ContainerLogsUntil($container->getId(), [
+        $logsStream = $this->dockerReadWrite->executeEndpoint(new ContainerLogsUntil($container->getId(), [
             'stdout' => true,
             'stderr' => true,
             'follow' => true,
@@ -50,20 +42,20 @@ final class ContainerWaitUntilLogService implements ContainerWaitUntilLogService
     private function initTimeoutAlarm(int $timeout, DockerRawStreamUntil $logsStream, ContainerParameterDTO $containerParameter): void
     {
         \pcntl_signal(SIGALRM, function (int $signo) use ($logsStream, $containerParameter): void {
-            $this->logger->debug(sprintf('SIGALRM (%d) DockerWaitUntilLogService for %s', $signo, $containerParameter->getName()));
+            $this->logger->debug(sprintf('SIGALRM (%d) DockerWaitUntilLogService for %s', $signo, $containerParameter->name));
             $logsStream->exitWait();
         }, true);
         \pcntl_alarm($timeout);
     }
 
-    private function getStreamMatcherCallback(string $type, string $expression, DockerRawStreamUntil $logsStream, ContainerParameterDTO $containerParameter)
+    private function getStreamMatcherCallback(string $type, string $expression, DockerRawStreamUntil $logsStream, ContainerParameterDTO $containerParameter): callable
     {
         return function ($buffer) use ($type, $expression, $logsStream, $containerParameter): void {
             if (preg_match($expression, $buffer)) {
                 \pcntl_alarm(0);
                 $logsStream->exitWait();
             }
-            $this->logger->debug(sprintf('%s on "%s": %s', strtoupper($type), $containerParameter->getName(), $buffer));
+            $this->logger->debug(sprintf('%s on "%s": %s', strtoupper($type), $containerParameter->name, $buffer));
         };
     }
 }

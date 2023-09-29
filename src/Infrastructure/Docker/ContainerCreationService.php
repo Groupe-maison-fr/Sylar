@@ -24,48 +24,31 @@ use Docker\API\Model\ContainersCreatePostBody;
 use Docker\API\Model\ContainersCreatePostResponse201;
 use Docker\API\Model\HostConfig;
 use Docker\Docker;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use Psr\Log\LoggerInterface;
 
 final class ContainerCreationService implements ContainerCreationServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-    private PortBindingFactoryInterface $bindingSpecificationFactory;
-    private MountFactoryInterface $mountSpecificationFactory;
-    private EnvironmentFactoryInterface $environmentSpecificationFactory;
-    private LabelFactoryInterface $labelSpecificationFactory;
-    private ContainerImageServiceInterface $dockerPullService;
-
-    private StringParameterFactoryInterface $stringParameterFactory;
-
     public function __construct(
-        Docker $dockerReadWrite,
-        LoggerInterface $logger,
-        PortBindingFactoryInterface $portBindingSpecificationFactory,
-        MountFactoryInterface $mountSpecificationFactory,
-        EnvironmentFactoryInterface $environmentSpecificationFactory,
-        LabelFactoryInterface $labelSpecificationFactory,
-        ContainerImageServiceInterface $dockerPullService,
-        StringParameterFactoryInterface $stringParameterFactory
+        private Docker $dockerReadWrite,
+        private LoggerInterface $logger,
+        private PortBindingFactoryInterface $bindingSpecificationFactory,
+        private MountFactoryInterface $mountSpecificationFactory,
+        private EnvironmentFactoryInterface $environmentSpecificationFactory,
+        private LabelFactoryInterface $labelSpecificationFactory,
+        private ContainerImageServiceInterface $dockerPullService,
+        private StringParameterFactoryInterface $stringParameterFactory,
     ) {
-        $this->docker = $dockerReadWrite;
-        $this->logger = $logger;
-        $this->bindingSpecificationFactory = $portBindingSpecificationFactory;
-        $this->mountSpecificationFactory = $mountSpecificationFactory;
-        $this->environmentSpecificationFactory = $environmentSpecificationFactory;
-        $this->labelSpecificationFactory = $labelSpecificationFactory;
-        $this->dockerPullService = $dockerPullService;
-        $this->stringParameterFactory = $stringParameterFactory;
     }
 
     public function createDocker(
         ContainerParameterDTO $containerParameter,
         Service $service,
-        array $labels
+        array $labels,
     ): void {
-        if (!$this->dockerPullService->imageExists($service->getImage())) {
-            $this->dockerPullService->pullImage($service->getImage());
+        if (!$this->dockerPullService->imageExists($service->image)) {
+            $this->dockerPullService->pullImage($service->image);
         }
         $hostConfig = new HostConfig();
 
@@ -73,7 +56,7 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
         $this->setPortBindings($containerParameter, $hostConfig, $service);
 
         $container = new ContainersCreatePostBody();
-        $container->setImage($service->getImage());
+        $container->setImage($service->image);
         $container->setHostConfig($hostConfig);
         $this->setLabel($containerParameter, $container, $service, $labels);
         $this->setEnv($containerParameter, $container, $service);
@@ -81,8 +64,8 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
 
         try {
             /** @var ContainersCreatePostResponse201 $containerCreate */
-            $containerCreate = $this->docker->containerCreate($container, ['name' => $containerParameter->getName()]);
-            $this->docker->containerStart($containerCreate->getId());
+            $containerCreate = $this->dockerReadWrite->containerCreate($container, ['name' => $containerParameter->name]);
+            $this->dockerReadWrite->containerStart($containerCreate->getId());
         } catch (ContainerCreateBadRequestException $exception) {
             $this->logger->error(sprintf('createDocker: %s %s', $exception->getMessage(), $exception->getErrorResponse()->getMessage()));
         } catch (ContainerStartNotFoundException $exception) {
@@ -97,64 +80,69 @@ final class ContainerCreationService implements ContainerCreationServiceInterfac
 
     private function setMounts(ContainerParameterDTO $containerParameter, HostConfig $hostConfig, Service $service): void
     {
-        if ($service->getMounts()->isEmpty()) {
+        $mounts = new ArrayCollection($service->mounts);
+        if ($mounts->isEmpty()) {
             return;
         }
-        $hostConfig->setMounts($service->getMounts()->map(function (Mount $mount) use ($containerParameter) {
-            return $this->mountSpecificationFactory->createFromConfiguration($containerParameter, $mount);
-        })->toArray());
+        $hostConfig->setMounts($mounts->map(fn (Mount $mount) => $this->mountSpecificationFactory->createFromConfiguration($containerParameter, $mount))->toArray());
     }
 
     private function setPortBindings(ContainerParameterDTO $containerParameter, HostConfig $hostConfig, service $service): void
     {
-        if ($service->getPorts()->isEmpty()) {
+        $ports = new ArrayCollection($service->ports);
+        if ($ports->isEmpty()) {
             return;
         }
         $hostConfig->setPortBindings(new ArrayObject(array_reduce(
-            $service->getPorts()->toArray(),
+            $ports->toArray(),
             function (array $previous, Port $port) use ($containerParameter) {
                 $portBinding = $this->bindingSpecificationFactory->createFromConfiguration($containerParameter, $port);
-                if (!isset($previous[$port->getContainerPort()])) {
-                    $previous[$port->getContainerPort()] = [];
+                if (!isset($previous[$port->containerPort])) {
+                    $previous[$port->containerPort] = [];
                 }
-                array_push($previous[$port->getContainerPort()], $portBinding);
+                array_push($previous[$port->containerPort], $portBinding);
 
                 return $previous;
             },
-            []
+            [],
         )));
     }
 
     private function setNetworkMode(ContainerParameterDTO $containerParameter, HostConfig $hostConfig, service $service): void
     {
-        if ($service->getNetworkMode() === null) {
+        if ($service->networkMode === null) {
             return;
         }
-        $hostConfig->setNetworkMode($this->stringParameterFactory->createFromConfiguration($containerParameter, $service->getNetworkMode()));
+        $hostConfig->setNetworkMode($this->stringParameterFactory->createFromConfiguration($containerParameter, $service->networkMode));
     }
 
     private function setEnv(ContainerParameterDTO $containerParameter, ContainersCreatePostBody $container, Service $service): void
     {
-        if ($service->getEnvironments()->isEmpty()) {
+        $environments = new ArrayCollection($service->environments);
+        if ($environments->isEmpty()) {
             return;
         }
-        $container->setEnv($service->getEnvironments()->map(function (Environment $environment) use ($containerParameter) {
-            return $this->environmentSpecificationFactory->createFromConfiguration($containerParameter, $environment);
-        })->toArray());
+        $container->setEnv($environments->map(fn (Environment $environment) => $this->environmentSpecificationFactory->createFromConfiguration($containerParameter, $environment))->toArray());
     }
 
+    /**
+     * @param string[] $labels
+     */
     private function setLabel(ContainerParameterDTO $containerParameter, ContainersCreatePostBody $container, Service $service, array $labels): void
     {
-        if ($service->getLabels()->isEmpty() && empty($labels)) {
+        $labels1 = new ArrayCollection($service->labels);
+        if ($labels1->isEmpty() && empty($labels)) {
             return;
         }
-        $containerLabels = new ArrayObject(array_reduce($service->getLabels()->toArray(),
+        $containerLabels = new ArrayObject(array_reduce(
+            $labels1->toArray(),
             function (array $labels, Label $label) use ($containerParameter) {
                 [$key, $value] = $this->labelSpecificationFactory->createFromConfiguration($containerParameter, $label);
                 $labels[$key] = $value;
 
                 return $labels;
-            }, $labels
+            },
+            $labels,
         ));
         $container->setLabels($containerLabels);
     }

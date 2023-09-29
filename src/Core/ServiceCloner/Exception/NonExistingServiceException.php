@@ -9,7 +9,7 @@ use Throwable;
 
 class NonExistingServiceException extends DomainException
 {
-    public function __construct(string $serviceName, $code = 0, Throwable $previous = null)
+    public function __construct(string $serviceName, int $code = 0, Throwable $previous = null)
     {
         parent::__construct(sprintf('Service %s does not exists', $serviceName), $code, $previous);
     }

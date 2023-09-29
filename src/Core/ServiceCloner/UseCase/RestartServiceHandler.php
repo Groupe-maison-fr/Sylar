@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace App\Core\ServiceCloner\UseCase;
 
 use App\Core\ServiceCloner\ServiceClonerServiceInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class RestartServiceHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+final class RestartServiceHandler
 {
-    private ServiceClonerServiceInterface $serviceClonerService;
-
     public function __construct(
-        ServiceClonerServiceInterface $serviceClonerService
+        private ServiceClonerServiceInterface $serviceClonerService,
     ) {
-        $this->serviceClonerService = $serviceClonerService;
     }
 
     public function __invoke(RestartServiceCommand $startServiceCommand): void
@@ -22,7 +20,7 @@ final class RestartServiceHandler implements MessageHandlerInterface
         $this->serviceClonerService->restartService(
             $startServiceCommand->getMasterName(),
             $startServiceCommand->getInstanceName(),
-            $startServiceCommand->getIndex() === null ? null : (int) $startServiceCommand->getIndex()
+            $startServiceCommand->getIndex() === null ? null : (int) $startServiceCommand->getIndex(),
         );
     }
 }

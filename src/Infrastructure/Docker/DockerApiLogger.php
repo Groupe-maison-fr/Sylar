@@ -12,12 +12,9 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 final class DockerApiLogger implements LoggerInterface
 {
-    private LoggerInterface $logger;
-
     public function __construct(
-      LoggerInterface $logger
+        private LoggerInterface $logger,
     ) {
-        $this->logger = $logger;
     }
 
     public function log($level, $message, array $context = []): void
@@ -28,11 +25,12 @@ final class DockerApiLogger implements LoggerInterface
             /** @var Response $response */
             $response = $context['response'];
             try {
-                $this->logger->log($level, sprintf('%s [%s] %s : %s',
+                $this->logger->log($level, sprintf(
+                    '%s [%s] %s : %s',
                     $request->getMethod(),
                     $response->getStatusCode(),
                     $request->getUri(),
-                    $request->getBody()
+                    $request->getBody(),
                 ));
             } catch (NotEncodableValueException $exception) {
                 dump($exception->getMessage());

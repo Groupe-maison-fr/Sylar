@@ -1,11 +1,12 @@
-home:
-  path: /
-  controller: App\UserInterface\Web\UseCase\IndexController::index
+api_login_check:
+  path: /api/login_check
 
-react_app:
-  path: /app/{parameters}
-  controller: App\UserInterface\Web\UseCase\IndexController::index
+controllers:
+  resource:
+    path: ../../src/UserInterface/Web/UseCase/
+    namespace: App\UserInterface\Web\UseCase
+  type: attribute
 
-react_app_sub:
-  path: /app/{parameters}/{subparameters}
-  controller: App\UserInterface\Web\UseCase\IndexController::index
+kernel:
+  resource: App\Kernel
+  type: attribute

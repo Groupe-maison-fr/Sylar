@@ -9,7 +9,7 @@ FailedMessage:
       exceptionMessage: String
       flattenException: FlattenException
       date: DateTime
-      backtrace: "[DebugTraceCall]"
+      backtrace: "[DebugTraceCall!]!"
 
 FlattenException:
   type: "object"
@@ -23,11 +23,11 @@ FlattenException:
       traceAsString: String
       class: String
       statusText: String
-      headers: "[String]"
+      headers: "[String!]!"
       file: String
       line: String
       asString: String
-      #trace: "[]"
+      #trace: "[!]!"
 
 DebugTraceCall:
   type: "object"
@@ -41,13 +41,11 @@ DebugTraceCall:
       function: String
       file: String
       line: Int
-      arguments: String
-      #"[DebugTraceCallArgument]"
+      arguments: "[DebugTraceCallArgument!]!"
 
 DebugTraceCallArgument:
   type: "object"
   config:
-    resolveField: '@=query("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\DebugTraceCallArgumentResolver", info, value, args)'
     fields:
       type: String
       value: String

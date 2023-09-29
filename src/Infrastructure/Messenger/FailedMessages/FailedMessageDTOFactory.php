@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Normalizer\ProblemNormalizer;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Webmozart\Assert\Assert;
 
 final class FailedMessageDTOFactory implements FailedMessageDTOFactoryInterface
 {
@@ -57,8 +58,8 @@ final class FailedMessageDTOFactory implements FailedMessageDTOFactoryInterface
             get_class($envelope->getMessage()),
             $this->serializer->serialize($envelope->getMessage(), 'json', ['json_encode_options' => JSON_PRETTY_PRINT]),
             new DateTimeImmutable(),
-            $lastRedeliveryStampWithException ? $lastRedeliveryStampWithException->getExceptionMessage() : null,
-            $lastRedeliveryStampWithException ? $lastRedeliveryStampWithException->getFlattenException() : null,
+            $lastRedeliveryStampWithException?->getExceptionMessage(),
+            $lastRedeliveryStampWithException?->getFlattenException(),
         );
     }
 
@@ -72,11 +73,14 @@ final class FailedMessageDTOFactory implements FailedMessageDTOFactoryInterface
         return null;
     }
 
-    private function getMessageId(Envelope $envelope): string
+    private function getMessageId(Envelope $envelope): int
     {
         /** @var TransportMessageIdStamp|null $stamp */
         $stamp = $envelope->last(TransportMessageIdStamp::class);
 
-        return $stamp ? $stamp->getId() : 'null';
+        $id = $stamp?->getId();
+        Assert::notNull($id);
+
+        return $id;
     }
 }

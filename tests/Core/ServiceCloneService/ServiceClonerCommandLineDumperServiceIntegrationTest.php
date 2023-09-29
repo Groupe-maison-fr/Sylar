@@ -8,12 +8,12 @@ use App\Core\ServiceCloner\Configuration\ConfigurationService;
 use App\Core\ServiceCloner\ServiceClonerCommandLineDumperService;
 use App\Infrastructure\Docker\ContainerParameter\ConfigurationExpressionGenerator;
 use App\Infrastructure\Docker\ContainerParameter\ContainerParameterDTO;
-use Tests\AbstractIntegrationTest;
+use Tests\AbstractIntegrationTestCase;
 
 /**
  * @internal
  */
-final class ServiceClonerCommandLineDumperServiceIntegrationTest extends AbstractIntegrationTest
+final class ServiceClonerCommandLineDumperServiceIntegrationTest extends AbstractIntegrationTestCase
 {
     /**
      * @test
@@ -25,14 +25,14 @@ final class ServiceClonerCommandLineDumperServiceIntegrationTest extends Abstrac
         $configurationService = new ConfigurationService(
             sprintf('%s/data/%s/sylar.yaml', __DIR__, $testConfigurationName),
             sprintf('%s/tests/%s/data/%s', getenv('MOUNTED_CONFIGURATION_PATH'), $matches[1], $testConfigurationName),
-            sprintf('%s/tests/%s/data/%s', getenv('CONTAINER_CONFIGURATION_PATH'), $matches[1], $testConfigurationName)
+            sprintf('%s/tests/%s/data/%s', getenv('CONTAINER_CONFIGURATION_PATH'), $matches[1], $testConfigurationName),
         );
         $configurationExpressionGenerator = new ConfigurationExpressionGenerator($configurationService);
         $serviceClonerCommandLineDumperService = new ServiceClonerCommandLineDumperService($configurationService, $configurationExpressionGenerator);
         $containerParameter = new ContainerParameterDTO(
             'mysql-test',
             0,
-            'toto/tata'
+            'toto/tata',
         );
 
         self::assertSame($this->getExpectedLifecycleHooksString(), $serviceClonerCommandLineDumperService->dump($containerParameter));

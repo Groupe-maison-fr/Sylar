@@ -12,17 +12,14 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class StorageResolver implements QueryInterface
+final readonly class StorageResolver implements QueryInterface
 {
-    private ZfsFilesystemService $zfsService;
-
     public function __construct(
-        ZfsFilesystemService $zfsService
+        private ZfsFilesystemService $zfsService,
     ) {
-        $this->zfsService = $zfsService;
     }
 
-    public function __invoke(ResolveInfo $info, FilesystemDTO $zfsFilesystem, Argument $args)
+    public function __invoke(ResolveInfo $info, FilesystemDTO $zfsFilesystem, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'name':

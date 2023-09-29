@@ -4,15 +4,21 @@ volumes:
   builder-build: {}
   node-modules-builder: {}
   vendor-sylar: {}
+  var-runner: {}
+  sqlite-runner: {}
   prometheus-db: {}
   grafana-db: {}
   redis-data: {}
+  loki-data: {}
 
 services:
   runner:
     container_name: sylar-runner
     build: .docker/runner
     entrypoint: ["/app/.docker/runner/entrypoint.sh"]
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     restart: unless-stopped
     working_dir: /app
     privileged: true
@@ -20,9 +26,10 @@ services:
       - loki
       - redis
     environment:
+      - DOCKER_HOST=tcp://docker-socket-proxy:2375
       - APP_ENV=dev
       - APP_SECRET='secretf0rt3st'
-      - DATABASE_URL=sqlite:///%kernel.project_dir%/var/app.db
+      - DATABASE_URL=sqlite:///%kernel.project_dir%/sqlite/app.db
       - KERNEL_CLASS='App\Kernel'
       - MERCURE_JWT_SECRET=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
       - MERCURE_PUBLIC_URL=http://sylar-mercure/.well-known/mercure
@@ -39,10 +46,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./.docker/runner/etc/ssh/ssh_config:/etc/ssh/ssh_config:ro
       - ./.docker/runner/etc/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf:ro
-      - ./.docker/runner/etc/php/7.4/fpm/pool.d/www.conf:/etc/php/7.4/fpm/pool.d/www.conf:ro
+      - ./.docker/runner/etc/php/8.2/fpm/pool.d/www.conf:/etc/php/8.2/fpm/pool.d/www.conf:ro
       - ./:/app
       - builder-build:/app/public/build
-      - vendor-sylar:/app/vendor
+      - var-runner:/app/var
+      - sqlite-runner:/app/sqlite
       - /dev/zfs:/dev/zfs:rw
       - /sylar:/sylar:shared
 
@@ -50,18 +58,28 @@ services:
     container_name: sylar-builder
     build: .docker/builder
     entrypoint: ["/app/.docker/builder/entrypoint.sh"]
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     restart: unless-stopped
     working_dir: /app
     environment:
-      NODE_OPTIONS: '--openssl-legacy-provider'
+      - NODE_OPTIONS=--openssl-legacy-provider
+      - SUPERVISORD_PASSWORD=adminpassword
+      - SUPERVISORD_URL=http://127.0.0.1:9001/RPC2
+      - SUPERVISORD_USER=admin
     volumes:
       - ./:/app
+      - ./.docker/builder/etc/supervisord.conf:/etc/supervisord.conf:ro
       - builder-build:/app/public/build
       - node-modules-builder:/app/node_modules
 
   webserver:
     container_name: sylar-webserver
     image: nginx:latest
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     restart: unless-stopped
     working_dir: /app
     volumes:
@@ -83,7 +101,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - LOG_LEVEL=debug
+      - LOG_LEVEL=info
       - ALLOW_RESTARTS=1
       - AUTH=1
       - BUILD=1
@@ -112,29 +130,39 @@ services:
 
   mercure:
     container_name: sylar-mercure
+    build: .docker/mercure
+    entrypoint: ["/entrypoint.sh"]
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     restart: unless-stopped
-    image: dunglas/mercure:v0.10.4
     environment:
-      - ALLOW_ANONYMOUS=1
-      - CORS_ALLOWED_ORIGINS=*
-      - MERCURE_EXTRA_DIRECTIVES=cors_allowed_origins *
-      - PUBLISHER_JWT_KEY=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
-      - PUBLISH_ALLOWED_ORIGINS=*
-      - SUBSCRIBER_JWT_KEY=mercure_subscriber
-      - SERVER_NAME=":80"
-      - USE_FORWARDED_HEADERS=1
+      - APP_ENV=prod
+      - APP_SECRET='secretf0rt3st'
+      - KERNEL_CLASS='App\Kernel'
+      - MERCURE_PUBLIC_URL=http://sylar-mercure/.well-known/mercure
+      - MERCURE_SUBSCRIBER_KEY=mercure_subscriber
+      - MERCURE_URL=http://sylar-mercure/.well-known/mercure
+      - X_LISTEN=0.0.0.0:80
+      - JWT_SECRET_KEY=GHJghjdjYYu1121kjkdstyydsghhdshzhgeh
+      - JWT_ALGORITHM=HS256
+    volumes:
+      - ./.docker/mercure/entrypoint.sh:/entrypoint.sh
 
   redis:
     container_name: sylar-redis
     image: redis:6.2-alpine
     restart: always
     command: redis-server --save 20 1 --loglevel warning --requirepass ZVlWWDdFd1ZtbXhLU
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     volumes:
       - redis-data:/data
 
   grafana:
     container_name: sylar-grafana
-    image: grafana/grafana:8.3.3
+    image: grafana/grafana:10.0.2
     user: "1000"
     restart: unless-stopped
     environment:
@@ -204,19 +232,22 @@ services:
 
   loki:
     container_name: sylar-loki
-    image: grafana/loki:2.5.0
+    image: grafana/loki:2.8.0
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - .docker/loki/etc/loki/local-config.yaml:/etc/loki/local-config.yaml
+      - loki-data:/loki
 
   promtail:
     container_name: sylar-promtail
-    image: grafana/promtail:1.4.1
+    image: grafana/promtail:2.8.2
+#    entrypoint: ["sleep","7200"]
+    command: -config.file=/etc/promtail/config.yml
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers
-      - .docker/promtail/etc/promtail/config.yaml:/etc/promtail/config.yaml
-    command: -config.file=/etc/promtail/config.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .docker/promtail/etc/promtail:/etc/promtail
     depends_on:
       - loki

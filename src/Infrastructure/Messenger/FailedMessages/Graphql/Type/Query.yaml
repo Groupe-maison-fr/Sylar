@@ -4,7 +4,7 @@ QueryFailedMessage:
   config:
     fields:
       failedMessages:
-        type: "[FailedMessage!]"
+        type: "[FailedMessage!]!"
         resolve: '@=resolver("App\\Infrastructure\\Messenger\\FailedMessages\\Graphql\\Resolver\\MessagesResolver::findAll", [args["max"]])'
         args:
           max:

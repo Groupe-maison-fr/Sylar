@@ -21,85 +21,96 @@ help:
 clean:
 	- rm -r vendor/*
 	- rm -r public/build/*
-	$(MAKE) host-dev-destroy
-
-.PHONY: host-dev-up
-host-dev-up:
-	vagrant up --provision --parallel
-	#vagrant ssh sylar -c 'cd /opt/sylar;make docker-up'
-
-.PHONY: host-dev-down
-host-dev-down:
-	vagrant halt
-
-.PHONY: host-dev-destroy
-host-dev-destroy:
-	vagrant destroy -f
+	$(MAKE) docker-compose-down
 
 .PHONY: host-shell-runner
 host-shell-runner:
-	vagrant ssh sylar -c 'cd /opt/sylar;docker-compose exec runner bash'
+	docker-compose exec runner bash
 
 .PHONY: host-shell-builder
 host-shell-builder:
-	vagrant ssh sylar -c 'cd /opt/sylar;docker-compose exec builder sh'
+	docker-compose exec builder sh
 
-.PHONY: host-shell-monitor
-host-shell-monitor:
-	vagrant ssh sylar -c 'cd /opt/sylar;docker-compose exec monitor sh'
+.PHONY: host-docker-stats
+host-docker-stats:
+	@docker stats --format "{{.ID}} {{.CPUPerc}} {{.MemUsage}} {{.Name}}"
 
-.PHONY: host-tests
-host-tests:
-	vagrant ssh sylar -- docker-compose -f /opt/sylar/docker-compose.yaml exec runner make test
+.PHONY: host-test-install
+host-test-install:
+	docker-compose exec runner bash -c "APP_ENV=test composer install --prefer-dist || true"
 
+.PHONY: host-test-phpunit
+host-test-phpunit:
+	docker-compose exec runner bash -c "vendor/bin/phpunit --configuration phpunit.xml.dist --testdox"
 
-.PHONY: host-shell-sylar
-host-shell-sylar:
-	vagrant ssh sylar -c 'cd /opt/sylar;fish'
+.PHONY: host-test-phpstan
+host-test-phpstan:
+	docker-compose exec runner bash -c "vendor/bin/phpstan analyse src --level 6"
 
-.PHONY: shell
-shell:
-	$(MAKE) host-shell
+.PHONY: host-test-cs-fixer
+host-test-cs-fixer:
+	docker-compose exec runner bash -c "vendor/bin/php-cs-fixer fix --verbose --dry-run"
 
-.PHONY: host-vagrant-init-docker-compose
-host-vagrant-init-docker-compose:
-	vagrant ssh sylar -- "docker-compose -f /opt/sylar/docker-compose.yaml up -d --build"
+.PHONY: host-test-tsc
+host-test-tsc:
+	docker-compose exec builder sh -c "yarn run tsc"
 
-.PHONY: host-watch-assets
-host-watch-assets:
-	 vagrant ssh sylar -- docker-compose -f /opt/sylar/docker-compose.yaml exec builder yarn run watch
+.PHONY: host-test-eslint
+host-test-eslint:
+	docker-compose exec builder sh -c "yarn run eslint assets/"
+
+.PHONY: host-test-jest
+host-test-jest:
+	docker-compose exec builder sh -c "yarn run jest assets"
+
+.PHONY: host-test-php
+host-test-php:
+	$(MAKE) host-test-install
+	$(MAKE) host-test-phpunit
+	$(MAKE) host-test-phpstan
+	$(MAKE) host-test-cs-fixer
+
+.PHONY: host-test-ts
+host-test-ts:
+	$(MAKE) host-test-tsc
+	$(MAKE) host-test-eslint
+	$(MAKE) host-test-jest
+
+.PHONY: host-test
+host-test:
+	$(MAKE) host-test-php
+	$(MAKE) host-test-ts
+
+.PHONY: host-docker-logs
+host-docker-logs:
+	docker-compose logs -f
+
+.PHONY: host-docker-loki-logs
+host-docker-loki-logs:
+	docker exec -it sylar-runner logcli --addr "http://sylar-loki:3100" query '{host=~ ".+"}' --tail
+
+.PHONY: host-restart-worker
+host-restart-worker:
+	docker-compose exec runner supervisorctl restart php-worker
+
+.PHONY: host-restart-builder
+host-restart-builder:
+	docker-compose exec builder supervisorctl restart typescript-watch
+	docker-compose exec builder supervisorctl restart codegen-watch
+
+docker-compose-up:
+	docker-compose -f docker-compose.yaml up -d --build
+
+docker-compose-up-dev:
+	docker-compose -f docker-compose.yaml -f docker-compose.debug.yaml up -d --build
+
+docker-compose-up-dev-amd64:
+	docker-compose -f docker-compose.yaml -f docker-compose.debug.yaml -f docker-compose.amd64.yaml up -d --build
+
+docker-compose-down:
+	docker-compose -f docker-compose.yaml -f docker-compose.debug.yaml -f docker-compose.amd64.yaml down --remove-orphans
 
 .PHONY: cs-fixer-fix
 cs-fixer-fix:
 	vendor/bin/php-cs-fixer fix --verbose
 
-.PHONY: docker-stats
-docker-stats:
-	@docker stats --format "{{.ID}} {{.CPUPerc}} {{.MemUsage}} {{.Name}}"
-
-.PHONY: test
-test:
-	APP_ENV=test composer install --prefer-dist
-	vendor/bin/phpstan analyse src --level 5
-	vendor/bin/php-cs-fixer fix --verbose --dry-run
-	vendor/bin/phpunit --configuration phpunit.xml.dist tests --testdox
-
-.PHONY: tests
-tests:
-	docker-compose exec runner make test
-
-.PHONY: docker-down
-docker-down:
-	docker-compose down --remove-orphans
-
-.PHONY: docker-up
-docker-up:
-	docker-compose up --build -d
-
-.PHONY: docker-logs
-docker-logs:
-	docker-compose logs -f
-
-.PHONY: host-restart-worker
-host-restart-worker:
-	vagrant ssh sylar -c 'docker-compose -f /opt/sylar/docker-compose.yaml exec runner supervisorctl restart php-worker'

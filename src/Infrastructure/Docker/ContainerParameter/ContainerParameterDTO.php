@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Docker\ContainerParameter;
 
-final class ContainerParameterDTO
+final readonly class ContainerParameterDTO
 {
-    private int $index;
-    private string $name;
-    private string $replicatedFilesystem;
-
     public function __construct(
-        string $name,
-        int $index,
-        string $replicatedFilesystem
+        public string $name,
+        public int $index,
+        public string $replicatedFilesystem,
     ) {
-        $this->index = $index;
-        $this->name = $name;
-        $this->replicatedFilesystem = $replicatedFilesystem;
     }
 
     public function getName(): string

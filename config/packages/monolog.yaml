@@ -1,20 +1,27 @@
 monolog:
     handlers:
-        security:
-            type: stream
-            level: INFO
-            handler: loki
-            channels: [php]
         main:
             type: fingers_crossed
             action_level: error
             handler: loki
+            level: info
             channels: ["!event", "!doctrine"]
         console:
             type: console
             handler: loki
-            channels: [ "!event", "!doctrine", "!console" ]
+            process_psr_3_messages: false
+            channels: ["!php", "!event", "!doctrine", "!console"]
+        security:
+            type: stream
+            level: info
+            handler: loki
+            channels: ["php"]
         loki:
             type: service
+            level: info
             id: Itspire\MonologLoki\Handler\LokiHandler
-
+            channels: ["!event", "!doctrine", "!console"]
+        mercure:
+            type: service
+            id: App\Infrastructure\Logging\ServerSideEventPublisherHandler
+            channels: ["!php", "!event", "!doctrine", "!console"]

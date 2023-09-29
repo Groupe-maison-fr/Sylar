@@ -6,45 +6,43 @@ namespace App\UserInterface\Cli;
 
 use App\Core\ServiceCloner\Exception\StartServiceException;
 use App\Core\ServiceCloner\UseCase\StartServiceCommand as StartServiceBusCommand;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
+#[AsCommand('service:start', description: 'Start a replicated service')]
 final class StartServiceCommand extends Command
 {
     private const ARGUMENT_SERVICE_NAME = 'serviceName';
     private const ARGUMENT_INSTANCE_NAME = 'instanceName';
     private const ARGUMENT_INSTANCE_INDEX = 'instanceIndex';
 
-    private MessageBusInterface $messageBus;
-
     public function __construct(
-        MessageBusInterface $messageBus
+        private MessageBusInterface $messageBus,
     ) {
         parent::__construct();
-        $this->messageBus = $messageBus;
     }
 
     protected function configure(): void
     {
-        $this->setName('service:start')
-            ->setDescription('generate a dataset based on parameters')
+        $this
             ->addArgument(
                 self::ARGUMENT_SERVICE_NAME,
                 InputArgument::REQUIRED,
-                'Service name'
+                'Service name',
             )
             ->addArgument(
                 self::ARGUMENT_INSTANCE_NAME,
                 InputArgument::REQUIRED,
-                'Instance name'
+                'Instance name',
             )
             ->addArgument(
                 self::ARGUMENT_INSTANCE_INDEX,
                 InputArgument::OPTIONAL,
-                'Instance index'
+                'Instance index',
             );
     }
 
@@ -58,7 +56,7 @@ final class StartServiceCommand extends Command
             $this->messageBus->dispatch(new StartServiceBusCommand(
                 $serviceName,
                 $instanceName,
-                $instanceIndex === null ? null : (int) $instanceIndex
+                $instanceIndex === null ? null : (int) $instanceIndex,
             ));
         } catch (StartServiceException $exception) {
             $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));

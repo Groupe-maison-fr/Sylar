@@ -10,18 +10,18 @@ use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;
 
 final class MutationRejectMessage implements MutationInterface
 {
-    /** @var ReceiverInterface&ListableReceiverInterface */
-    private $receiver;
-
     /** @param ReceiverInterface&ListableReceiverInterface $receiver */
-    public function __construct(ReceiverInterface $receiver)
-    {
-        $this->receiver = $receiver;
+    public function __construct(
+        private ReceiverInterface $receiver,
+    ) {
     }
 
+    /**
+     * @param mixed[] $messageIds
+     */
     public function __invoke(
-        array $messageIds
-    ) {
+        array $messageIds,
+    ): bool {
         array_map(function (string $messageId): void {
             $envelop = $this->receiver->find($messageId);
             $this->receiver->reject($envelop);

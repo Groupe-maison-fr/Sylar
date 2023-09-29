@@ -1,0 +1,13 @@
+framework:
+    messenger:
+        failure_transport: failed
+
+        transports:
+            - name: failed
+              dsn: 'doctrine://default?queue_name=failed'
+            - name: sync
+              dsn: 'sync://'
+
+        routing:
+            'App\Infrastructure\Messenger\AsyncCommandInterface' : sync
+            'App\Infrastructure\Messenger\SyncCommandInterface' : sync

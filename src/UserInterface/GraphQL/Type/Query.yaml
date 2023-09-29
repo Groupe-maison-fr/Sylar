@@ -4,20 +4,27 @@ QueryUserInterface:
   config:
     fields:
       services:
-        type: "[Service]"
+        type: "[Service!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver::resolve")'
       containers:
-        type: "[Container]"
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_USER'])"
+        type: "[Container!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ContainerResolver::resolve")'
       filesystems:
-        type: "[Filesystem]"
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_USER'])"
+        type: "[Filesystem!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\StorageResolver::resolve")'
       commands:
-        type: "[Command]"
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_USER'])"
+        type: "[Command!]!"
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolve")'
       commandByName:
+        access: "@=!parameter('security_enabled') || hasAnyRole(['ROLE_USER'])"
         type: Command
         resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\CommandResolver::resolveByName",[args["commandName"]])'
         args:
           commandName: String!
+      reservations:
+        type: "[Reservation!]!"
+        resolve: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ReservationResolver::resolve")'
 

@@ -8,5 +8,8 @@ interface ContainerStateServiceInterface
 {
     public function dockerState(string $dockerName): ?string;
 
+    /**
+     * @return int[]|null
+     */
     public function dockerExposedPorts(string $dockerName): ?array;
 }

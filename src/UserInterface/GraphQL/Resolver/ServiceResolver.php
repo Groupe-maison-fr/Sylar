@@ -8,53 +8,50 @@ use App\Core\ServiceCloner\Configuration\ConfigurationServiceInterface;
 use App\Core\ServiceCloner\Configuration\Object\Service;
 use App\Core\ServiceCloner\ServiceClonerStateServiceInterface;
 use App\Core\ServiceCloner\ServiceClonerStatusDTO;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\UserInterface\GraphQL\Security\FieldVisibility;
 use DomainException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-final class ServiceResolver implements QueryInterface
+final readonly class ServiceResolver implements QueryInterface
 {
-    private ConfigurationServiceInterface $configurationService;
-    private ServiceClonerStateServiceInterface $serviceClonerStateService;
-
     public function __construct(
-        ConfigurationServiceInterface $configurationService,
-        ServiceClonerStateServiceInterface $serviceClonerStateService
+        private ConfigurationServiceInterface $configurationService,
+        private ServiceClonerStateServiceInterface $serviceClonerStateService,
+        private FieldVisibility $fieldVisibility,
     ) {
-        $this->configurationService = $configurationService;
-        $this->serviceClonerStateService = $serviceClonerStateService;
     }
 
-    public function __invoke(ResolveInfo $info, Service $service, Argument $args)
+    public function __invoke(ResolveInfo $info, Service $service, Argument $args): mixed
     {
         switch ($info->fieldName) {
             case 'name':
-                return $service->getName();
+                return $service->name;
             case 'image':
-                return $service->getImage();
+                return $service->image;
             case 'command':
-                return $service->getCommand();
+                return $service->command;
             case 'labels':
-                return $service->getLabels();
+                return $this->fieldVisibility->emptyOnAnyRole($service->labels, ['ROLE_ADMIN', 'ROLE_USER'], []);
             case 'ports':
-                return $service->getPorts();
+                return $service->ports;
             case 'environments':
-                return $service->getEnvironments();
+                return $this->fieldVisibility->emptyOnAnyRole($service->environments, ['ROLE_ADMIN', 'ROLE_USER'], []);
             case 'containers':
                 return array_filter(
                     $this->serviceClonerStateService->getStates(),
-                    function (ServiceClonerStatusDTO $serviceClonerStatusDTO) use ($service) {
-                        return $serviceClonerStatusDTO->getMasterName() === $service->getName();
-                    }
+                    fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getMasterName() === $service->name,
                 );
         }
         throw new DomainException(sprintf('No field %s found', $info->fieldName));
     }
 
-    public function resolve(): ArrayCollection
+    /**
+     * @return Service[]
+     */
+    public function resolve(): array
     {
-        return $this->configurationService->getConfiguration()->getServices();
+        return $this->configurationService->getConfiguration()->services;
     }
 }

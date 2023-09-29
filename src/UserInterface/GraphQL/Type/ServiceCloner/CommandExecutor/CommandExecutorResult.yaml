@@ -5,4 +5,4 @@ CommandExecutorResult:
       subCommand:
         type: String!
       output:
-        type: '[String]'
+        type: '[String!]!'

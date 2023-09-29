@@ -18,7 +18,6 @@ final class TreeBuilderConfiguration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('serviceCloner');
 
-        /* @phpstan-ignore-next-line */
         $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('stateRoot')
@@ -67,6 +66,8 @@ final class TreeBuilderConfiguration implements ConfigurationInterface
                                     ->arrayNode('preStartCommands')
                                         ->arrayPrototype()
                                             ->children()
+                                                ->scalarNode('when')
+                                                ->end()
                                                 ->scalarNode('executionEnvironment')
                                                     ->isRequired()
                                                     ->validate()
@@ -87,6 +88,8 @@ final class TreeBuilderConfiguration implements ConfigurationInterface
                                     ->arrayNode('postStartWaiters')
                                         ->arrayPrototype()
                                             ->children()
+                                                ->scalarNode('when')
+                                                ->end()
                                                 ->scalarNode('type')
                                                     ->isRequired()
                                                     ->validate()
@@ -107,6 +110,8 @@ final class TreeBuilderConfiguration implements ConfigurationInterface
                                     ->arrayNode('postStartCommands')
                                         ->arrayPrototype()
                                             ->children()
+                                                ->scalarNode('when')
+                                                ->end()
                                                 ->scalarNode('executionEnvironment')
                                                     ->isRequired()
                                                     ->validate()
@@ -128,6 +133,8 @@ final class TreeBuilderConfiguration implements ConfigurationInterface
                                     ->arrayNode('postDestroyCommands')
                                         ->arrayPrototype()
                                             ->children()
+                                                ->scalarNode('when')
+                                                ->end()
                                                 ->scalarNode('executionEnvironment')
                                                     ->isRequired()
                                                     ->validate()

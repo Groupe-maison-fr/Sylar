@@ -6,81 +6,46 @@ namespace App\Core\ServiceCloner\Configuration\Object;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class ServiceCloner
+final readonly class ServiceCloner
 {
-    private string $stateRoot;
-    private string $zpoolName;
-    private string $zpoolRoot;
-    private string $configurationRoot;
-
-    /**
-     * @var Service[]|ArrayCollection
-     */
-    private $services;
-    /**
-     * @var Command[]|ArrayCollection
-     */
-    private $commands;
-
-    public function __construct()
-    {
-        $this->services = new ArrayCollection();
-        $this->commands = new ArrayCollection();
+    public function __construct(
+        public string $stateRoot,
+        public string $zpoolName,
+        public string $zpoolRoot,
+        public string $configurationRoot,
+        /** @var Service[] */
+        public array $services = [],
+        /** @var Command[] */
+        public array $commands = [],
+    ) {
     }
 
-    public function getstateRoot()
+    public function getstateRoot(): string
     {
         return $this->stateRoot;
     }
 
-    public function setstateRoot(string $stateRoot): void
-    {
-        $this->stateRoot = $stateRoot;
-    }
-
-    public function getZpoolName()
+    public function getZpoolName(): string
     {
         return $this->zpoolName;
     }
 
-    public function setZpoolName(string $zpoolName): void
-    {
-        $this->zpoolName = $zpoolName;
-    }
-
-    public function getZpoolRoot()
+    public function getZpoolRoot(): string
     {
         return $this->zpoolRoot;
     }
 
-    public function setZpoolRoot(string $zpoolRoot): void
-    {
-        $this->zpoolRoot = $zpoolRoot;
-    }
-
-    public function addService(Service $service): void
-    {
-        $this->services[] = $service;
-    }
-
-    public function addCommand(Command $command): void
-    {
-        $this->commands[] = $command;
-    }
-
     /**
-     * @return Service[]|ArrayCollection
+     * @return ArrayCollection<int, Service>
      */
     public function getServices(): ArrayCollection
     {
-        return $this->services;
+        return new ArrayCollection($this->services);
     }
 
     public function getServiceByName(string $name): ?Service
     {
-        $services = $this->services->filter(function (Service $service) use ($name) {
-            return $service->getName() === $name;
-        });
+        $services = (new ArrayCollection($this->services))->filter(fn (Service $service) => $service->name === $name);
 
         if ($services->isEmpty()) {
             return null;
@@ -89,42 +54,14 @@ final class ServiceCloner
         return $services->first();
     }
 
-    public function removeService(Service $service): void
-    {
-        $this->services->removeElement($service);
-    }
-
-    /**
-     * @return Command[]|ArrayCollection
-     */
-    public function getCommands(): ArrayCollection
-    {
-        return $this->commands;
-    }
-
-    public function removeCommand(Command $command): void
-    {
-        $this->commands->removeElement($command);
-    }
-
     public function getCommandByName(string $name): ?Command
     {
-        $commands = $this->commands->filter(fn (Command $command) => $command->getName() === $name);
+        $commands = (new ArrayCollection($this->commands))->filter(fn (Command $command) => $command->name === $name);
 
         if ($commands->isEmpty()) {
             return null;
         }
 
         return $commands->first();
-    }
-
-    public function setConfigurationRoot(string $configurationRoot): void
-    {
-        $this->configurationRoot = $configurationRoot;
-    }
-
-    public function getConfigurationRoot(): string
-    {
-        return $this->configurationRoot;
     }
 }

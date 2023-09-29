@@ -1,7 +1,7 @@
 Service:
   type: object
   config:
-    resolveField: '@=resolver("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver", [info, value, args])'
+    resolveField: '@=query("App\\UserInterface\\GraphQL\\Resolver\\ServiceResolver", info, value, args)'
     fields:
       name:
         type: String!
@@ -10,10 +10,10 @@ Service:
       command:
         type: String
       labels:
-        type: '[Label]'
+        type: '[Label!]!'
       environments:
-        type: '[Environment]'
+        type: '[Environment!]!'
       ports:
-        type: '[Port]'
+        type: '[Port!]!'
       containers:
-        type: '[Container]'
+        type: '[Container!]!'

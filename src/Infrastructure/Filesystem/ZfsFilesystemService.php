@@ -15,13 +15,10 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
 {
     private const headerList = ['name', 'avail', 'used', 'usedsnap', 'usedds', 'usedrefreserv', 'usedchild', 'refer', 'mountpoint', 'origin', 'type', 'creation'];
 
-    private ProcessInterface $process;
-    private BytesFormatConvertorInterface $sizeFormatConvertor;
-
-    public function __construct(ProcessInterface $process, BytesFormatConvertorInterface $sizeFormatConvertor)
-    {
-        $this->process = $process;
-        $this->sizeFormatConvertor = $sizeFormatConvertor;
+    public function __construct(
+        private ProcessInterface $process,
+        private BytesFormatConvertorInterface $sizeFormatConvertor,
+    ) {
     }
 
     public function createFilesystem(string $name): void
@@ -38,13 +35,13 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
     public function getFilesystem(string $name): FilesystemDTO
     {
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList), $name)->getStdOutput()
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList), $name)->getStdOutput(),
         )->first();
     }
 
     public function destroyFilesystem(string $name, bool $force = false): void
     {
-        $this->process->run('/sbin/zfs', 'destroy', $name, ($force ? '-Rf' : null));
+        $this->process->run('/sbin/zfs', 'destroy', $name, $force ? '-Rf' : null);
     }
 
     public function createSnapshot(string $name, string $snap): void
@@ -54,11 +51,11 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
 
     public function destroySnapshot(string $name, string $snap, bool $force = false): void
     {
-        $this->process->run('/sbin/zfs', 'destroy', sprintf('%s-%s', $name, $snap), ($force ? '-Rf' : null));
-        $this->process->run('/sbin/zfs', 'destroy', sprintf('%s@%s', $name, $snap), ($force ? '-Rf' : null));
+        $this->process->run('/sbin/zfs', 'destroy', sprintf('%s-%s', $name, $snap), $force ? '-Rf' : null);
+        $this->process->run('/sbin/zfs', 'destroy', sprintf('%s@%s', $name, $snap), $force ? '-Rf' : null);
     }
 
-    public function cloneSnapshot(string $name, string $snap, ?string $mountPoint = null): void
+    public function cloneSnapshot(string $name, string $snap, string $mountPoint = null): void
     {
         if ($mountPoint === null) {
             $mountPoint = sprintf('%s-%s', $name, $snap);
@@ -68,12 +65,10 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
 
     public function getClones(string $name, string $snap): FilesystemCollection
     {
-        /* @phpstan-ignore-next-line */
+        /** @var FilesystemCollection */
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput()
-        )->filter(function (FilesystemDTO $filesystem) use ($name, $snap) {
-            return $filesystem->getOrigin() === sprintf('%s@%s', $name, $snap);
-        });
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput(),
+        )->filter(fn (FilesystemDTO $filesystem) => $filesystem->getOrigin() === sprintf('%s@%s', $name, $snap));
     }
 
     public function isSnapshoted(string $name): bool
@@ -88,11 +83,11 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
     public function getSnapshots(): FilesystemCollection
     {
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList), '-t', 'snapshot')->getStdOutput()
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList), '-t', 'snapshot')->getStdOutput(),
         );
     }
 
-    public function getSnapshot(string $name, ?string $instance = null): ?FilesystemDTO
+    public function getSnapshot(string $name, string $instance = null): ?FilesystemDTO
     {
         $snapshotName = $instance === null ? $name : sprintf('%s@%s', $name, $instance);
         $snapshots = $this
@@ -118,15 +113,13 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
     {
         return $this
                 ->getFilesystems()
-                ->filter(function (FilesystemDTO $filesystem) use ($mountPoint) {
-                    return $filesystem->getMountPoint() === $mountPoint;
-                })->count() === 1;
+                ->filter(fn (FilesystemDTO $filesystem) => $filesystem->getMountPoint() === $mountPoint)->count() === 1;
     }
 
     public function getFilesystems(): FilesystemCollection
     {
         return $this->mapZfsListToZfsCollection(
-            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput()
+            $this->process->run('/sbin/zfs', 'list', '-H', '-o', implode(',', self::headerList))->getStdOutput(),
         );
     }
 
@@ -154,7 +147,7 @@ final class ZfsFilesystemService implements FilesystemServiceInterface
                 $mappedLine['mountpoint'],
                 $mappedLine['origin'],
                 $mappedLine['type'],
-                $creationTimestamp
+                $creationTimestamp,
             ));
 
             return $collection;

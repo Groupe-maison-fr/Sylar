@@ -1,0 +1,38 @@
+stateRoot: '/app/data'
+zpoolName: 'sylar'
+zpoolRoot: '/sylar'
+services:
+  - name: unit-test-go-static-webserver
+    image: 'nginx'
+    labels:
+      - name: environment
+        value: unit-test
+    networkMode: 'none'
+    environments:
+    - name: CLONE_NAME
+      value: '=containerParameter.getName()'
+    - name: CLONE_INDEX
+      value: '=containerParameter.getIndex()'
+    - name: CLONE_REPLICATED_FILESYSTEM
+      value: '=containerParameter.getReplicatedFilesystem()'
+    lifeCycleHooks:
+      preStartCommands:
+        - executionEnvironment: host
+          when: "=containerParameter.getIndex() !== 0"
+          command: [ 'bash','-c','echo "should not appear"' ]
+        - executionEnvironment: masterContainer
+          when: "=containerParameter.getIndex() !== 0"
+          command: [ 'bash','-c','echo "should not appear"' ]
+      postStartWaiters:
+        - type: logMatch
+          when: "=containerParameter.getIndex() !== 0"
+          expression: '!start worker processes!'
+          timeout: 30
+      postStartCommands:
+        - executionEnvironment: host
+          when: "=containerParameter.getIndex() !== 0"
+          command: [ 'bash','-c','echo "should not appear"' ]
+      postDestroyCommands:
+        - executionEnvironment: host
+          when: "=containerParameter.getIndex() !== 0"
+          command: [ 'bash','-c','echo "should not appear"' ]

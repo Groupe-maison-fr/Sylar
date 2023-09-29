@@ -9,22 +9,19 @@ use Docker\API\Model\Mount as DockerApiModelMount;
 
 final class MountFactory implements MountFactoryInterface
 {
-    private ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator;
-
     public function __construct(
-        ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator
+        private readonly ConfigurationExpressionGeneratorInterface $configurationExpressionGenerator,
     ) {
-        $this->configurationExpressionGenerator = $configurationExpressionGenerator;
     }
 
     public function createFromConfiguration(ContainerParameterDTO $containerParameter, Mount $mount): DockerApiModelMount
     {
         $dockerMount = new DockerApiModelMount();
         $dockerMount->setSource(
-            $this->configurationExpressionGenerator->generate($containerParameter, $mount->getSource())
+            $this->configurationExpressionGenerator->generate($containerParameter, $mount->source),
         );
         $dockerMount->setTarget(
-            $this->configurationExpressionGenerator->generate($containerParameter, $mount->getTarget())
+            $this->configurationExpressionGenerator->generate($containerParameter, $mount->target),
         );
         $dockerMount->setType('bind');
 

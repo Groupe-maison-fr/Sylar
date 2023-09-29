@@ -26,59 +26,31 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class ServiceClonerService implements ServiceClonerServiceInterface
 {
-    private const MASTER_NAME = 'master';
-
-    private ConfigurationServiceInterface $dockerConfiguration;
-    private LoggerInterface $logger;
-    private FilesystemServiceInterface $zfsService;
-    private SluggerInterface $slugger;
-    private ContainerCreationServiceInterface $containerCreationService;
     private ServiceCloner $configuration;
-    private ContainerStateServiceInterface $dockerStateService;
-    private ServiceClonerLifeCycleHookServiceInterface $serviceClonerLifeCycleHookService;
-    private ServiceClonerNamingServiceInterface $serviceClonerNamingService;
-    private ServiceClonerStateService $serviceClonerStateService;
-    private ContainerStopServiceInterface $containerStopService;
-    private ContainerDeleteServiceInterface $containerDestroyService;
-    private IndexManagerServiceInterface $indexManagerService;
-    private ServerSideEventPublisherInterface $serverSideEventPublisher;
 
     public function __construct(
-        ConfigurationServiceInterface $dockerConfiguration,
-        LoggerInterface $logger,
-        FilesystemServiceInterface $filesystemService,
-        ContainerCreationServiceInterface $containerCreationService,
-        ContainerStopServiceInterface $containerStopService,
-        ContainerDeleteServiceInterface $containerDestroyService,
-        ServiceClonerLifeCycleHookServiceInterface $serviceClonerLifeCycleHookService,
-        ServiceClonerNamingServiceInterface $serviceClonerNamingService,
-        ServiceClonerStateService $serviceClonerStateService,
-        ContainerStateServiceInterface $containerStateService,
-        IndexManagerServiceInterface $indexManagerService,
-        SluggerInterface $slugger,
-        ServerSideEventPublisherInterface $serverSideEventPublisher
+        private ConfigurationServiceInterface $dockerConfiguration,
+        private LoggerInterface $logger,
+        private FilesystemServiceInterface $zfsService,
+        private ContainerCreationServiceInterface $containerCreationService,
+        private ContainerStopServiceInterface $containerStopService,
+        private ContainerDeleteServiceInterface $containerDestroyService,
+        private ServiceClonerLifeCycleHookServiceInterface $serviceClonerLifeCycleHookService,
+        private ServiceClonerNamingServiceInterface $serviceClonerNamingService,
+        private ServiceClonerStateService $serviceClonerStateService,
+        private ContainerStateServiceInterface $dockerStateService,
+        private IndexManagerServiceInterface $indexManagerService,
+        private SluggerInterface $slugger,
+        private ServerSideEventPublisherInterface $serverSideEventPublisher,
     ) {
-        $this->dockerConfiguration = $dockerConfiguration;
         $this->configuration = $this->dockerConfiguration->getConfiguration();
-        $this->logger = $logger;
-        $this->zfsService = $filesystemService;
-        $this->slugger = $slugger;
-        $this->containerCreationService = $containerCreationService;
-        $this->containerStopService = $containerStopService;
-        $this->containerDestroyService = $containerDestroyService;
-        $this->dockerStateService = $containerStateService;
-        $this->serviceClonerLifeCycleHookService = $serviceClonerLifeCycleHookService;
-        $this->serviceClonerNamingService = $serviceClonerNamingService;
-        $this->indexManagerService = $indexManagerService;
-        $this->serviceClonerStateService = $serviceClonerStateService;
-        $this->serverSideEventPublisher = $serverSideEventPublisher;
     }
 
     public function startMaster(string $masterName): void
     {
         try {
             $this->assertStartMasterParameters($masterName);
-            $this->start($masterName, 'master', 0);
+            $this->start($masterName, ServiceClonerNamingServiceInterface::MASTER_NAME, 0);
         } catch (Exception $exception) {
             $this->publishError($exception->getMessage());
             throw $exception;
@@ -102,7 +74,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         try {
             $this->stop($masterName, $instanceName);
             sleep(5);
-        } catch (NonExistingServiceInstanceException | NonExistingServiceStateFileException | ContainerDeleteNotFoundException $exception) {
+        } catch (NonExistingServiceInstanceException|NonExistingServiceStateFileException|ContainerDeleteNotFoundException $exception) {
         }
         $this->start($masterName, $instanceName, $index);
     }
@@ -110,7 +82,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
     private function start(string $masterName, string $instanceName, ?int $index): void
     {
         if ($index === null) {
-            $index = $this->indexManagerService->getNextAvailable();
+            $index = $this->indexManagerService->getNextAvailable($masterName);
         }
         $this->logger->debug(sprintf('-------------%s----------', $this->serviceClonerNamingService->getFullName($masterName, $instanceName, '@')));
         $this->startFilesystem($masterName, $instanceName);
@@ -139,7 +111,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
             if ($this->serviceClonerNamingService->isMasterName($instanceName) && $this->serviceClonerStateService->hasMasterDependantService($masterName)) {
                 $dependantServiceNames = array_unique(array_map(
                     fn (ServiceClonerStatusDTO $serviceClonerStatusDTO) => $serviceClonerStatusDTO->getInstanceName(),
-                    $this->serviceClonerStateService->getMasterDependantService($masterName)->toArray()
+                    $this->serviceClonerStateService->getMasterDependantService($masterName)->toArray(),
                 ));
                 asort($dependantServiceNames);
                 throw new DomainException(sprintf('Can not delete "%s", some dependant services are still there [%s]', $masterName, implode(',', $dependantServiceNames)));
@@ -148,7 +120,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
             $containerParameter = new ContainerParameterDTO(
                 $serviceState->getContainerName(),
                 $serviceState->getIndex(),
-                $this->serviceClonerNamingService->getZfsFilesystemPath($masterName, $instanceName)
+                $this->serviceClonerNamingService->getZfsFilesystemPath($masterName, $instanceName),
             );
 
             $service = $this->configuration->getServiceByName($masterName);
@@ -181,7 +153,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
         $containerParameter = new ContainerParameterDTO(
             $containerName,
             $index,
-            $this->serviceClonerNamingService->getZfsFilesystemPath($masterName, $instanceName)
+            $this->serviceClonerNamingService->getZfsFilesystemPath($masterName, $instanceName),
         );
 
         if ($this->dockerStateService->dockerState($containerName) === 'running') {
@@ -199,7 +171,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
             $service,
             [
                 'launcher' => 'sylar',
-            ] + $this->serviceClonerStateService->createServiceClonerStatusDTO($masterName, $instanceName, $index)->toArray()
+            ] + $this->serviceClonerStateService->createServiceClonerStatusDTO($masterName, $instanceName, $index)->toArray(),
         );
         $this->serviceClonerLifeCycleHookService->postStartWaiter($service, $containerParameter);
         $this->serviceClonerLifeCycleHookService->postStart($service, $containerParameter);
@@ -213,7 +185,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
             return;
         }
 
-        if ($instanceName === self::MASTER_NAME) {
+        if ($instanceName === ServiceClonerNamingServiceInterface::MASTER_NAME) {
             $this->zfsService->createFilesystem($zfsFilesystemPath);
 
             return;
@@ -225,8 +197,8 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
 
         $filesystem = sprintf(
             '%s/%s',
-            $this->dockerConfiguration->getConfiguration()->getZpoolName(),
-            $this->slugger->slug($masterName)->toString()
+            $this->dockerConfiguration->getConfiguration()->zpoolName,
+            $this->slugger->slug($masterName)->toString(),
         );
         $snapshotName = $this->slugger->slug($instanceName)->toString();
 
@@ -236,7 +208,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
 
     private function stopFilesystem(string $masterName, string $instanceName): void
     {
-        $zfsFilesystemName = $this->dockerConfiguration->getConfiguration()->getZpoolName() . '/' . $masterName;
+        $zfsFilesystemName = $this->dockerConfiguration->getConfiguration()->zpoolName . '/' . $masterName;
         /*
         if (!$this->zfsService->hasSnapshot($zfsFilesystemName, $instanceName)) {
             $this->logger->debug(sprintf('Can not stop filesystem, !hasSnapshot %s', $instanceName));
@@ -251,20 +223,27 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
             return;
         }
 
-        if ($instanceName === self::MASTER_NAME && $this->zfsService->isSnapshoted($zfsFilesystemName)) {
+        if ($instanceName === ServiceClonerNamingServiceInterface::MASTER_NAME && $this->zfsService->isSnapshoted($zfsFilesystemName)) {
             $this->logger->debug(sprintf('Can not stop filesystem, !isSnapshoted %s', $zfsFilesystemName));
+
+            return;
+        }
+
+        if ($instanceName === ServiceClonerNamingServiceInterface::MASTER_NAME) {
+            $this->zfsService->destroyFilesystem($zfsFilesystemName);
+
+            $this->logger->debug(sprintf('Stop master filesystem %s', $zfsFilesystemName));
 
             return;
         }
 
         $filesystem = sprintf(
             '%s/%s',
-            $this->dockerConfiguration->getConfiguration()->getZpoolName(),
-            $this->slugger->slug($masterName)->toString()
+            $this->dockerConfiguration->getConfiguration()->zpoolName,
+            $this->slugger->slug($masterName)->toString(),
         );
-        $snapshotName = $this->slugger->slug($instanceName)->toString();
 
-        $this->zfsService->destroySnapshot($filesystem, $snapshotName, true);
+        $this->zfsService->destroySnapshot($filesystem, $this->slugger->slug($instanceName)->toString(), true);
     }
 
     private function assertStartMasterParameters(string $masterName): void
@@ -276,7 +255,7 @@ final class ServiceClonerService implements ServiceClonerServiceInterface
 
     private function assertStartServiceParameters(string $masterName, string $instanceName, ?int $index): void
     {
-        if ($instanceName === 'master') {
+        if ($instanceName === ServiceClonerNamingServiceInterface::MASTER_NAME) {
             throw new StartServiceException(sprintf('Service name %s can not be master', $instanceName));
         }
 

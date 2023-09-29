@@ -9,30 +9,17 @@ use Symfony\Component\ErrorHandler\Exception\FlattenException;
 
 final class FailedMessageDTO
 {
-    private string $id;
-    private string $className;
-    private string $message;
-    private ?DateTimeInterface $dateTime;
-    private ?string $exceptionMessage;
-    private ?FlattenException $flattenException;
-
     public function __construct(
-        string $id,
-        string $className,
-        string $message,
-        ?DateTimeInterface $dateTime,
-        ?string $exceptionMessage,
-        ?FlattenException $flattenException
+        private int $id,
+        private string $className,
+        private string $message,
+        private ?DateTimeInterface $dateTime,
+        private ?string $exceptionMessage,
+        private ?FlattenException $flattenException,
     ) {
-        $this->id = $id;
-        $this->className = $className;
-        $this->message = $message;
-        $this->dateTime = $dateTime;
-        $this->exceptionMessage = $exceptionMessage;
-        $this->flattenException = $flattenException;
     }
 
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }

@@ -8,24 +8,20 @@ use Docker\API\Model\CreateImageInfo;
 use Docker\API\Model\ImageSummary;
 use Docker\Docker;
 use Docker\Stream\CreateImageStream;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
-final class ContainerImageService implements ContainerImageServiceInterface
+final readonly class ContainerImageService implements ContainerImageServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-
     public function __construct(
-        Docker $dockerReadOnly,
-        LoggerInterface $logger
+        private Docker $dockerReadWrite,
+        private LoggerInterface $logger,
     ) {
-        $this->docker = $dockerReadOnly;
-        $this->logger = $logger;
     }
 
     public function imageExists(string $imageName): bool
     {
-        $existingImages = $this->docker->imageList([
+        $existingImages = $this->dockerReadWrite->imageList([
             'filters' => json_encode([
                 'reference' => [$imageName],
             ]),
@@ -34,15 +30,13 @@ final class ContainerImageService implements ContainerImageServiceInterface
             return false;
         }
 
-        return count(array_filter($existingImages, function (ImageSummary $imageSummary) use ($imageName) {
-            return in_array($imageName, $imageSummary->getRepoTags());
-        })) > 0;
+        return count($this->getFilteredImages($imageName, $existingImages)) > 0;
     }
 
     public function pullImage(string $imageName): bool
     {
         /** @var CreateImageStream $buildStream */
-        $buildStream = $this->docker->imageCreate($imageName, ['fromImage' => $imageName]);
+        $buildStream = $this->dockerReadWrite->imageCreate($imageName, ['fromImage' => $imageName]);
         if ($buildStream == null) {
             $this->logger->error(sprintf('Error on imageCreate %s', $imageName));
 
@@ -56,7 +50,7 @@ final class ContainerImageService implements ContainerImageServiceInterface
                 $frame->getStatus(),
                 $frame->getProgress(),
                 $frame->getProgressDetail() ? $frame->getProgressDetail()->getCurrent() : '',
-                $frame->getProgressDetail() ? $frame->getProgressDetail()->getTotal() : ''
+                $frame->getProgressDetail() ? $frame->getProgressDetail()->getTotal() : '',
             ));
 
             if ($frame->getError()) {
@@ -66,5 +60,26 @@ final class ContainerImageService implements ContainerImageServiceInterface
         $buildStream->wait();
 
         return !$lastIsError;
+    }
+
+    /**
+     * @param ImageSummary[]|ResponseInterface $existingImages
+     *
+     * @return ImageSummary[]|ResponseInterface
+     */
+    public function getFilteredImages(string $imageName, array|ResponseInterface $existingImages): ResponseInterface|array
+    {
+        return array_filter($existingImages, function (ImageSummary $imageSummary) use ($imageName): bool {
+            if (str_contains($imageName, ':')) {
+                return in_array($imageName, $imageSummary->getRepoTags());
+            }
+            foreach ($imageSummary->getRepoTags() as $tag) {
+                if (str_starts_with($tag, $imageName . ':')) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
     }
 }

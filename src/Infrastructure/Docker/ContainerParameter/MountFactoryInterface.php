@@ -9,5 +9,5 @@ use Docker\API\Model\Mount as DockerApiModelMount;
 
 interface MountFactoryInterface
 {
-    public function createFromConfiguration(ContainerParameterDTO $containerParameter, Mount $port): DockerApiModelMount;
+    public function createFromConfiguration(ContainerParameterDTO $containerParameter, Mount $mount): DockerApiModelMount;
 }

@@ -6,20 +6,19 @@ namespace App\Infrastructure\Process;
 
 final class CommandDTO
 {
-    private array $arguments;
-    private bool $mustRun;
-    private bool $sudo;
-
+    /**
+     * @param string[] $arguments
+     */
     public function __construct(
-        array $arguments,
-        bool $mustRun,
-        bool $sudo
+        private array $arguments,
+        private bool $mustRun,
+        private bool $sudo,
     ) {
-        $this->arguments = $arguments;
-        $this->sudo = $sudo;
-        $this->mustRun = $mustRun;
     }
 
+    /**
+     * @return string[]
+     */
     public function getArguments(): array
     {
         return $this->arguments;

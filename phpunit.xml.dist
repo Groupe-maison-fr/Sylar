@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.2/phpunit.xsd"
         backupGlobals="false"
         colors="true"
         bootstrap="tests/bootstrap.php"
+        cacheResult="false"
 >
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-    </coverage>
     <php>
         <ini name="error_reporting" value="-1"/>
         <server name="APP_ENV" value="test" force="true"/>
@@ -23,9 +19,22 @@
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
+            <directory>lib/Common/tests</directory>
         </testsuite>
     </testsuites>
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
-    </listeners>
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+            <directory suffix=".php">lib</directory>
+        </include>
+    </source>
+    <coverage>
+        <report>
+            <clover outputFile="build/logs/clover.xml"/>
+            <php outputFile="build/logs/coverage.php"/>
+            <html outputDirectory="build/logs/html-coverage"/>
+            <text outputFile="build/logs/coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/>
+            <xml outputDirectory="build/logs/xml-coverage"/>
+        </report>
+    </coverage>
 </phpunit>

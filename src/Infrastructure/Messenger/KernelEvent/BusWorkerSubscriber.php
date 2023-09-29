@@ -12,12 +12,9 @@ use Symfony\Component\Messenger\Stamp\SentToFailureTransportStamp;
 
 final class BusWorkerSubscriber implements EventSubscriberInterface
 {
-    private ServerSideEventPublisherInterface $serverSideEventPublisher;
-
     public function __construct(
-        ServerSideEventPublisherInterface $serverSideEventPublisher
+        private ServerSideEventPublisherInterface $serverSideEventPublisher,
     ) {
-        $this->serverSideEventPublisher = $serverSideEventPublisher;
     }
 
     public static function getSubscribedEvents(): array

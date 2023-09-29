@@ -9,19 +9,15 @@ use Docker\API\Exception\ContainerListBadRequestException;
 use Docker\API\Exception\ContainerListInternalServerErrorException;
 use Docker\API\Model\ContainerSummaryItem;
 use Docker\Docker;
+use Exception;
 use Psr\Log\LoggerInterface;
 
 final class ContainerLabelService implements ContainerLabelServiceInterface
 {
-    private LoggerInterface $logger;
-    private Docker $docker;
-
     public function __construct(
-        Docker $dockerReadOnly,
-        LoggerInterface $logger
+        private Docker $dockerReadOnly,
+        private LoggerInterface $logger,
     ) {
-        $this->docker = $dockerReadOnly;
-        $this->logger = $logger;
     }
 
     public function getDockerLabelsByName(string $dockerName): array
@@ -29,19 +25,19 @@ final class ContainerLabelService implements ContainerLabelServiceInterface
         try {
             /** @var ContainerSummaryItem[] $containers */
             $containers = array_filter(
-                $this->docker->containerList([
+                $this->dockerReadOnly->containerList([
                     'filters' => json_encode([
                         'name' => [$dockerName],
                     ]),
                     'all' => true,
                 ]),
-                fn (ContainerSummaryItem $containerSummaryItem) => $containerSummaryItem->getNames()[0] === sprintf('/%s', $dockerName)
+                fn (ContainerSummaryItem $containerSummaryItem) => $containerSummaryItem->getNames()[0] === sprintf('/%s', $dockerName),
             );
-        } catch (ContainerListBadRequestException | ContainerListInternalServerErrorException $exception) {
+        } catch (ContainerListBadRequestException|ContainerListInternalServerErrorException $exception) {
             $this->logger->error(sprintf('Can not get DockerLabelsByName "%s" because "%s"', $dockerName, $exception->getErrorResponse()->getMessage()));
 
             return [];
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->logger->error(sprintf('Can not get DockerLabelsByName "%s" because "%s"', $dockerName, $exception->getMessage()));
 
             return [];
@@ -51,6 +47,6 @@ final class ContainerLabelService implements ContainerLabelServiceInterface
             return [];
         }
 
-        return current($containers)->getLabels()->getArrayCopy();
+        return iterator_to_array(current($containers)->getLabels());
     }
 }
