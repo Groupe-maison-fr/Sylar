@@ -219,7 +219,7 @@ services:
 
   cadvisor:
     container_name: sylar-cadvisor
-    image: google/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor:latest
     restart: unless-stopped
     volumes:
       - /:/rootfs:ro
