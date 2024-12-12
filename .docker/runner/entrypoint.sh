@@ -1,7 +1,6 @@
 #!/bin/sh
 
 cd /app
-which make || apt-get install -y make
 chmod a+rwx /app/sqlite
 sudo -u www-data composer install
 sudo -u www-data mkdir -p config/jwt

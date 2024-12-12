@@ -9,6 +9,7 @@ RUN apt-get update;\
         curl \
         dirmngr \
         lsb-release \
+        make \
         software-properties-common \
         ssh \
         sudo \
