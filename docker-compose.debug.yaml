@@ -1,5 +1,4 @@
-version: "3.5"
-
+---
 services:
   docker-socket-proxy-debug:
     container_name: sylar-docker-socket-proxy-debug
