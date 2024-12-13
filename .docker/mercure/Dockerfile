@@ -1,4 +1,7 @@
 FROM ubuntu:20.04
+
+ARG COMPOSER_VERSION=2.8.4
+
 RUN apt-get update;\
     apt-get install -y \
         apt-transport-https \
@@ -20,11 +23,8 @@ RUN apt-get update;\
         php8.2-sqlite3 \
         php8.2-xml \
         php8.2-zip; \
-    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";\
-    php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;";\
-    php composer-setup.php;\
-    php -r "unlink('composer-setup.php');";\
-    mv composer.phar /usr/local/bin/composer
+    curl -L https://github.com/composer/composer/releases/download/${COMPOSER_VERSION}/composer.phar -o /usr/local/bin/composer; \
+    chmod +x /usr/local/bin/composer
 
 RUN mkdir /app; \
     cd /app; \

@@ -1,11 +1,14 @@
 #!/bin/sh
+set -e
 
 cd /app
-which make || apt-get install -y make
-chmod a+rwx /app/sqlite
-sudo -u www-data composer install
-sudo -u www-data mkdir -p config/jwt
-sudo -u www-data bin/console lexik:jwt:generate-keypair --skip-if-exists
+install -o www-data -g www-data -d /app/data
+install -o www-data -g www-data -d /app/var
+install -o www-data -g www-data -d /app/config/jwt
+cd /app
+composer install
+rm -rf /app/var/*
+sudo -u www-data -E bin/console lexik:jwt:generate-keypair --skip-if-exists
 env | sort
  [ -f /app/sqlite/app.db ] || sudo -u www-data -E bin/console doctrine:database:create
 /usr/bin/supervisord
