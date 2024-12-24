@@ -1,5 +1,8 @@
 # Sylar
 
+> [!IMPORTANT]  
+> The repository has been moved to https://github.com/sylar-db-cloner/sylar
+
 Service cloner for development purpose
 
 ![general](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Groupe-maison-fr/Sylar/master/docs/general.iuml)
